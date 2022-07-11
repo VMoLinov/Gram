@@ -2,7 +2,6 @@ package ru.molinov.gram
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.mikepenz.materialdrawer.AccountHeader
@@ -14,6 +13,8 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import ru.molinov.gram.databinding.ActivityMainBinding
+import ru.molinov.gram.ui.ChatsFragment
+import ru.molinov.gram.ui.SettingsFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,6 +37,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun initFunc() {
         setSupportActionBar(toolbar)
+        supportFragmentManager.beginTransaction()
+            .add(R.id.dataContainer, ChatsFragment()).commit()
         createHeader()
         createDrawer()
     }
@@ -105,7 +108,12 @@ class MainActivity : AppCompatActivity() {
                     position: Int,
                     drawerItem: IDrawerItem<*>
                 ): Boolean {
-                    Toast.makeText(applicationContext, position.toString(), Toast.LENGTH_SHORT).show()
+                    when (position) {
+                        7 -> supportFragmentManager.beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.dataContainer, SettingsFragment())
+                            .commit()
+                    }
                     return false
                 }
             }).build()
