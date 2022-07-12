@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Settings Fragment-->
+    <dimen name="settings_user_photo_width">55dp</dimen>
+    <dimen name="settings_user_photo_height">55dp</dimen>
+    <dimen name="settings_btn_change_photo_width">45dp</dimen>
+    <dimen name="settings_btn_change_photo_height">45dp</dimen>
+    <dimen name="settings_header_block_height">100dp</dimen>
+    <dimen name="settings_user_photo_border">2dp</dimen>
+    <dimen name="settings_user_photo_margin_start">16dp</dimen>
+    <dimen name="settings_user_name_margin_start">16dp</dimen>
+    <dimen name="settings_user_margin_top">10dp</dimen>
+    <dimen name="settings_normal_text">16sp</dimen>
+    <dimen name="settings_user_status_margin_start">16dp</dimen>
+    <dimen name="settings_small_text">14sp</dimen>
+    <dimen name="settings_account_margin_start">16dp</dimen>
+    <dimen name="settings_account_margin_top">16dp</dimen>
+    <dimen name="settings_ripple_effect_radius">4dp</dimen>
+</resources>
