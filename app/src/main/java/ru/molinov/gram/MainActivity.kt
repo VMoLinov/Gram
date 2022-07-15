@@ -1,9 +1,11 @@
 package ru.molinov.gram
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import ru.molinov.gram.databinding.ActivityMainBinding
+import ru.molinov.gram.ui.activities.RegisterActivity
 import ru.molinov.gram.ui.fragments.ChatsFragment
 import ru.molinov.gram.ui.objects.AppDrawer
 
@@ -26,10 +28,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunc() {
-        setSupportActionBar(toolbar)
-        appDrawer.create()
-        supportFragmentManager.beginTransaction()
-            .add(R.id.dataContainer, ChatsFragment()).commit()
+        if (false) {
+            setSupportActionBar(toolbar)
+            appDrawer.create()
+            supportFragmentManager.beginTransaction()
+                .add(R.id.dataContainer, ChatsFragment()).commit()
+        } else {
+            val registerIntent = Intent(this, RegisterActivity::class.java)
+            startActivity(registerIntent)
+        }
     }
 
     private fun initProperties() {

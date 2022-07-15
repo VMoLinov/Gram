@@ -13,18 +13,13 @@ open class BaseFragment<T : ViewBinding>(
 ) : Fragment() {
 
     private var _binding: T? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = bindingFactory(inflater, container, false).also { _binding = it }.root
-
-    override fun onStart() {
-        super.onStart()
-
-    }
 
     override fun onDestroy() {
         _binding = null
