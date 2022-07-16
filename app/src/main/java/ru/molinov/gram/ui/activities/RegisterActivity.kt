@@ -1,11 +1,10 @@
 package ru.molinov.gram.ui.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import ru.molinov.gram.R
 import ru.molinov.gram.databinding.ActivityRegisterBinding
-import ru.molinov.gram.ui.fragments.EnterCodeFragment
 import ru.molinov.gram.ui.fragments.EnterPhoneNumberFragment
 
 class RegisterActivity : AppCompatActivity() {

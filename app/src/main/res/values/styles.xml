@@ -15,7 +15,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:textColor">@color/colorBlack</item>
-        <item name="android:textSize">@dimen/settings_normal_text</item>
+        <item name="android:textSize">@dimen/normal_text</item>
     </style>
 
     <style name="smallText">
@@ -23,7 +23,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:textColor">@color/colorGray</item>
-        <item name="android:textSize">@dimen/settings_small_text</item>
+        <item name="android:textSize">@dimen/small_text</item>
     </style>
 
     <style name="settingsSeparator">
