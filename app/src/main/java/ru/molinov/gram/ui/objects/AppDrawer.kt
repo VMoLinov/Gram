@@ -13,6 +13,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import ru.molinov.gram.R
 import ru.molinov.gram.ui.fragments.SettingsFragment
+import ru.molinov.gram.utilites.replaceFragment
 
 class AppDrawer(private val mainActivity: AppCompatActivity, private val toolbar: Toolbar) {
     private lateinit var drawer: Drawer
@@ -84,10 +85,7 @@ class AppDrawer(private val mainActivity: AppCompatActivity, private val toolbar
                     drawerItem: IDrawerItem<*>
                 ): Boolean {
                     when (position) {
-                        7 -> mainActivity.supportFragmentManager.beginTransaction()
-                            .addToBackStack(null)
-                            .replace(R.id.dataContainer, SettingsFragment())
-                            .commit()
+                        7 -> mainActivity.replaceFragment(SettingsFragment())
                     }
                     return false
                 }

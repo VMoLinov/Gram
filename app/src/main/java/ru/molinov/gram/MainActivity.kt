@@ -1,6 +1,5 @@
 package ru.molinov.gram
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -8,6 +7,8 @@ import ru.molinov.gram.databinding.ActivityMainBinding
 import ru.molinov.gram.ui.activities.RegisterActivity
 import ru.molinov.gram.ui.fragments.ChatsFragment
 import ru.molinov.gram.ui.objects.AppDrawer
+import ru.molinov.gram.utilites.addFragment
+import ru.molinov.gram.utilites.replaceActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,11 +32,9 @@ class MainActivity : AppCompatActivity() {
         if (false) {
             setSupportActionBar(toolbar)
             appDrawer.create()
-            supportFragmentManager.beginTransaction()
-                .add(R.id.dataContainer, ChatsFragment()).commit()
+            addFragment(ChatsFragment())
         } else {
-            val registerIntent = Intent(this, RegisterActivity::class.java)
-            startActivity(registerIntent)
+            replaceActivity(RegisterActivity())
         }
     }
 

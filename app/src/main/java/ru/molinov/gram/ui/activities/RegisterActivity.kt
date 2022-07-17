@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar
 import ru.molinov.gram.R
 import ru.molinov.gram.databinding.ActivityRegisterBinding
 import ru.molinov.gram.ui.fragments.EnterPhoneNumberFragment
+import ru.molinov.gram.utilites.replaceFragment
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -23,8 +24,6 @@ class RegisterActivity : AppCompatActivity() {
         toolbar = binding.registerToolbar
         setSupportActionBar(toolbar)
         title = getString(R.string.register_title_your_phone)
-        supportFragmentManager.beginTransaction()
-            .add(R.id.registerDataContainer, EnterPhoneNumberFragment())
-            .commit()
+        replaceFragment(EnterPhoneNumberFragment())
     }
 }

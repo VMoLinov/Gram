@@ -1,8 +1,9 @@
 package ru.molinov.gram.ui.fragments
 
-import android.widget.Toast
 import ru.molinov.gram.R
 import ru.molinov.gram.databinding.FragmentEnterPhoneNumberBinding
+import ru.molinov.gram.utilites.replaceFragment
+import ru.molinov.gram.utilites.showToast
 
 class EnterPhoneNumberFragment :
     BaseFragment<FragmentEnterPhoneNumberBinding>(FragmentEnterPhoneNumberBinding::inflate) {
@@ -14,17 +15,9 @@ class EnterPhoneNumberFragment :
 
     private fun sendCode() {
         if (binding.registerInputPhoneNumber.text.isEmpty()) {
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.register_enter_phone),
-                Toast.LENGTH_SHORT
-            )
-                .show()
+            showToast(getString(R.string.register_enter_phone))
         } else {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.registerDataContainer, EnterCodeFragment())
-                .addToBackStack(null)
-                .commit()
+            replaceFragment(EnterCodeFragment())
         }
     }
 }
