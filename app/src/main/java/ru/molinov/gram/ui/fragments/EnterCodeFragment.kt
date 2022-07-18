@@ -10,9 +10,7 @@ class EnterCodeFragment :
     override fun onStart() {
         super.onStart()
         binding.registerInputCode.addTextChangedListener(AppTextWatcher {
-            if (it?.length == 6) {
-                verifyCode()
-            }
+            if (it.length == 6) verifyCode()
         })
     }
 

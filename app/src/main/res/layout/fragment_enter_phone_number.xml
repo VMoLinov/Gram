@@ -13,6 +13,7 @@
         android:layout_margin="@dimen/normal_margin"
         android:autofillHints="phone"
         android:inputType="phone"
+        android:maxLength="11"
         android:maxLines="1"
         android:padding="5dp"
         android:textColor="@color/colorBlack"
