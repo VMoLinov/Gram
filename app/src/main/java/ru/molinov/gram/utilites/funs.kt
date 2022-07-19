@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import ru.molinov.gram.R
-import ru.molinov.gram.ui.fragments.ChatsFragment
 
 fun Fragment.showToast(text: String) {
     Toast.makeText(this.context, text, Toast.LENGTH_SHORT).show()
