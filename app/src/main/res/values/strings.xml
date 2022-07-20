@@ -22,4 +22,5 @@
     <string name="register_hint_default_code">- - - - - -</string>
     <string name="register_title_your_phone">Ваш телефон</string>
     <string name="register_enter_phone">Введите номер телефона</string>
+    <string name="enter_phone_number_hint">+79111234567</string>
 </resources>

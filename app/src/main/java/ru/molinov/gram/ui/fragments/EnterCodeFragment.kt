@@ -4,10 +4,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 import ru.molinov.gram.MainActivity
 import ru.molinov.gram.databinding.FragmentEnterCodeBinding
 import ru.molinov.gram.ui.activities.RegisterActivity
-import ru.molinov.gram.utilites.AppTextWatcher
-import ru.molinov.gram.utilites.auth
-import ru.molinov.gram.utilites.replaceActivity
-import ru.molinov.gram.utilites.showToast
+import ru.molinov.gram.utilites.*
 
 class EnterCodeFragment(private val phoneNumber: String, val id: String) :
     BaseFragment<FragmentEnterCodeBinding>(FragmentEnterCodeBinding::inflate) {
@@ -25,8 +22,18 @@ class EnterCodeFragment(private val phoneNumber: String, val id: String) :
         val credential = PhoneAuthProvider.getCredential(id, code)
         auth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
-                showToast("Аутентификация выполнена успешно")
-                (activity as RegisterActivity).replaceActivity(MainActivity())
+                val map = mutableMapOf<String, Any>()
+                val uid = auth.currentUser?.uid.toString()
+                map[USER_ID] = uid
+                map[USER_PHONE] = phoneNumber
+                map[USER_NAME] = uid
+                refDb.child(NODE_USERS).child(uid).updateChildren(map)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            showToast("Аутентификация выполнена успешно")
+                            (activity as RegisterActivity).replaceActivity(MainActivity())
+                        } else showToast("Ошибка авторизации")
+                    }
             } else showToast(it.exception?.message.toString())
         }
     }

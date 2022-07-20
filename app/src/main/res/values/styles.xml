@@ -41,4 +41,17 @@
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
+
+    <style name="editText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/normal_margin</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColorHint">@color/colorGray</item>
+        <item name="android:inputType">phone</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">@dimen/normal_text</item>
+    </style>
 </resources>
