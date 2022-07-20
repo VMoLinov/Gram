@@ -3,6 +3,7 @@ package ru.molinov.gram.ui.objects
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -16,12 +17,31 @@ import ru.molinov.gram.ui.fragments.SettingsFragment
 import ru.molinov.gram.utilites.replaceFragment
 
 class AppDrawer(private val mainActivity: AppCompatActivity, private val toolbar: Toolbar) {
+
     private lateinit var drawer: Drawer
     private lateinit var header: AccountHeader
+    private lateinit var drawerLayout: DrawerLayout
 
     fun create() {
         createHeader()
         createDrawer()
+        drawerLayout = drawer.drawerLayout
+    }
+
+    fun lockDrawer() {
+        drawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = false
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        toolbar.setNavigationOnClickListener {
+            mainActivity.supportFragmentManager.popBackStack()
+        }
+    }
+
+    fun unlockDrawer() {
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        drawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = true
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+        toolbar.setNavigationOnClickListener { drawer.openDrawer() }
     }
 
     private fun createDrawer() {

@@ -27,6 +27,7 @@ fun AppCompatActivity.replaceFragment(fragment: Fragment) {
     supportFragmentManager
         .beginTransaction()
         .replace(R.id.dataContainer, fragment)
+        .addToBackStack(null)
         .commit()
 }
 
