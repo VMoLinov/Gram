@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import ru.molinov.gram.MainActivity
 
 open class BaseFragment<T : ViewBinding>(
     private val bindingFactory: (inflater: LayoutInflater, container: ViewGroup?, attachToParent: Boolean) -> T
@@ -24,15 +23,5 @@ open class BaseFragment<T : ViewBinding>(
     override fun onDestroy() {
         _binding = null
         super.onDestroy()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        (activity as MainActivity).appDrawer.lockDrawer()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        (activity as MainActivity).appDrawer.unlockDrawer()
     }
 }

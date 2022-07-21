@@ -1,26 +1,32 @@
 <resources>
+    <!-- Main -->
     <string name="app_name">Gram</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="empty_string" />
+    <string name="data_update">Data is update</string>
     <!-- Settings -->
     <string name="settings_default_user_name">Vadim Molinov</string>
-    <string name="settings_status_online">В сети</string>
-    <string name="settings_text_account">Аккаунт</string>
+    <string name="settings_status_online">Online</string>
+    <string name="settings_text_account">Account</string>
     <string name="settings_default_number">+7911111111111</string>
-    <string name="settings_label_phone_number">Нажмите, чтобы изменить номер телефона</string>
+    <string name="settings_label_phone_number">Click to change phone number</string>
     <string name="settings_default_login">\@Molinov</string>
-    <string name="settings_label_login">Имя пользователя</string>
-    <string name="settings_default_bio">О себе</string>
-    <string name="settings_default_label_bio">Напишите немного о себе</string>
-    <string name="settings_menu_change_name">Изменить имя</string>
-    <string name="settings_menu_exit">Выход</string>
-    <string name="empty_string" />
+    <string name="settings_label_login">User name</string>
+    <string name="settings_default_bio">Bio</string>
+    <string name="settings_default_label_bio">Write about yourself</string>
+    <string name="settings_menu_change_name">Change name</string>
+    <string name="settings_menu_exit">Exit</string>
+    <string name="settings_edit_text_name">Name</string>
+    <string name="settings_edit_text_last_name">Last name</string>
+    <string name="settings_digits_name">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="settings_name_is_empty">Name don\'t be empty</string>
     <!-- Register -->
     <string name="register_next">next</string>
     <string name="cd_register_image">registerImage</string>
-    <string name="register_text_enter_code">Введите код</string>
-    <string name="register_text_we_sent">Мы отправили SMS с кодом проверки на Ваш телефон</string>
+    <string name="register_text_enter_code">Enter code</string>
+    <string name="register_text_we_sent">We sent SMS with check code on your phone</string>
     <string name="register_hint_default_code">- - - - - -</string>
-    <string name="register_title_your_phone">Ваш телефон</string>
-    <string name="register_enter_phone">Введите номер телефона</string>
+    <string name="register_title_your_phone">Your phone</string>
+    <string name="register_enter_phone">Enter phone number</string>
     <string name="enter_phone_number_hint">+79111234567</string>
 </resources>

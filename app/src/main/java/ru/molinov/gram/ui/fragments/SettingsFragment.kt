@@ -9,8 +9,10 @@ import ru.molinov.gram.databinding.FragmentSettingsBinding
 import ru.molinov.gram.ui.activities.RegisterActivity
 import ru.molinov.gram.utilites.auth
 import ru.molinov.gram.utilites.replaceActivity
+import ru.molinov.gram.utilites.replaceFragment
 
-class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsBinding::inflate) {
+class SettingsFragment :
+    OptionsFragment<FragmentSettingsBinding>(FragmentSettingsBinding::inflate) {
 
     override fun onResume() {
         super.onResume()
@@ -28,6 +30,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
                 (activity as MainActivity).replaceActivity(RegisterActivity())
                 return true
             }
+            R.id.settings_menu_change_name -> replaceFragment(ChangeNameFragment())
         }
         return true
     }

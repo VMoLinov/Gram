@@ -23,7 +23,6 @@ class EnterCodeFragment(private val phoneNumber: String, val id: String) :
         auth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
                 val map = mutableMapOf<String, Any>()
-                val uid = auth.currentUser?.uid.toString()
                 map[USER_ID] = uid
                 map[USER_PHONE] = phoneNumber
                 map[USER_NAME] = uid
