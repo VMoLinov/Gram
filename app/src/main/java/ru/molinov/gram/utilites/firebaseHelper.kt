@@ -7,10 +7,10 @@ import com.google.firebase.ktx.Firebase
 import ru.molinov.gram.BuildConfig
 import ru.molinov.gram.ui.models.User
 
-lateinit var auth: FirebaseAuth
-lateinit var uid: String
-lateinit var refDb: DatabaseReference
-lateinit var user: User
+lateinit var AUTH: FirebaseAuth
+lateinit var UID: String
+lateinit var REFERENCE_DB: DatabaseReference
+lateinit var USER: User
 
 const val NODE_USERS = "users"
 const val USER_ID = "uid"
@@ -19,9 +19,9 @@ const val USER_NAME = "username"
 const val USER_FULL_NAME = "fullName"
 
 fun initFirebase() {
-    auth = FirebaseAuth.getInstance()
-    if (BuildConfig.DEBUG) auth.firebaseAuthSettings.setAppVerificationDisabledForTesting(true)
-    refDb = Firebase.database(BuildConfig.FIREBASE_REFERENCE).reference
-    user = User()
-    uid = auth.currentUser?.uid.toString()
+    AUTH = FirebaseAuth.getInstance()
+    if (BuildConfig.DEBUG) AUTH.firebaseAuthSettings.setAppVerificationDisabledForTesting(true)
+    REFERENCE_DB = Firebase.database(BuildConfig.FIREBASE_REFERENCE).reference
+    USER = User()
+    UID = AUTH.currentUser?.uid.toString()
 }

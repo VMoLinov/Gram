@@ -8,7 +8,7 @@ import ru.molinov.gram.MainActivity
 import ru.molinov.gram.R
 import ru.molinov.gram.databinding.FragmentEnterPhoneNumberBinding
 import ru.molinov.gram.ui.activities.RegisterActivity
-import ru.molinov.gram.utilites.auth
+import ru.molinov.gram.utilites.AUTH
 import ru.molinov.gram.utilites.replaceActivity
 import ru.molinov.gram.utilites.replaceFragment
 import ru.molinov.gram.utilites.showToast
@@ -24,7 +24,7 @@ class EnterPhoneNumberFragment :
         super.onStart()
         callback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                auth.signInWithCredential(credential).addOnCompleteListener {
+                AUTH.signInWithCredential(credential).addOnCompleteListener {
                     if (it.isSuccessful) {
                         showToast("Аутентификация выполнена успешно")
                         (activity as RegisterActivity).replaceActivity(MainActivity())
@@ -54,7 +54,7 @@ class EnterPhoneNumberFragment :
     private fun authUser() {
         phoneNumber = binding.registerInputPhoneNumber.text.toString()
         PhoneAuthProvider.verifyPhoneNumber(
-            PhoneAuthOptions.newBuilder(auth)
+            PhoneAuthOptions.newBuilder(AUTH)
                 .setPhoneNumber(phoneNumber)
                 .setTimeout(60L, TimeUnit.SECONDS)
                 .setActivity(activity as RegisterActivity)

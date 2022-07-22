@@ -7,7 +7,7 @@
     tools:context=".ui.fragments.ChangeNameFragment">
 
     <EditText
-        android:id="@+id/settingsChangeName"
+        android:id="@+id/changeInputName"
         style="@style/editText"
         android:layout_width="match_parent"
         android:digits="@string/settings_digits_name"
@@ -20,15 +20,15 @@
         tools:ignore="LabelFor" />
 
     <EditText
-        android:id="@+id/settingsChangeLastName"
+        android:id="@+id/changeInputLastName"
         style="@style/editText"
         android:layout_width="match_parent"
         android:digits="@string/settings_digits_name"
         android:hint="@string/settings_edit_text_last_name"
         android:importantForAutofill="no"
-        android:inputType="textPersonName"
+        android:inputType="textCapWords"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/settingsChangeName"
+        app:layout_constraintTop_toBottomOf="@id/changeInputName"
         tools:ignore="LabelFor" />
 </androidx.constraintlayout.widget.ConstraintLayout>

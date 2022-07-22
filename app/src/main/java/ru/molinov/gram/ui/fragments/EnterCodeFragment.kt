@@ -20,13 +20,13 @@ class EnterCodeFragment(private val phoneNumber: String, val id: String) :
     private fun verifyCode() {
         val code = binding.registerInputCode.text.toString()
         val credential = PhoneAuthProvider.getCredential(id, code)
-        auth.signInWithCredential(credential).addOnCompleteListener {
+        AUTH.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
                 val map = mutableMapOf<String, Any>()
-                map[USER_ID] = uid
+                map[USER_ID] = UID
                 map[USER_PHONE] = phoneNumber
-                map[USER_NAME] = uid
-                refDb.child(NODE_USERS).child(uid).updateChildren(map)
+                map[USER_NAME] = UID
+                REFERENCE_DB.child(NODE_USERS).child(UID).updateChildren(map)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             showToast("Аутентификация выполнена успешно")

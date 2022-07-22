@@ -14,6 +14,7 @@ class ChangeNameFragment :
     override fun onResume() {
         super.onResume()
         setHasOptionsMenu(true)
+        loadName()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -25,17 +26,23 @@ class ChangeNameFragment :
         return true
     }
 
+    private fun loadName() = with(binding) {
+        val fullNameList = USER.fullName.split(" ")
+        changeInputName.setText(fullNameList.first())
+        changeInputLastName.setText(fullNameList.last())
+    }
+
     private fun changeName() = with(binding) {
-        val name = settingsChangeName.text.toString()
-        val lastName = settingsChangeLastName.text.toString()
+        val name = changeInputName.text.toString()
+        val lastName = changeInputLastName.text.toString()
         if (name.isEmpty()) showToast(getString(R.string.settings_name_is_empty))
         else {
             val fullName = "$name $lastName"
-            refDb.child(NODE_USERS).child(uid).child(USER_FULL_NAME).setValue(fullName)
+            REFERENCE_DB.child(NODE_USERS).child(UID).child(USER_FULL_NAME).setValue(fullName)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         showToast(getString(R.string.data_update))
-                        user.fullName = fullName
+                        USER.fullName = fullName
                         parentFragmentManager.popBackStack()
                     } else showToast("Data update error: ${it.exception?.message}")
                 }

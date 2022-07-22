@@ -6,11 +6,9 @@ import androidx.appcompat.widget.Toolbar
 import ru.molinov.gram.databinding.ActivityMainBinding
 import ru.molinov.gram.ui.activities.RegisterActivity
 import ru.molinov.gram.ui.fragments.ChatsFragment
+import ru.molinov.gram.ui.models.User
 import ru.molinov.gram.ui.objects.AppDrawer
-import ru.molinov.gram.utilites.addFragment
-import ru.molinov.gram.utilites.auth
-import ru.molinov.gram.utilites.initFirebase
-import ru.molinov.gram.utilites.replaceActivity
+import ru.molinov.gram.utilites.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunc() {
-        if (auth.currentUser != null) {
+        if (AUTH.currentUser != null) {
             setSupportActionBar(toolbar)
             appDrawer.create()
             addFragment(ChatsFragment())
@@ -44,5 +42,13 @@ class MainActivity : AppCompatActivity() {
         toolbar = binding.mainToolbar
         appDrawer = AppDrawer(this, toolbar)
         initFirebase()
+        initUser()
+    }
+
+    private fun initUser() {
+        REFERENCE_DB.child(NODE_USERS).child(UID)
+            .addListenerForSingleValueEvent(AppValueEventListener {
+                USER = it.getValue(User::class.java) ?: User()
+            })
     }
 }
