@@ -4,31 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.ChangeNameFragment">
+    tools:context=".ui.fragments.ChangeFullNameFragment">
 
     <EditText
-        android:id="@+id/changeInputName"
+        android:id="@+id/changeUsername"
         style="@style/editText"
         android:layout_width="match_parent"
-        android:digits="@string/settings_digits_name"
-        android:hint="@string/settings_edit_text_name"
+        android:digits="@string/settings_digits_username"
+        android:hint="@string/settings_edit_username"
         android:importantForAutofill="no"
         android:inputType="textCapWords"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="LabelFor" />
-
-    <EditText
-        android:id="@+id/changeInputLastName"
-        style="@style/editText"
-        android:layout_width="match_parent"
-        android:digits="@string/settings_digits_name"
-        android:hint="@string/settings_edit_text_last_name"
-        android:importantForAutofill="no"
-        android:inputType="textCapWords"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/changeInputName"
         tools:ignore="LabelFor" />
 </androidx.constraintlayout.widget.ConstraintLayout>

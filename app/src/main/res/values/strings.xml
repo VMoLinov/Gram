@@ -3,7 +3,7 @@
     <string name="app_name">Gram</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="empty_string" />
-    <string name="data_update">Data is update</string>
+    <string name="toast_data_update">Data is update</string>
     <!-- Settings -->
     <string name="settings_default_user_name">Vadim Molinov</string>
     <string name="settings_status_online">Online</string>
@@ -18,7 +18,8 @@
     <string name="settings_menu_exit">Exit</string>
     <string name="settings_edit_text_name">Name</string>
     <string name="settings_edit_text_last_name">Last name</string>
-    <string name="settings_digits_name">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="settings_digits_full_name">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="settings_digits_username">0123456789_-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="settings_name_is_empty">Name don\'t be empty</string>
     <!-- Register -->
     <string name="register_next">next</string>
@@ -29,4 +30,8 @@
     <string name="register_title_your_phone">Your phone</string>
     <string name="register_enter_phone">Enter phone number</string>
     <string name="enter_phone_number_hint">+79111234567</string>
+    <string name="settings_edit_username">Username</string>
+    <string name="settings_change_username_already_exists">This name already exists</string>
+    <string name="authorization_successful">Authorization successful</string>
+    <string name="authorization_error">Authorization error</string>
 </resources>

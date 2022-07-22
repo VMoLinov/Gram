@@ -26,7 +26,7 @@ class EnterPhoneNumberFragment :
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
                 AUTH.signInWithCredential(credential).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        showToast("Аутентификация выполнена успешно")
+                        showToast(getString(R.string.authorization_successful))
                         (activity as RegisterActivity).replaceActivity(MainActivity())
                     } else showToast(it.exception?.message.toString())
                 }

@@ -13,6 +13,7 @@ lateinit var REFERENCE_DB: DatabaseReference
 lateinit var USER: User
 
 const val NODE_USERS = "users"
+const val NODE_USERNAMES = "usernames"
 const val USER_ID = "uid"
 const val USER_PHONE = "phone"
 const val USER_NAME = "username"

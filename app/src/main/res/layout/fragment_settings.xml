@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/normal_margin"
             android:layout_marginTop="@dimen/small_margin"
-            android:text="@string/settings_default_user_name"
+            tools:text="@string/settings_default_user_name"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/normal_text"
             app:layout_constraintStart_toEndOf="@id/settingsUserPhoto"
@@ -44,7 +44,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/normal_margin"
-            android:text="@string/settings_status_online"
+            tools:text="@string/settings_status_online"
             android:textColor="@color/colorAccentDark"
             android:textSize="@dimen/small_text"
             app:layout_constraintStart_toEndOf="@id/settingsUserPhoto"
@@ -74,7 +74,7 @@
         <TextView
             android:id="@+id/settingsPhoneNumber"
             style="@style/normalText"
-            android:text="@string/settings_default_number"
+            tools:text="@string/settings_default_number"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -93,7 +93,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/settingsBtnChangeUserName"
+        android:id="@+id/settingsBtnChangeUsername"
         style="@style/settingsButtons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -102,7 +102,7 @@
         <TextView
             android:id="@+id/settingsUserName"
             style="@style/normalText"
-            android:text="@string/settings_default_login"
+            tools:text="@string/settings_default_login"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -125,12 +125,12 @@
         style="@style/settingsButtons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/settingsBtnChangeUserName">
+        app:layout_constraintTop_toBottomOf="@id/settingsBtnChangeUsername">
 
         <TextView
             android:id="@+id/settingsBio"
             style="@style/normalText"
-            android:text="@string/settings_default_bio"
+            tools:text="@string/settings_default_bio"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

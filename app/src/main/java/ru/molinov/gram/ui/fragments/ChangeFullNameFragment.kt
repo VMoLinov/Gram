@@ -5,16 +5,33 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import ru.molinov.gram.MainActivity
 import ru.molinov.gram.R
-import ru.molinov.gram.databinding.FragmentChangeNameBinding
+import ru.molinov.gram.databinding.FragmentChangeFullNameBinding
 import ru.molinov.gram.utilites.*
 
-class ChangeNameFragment :
-    BaseFragment<FragmentChangeNameBinding>(FragmentChangeNameBinding::inflate) {
+class ChangeFullNameFragment :
+    OptionsFragment<FragmentChangeFullNameBinding>(FragmentChangeFullNameBinding::inflate) {
 
     override fun onResume() {
         super.onResume()
-        setHasOptionsMenu(true)
         loadName()
+        setTextWatcher()
+    }
+
+    private fun setTextWatcher() = with(binding) {
+        val fullNameList = USER.fullName.split(" ")
+        changeInputName.addTextChangedListener(AppTextWatcher {
+            val string = it.toString()
+            if (string.isNotEmpty() && string != fullNameList.first()
+                || fullNameList.last() != changeInputLastName.text.toString()
+            ) setHasOptionsMenu(true)
+            else setHasOptionsMenu(false)
+        })
+        changeInputLastName.addTextChangedListener(AppTextWatcher {
+            val string = it.toString()
+            if (string != fullNameList.last() || fullNameList.first() != changeInputName.text.toString())
+                setHasOptionsMenu(true)
+            else setHasOptionsMenu(false)
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -41,7 +58,7 @@ class ChangeNameFragment :
             REFERENCE_DB.child(NODE_USERS).child(UID).child(USER_FULL_NAME).setValue(fullName)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        showToast(getString(R.string.data_update))
+                        showToast(getString(R.string.toast_data_update))
                         USER.fullName = fullName
                         parentFragmentManager.popBackStack()
                     } else showToast("Data update error: ${it.exception?.message}")
