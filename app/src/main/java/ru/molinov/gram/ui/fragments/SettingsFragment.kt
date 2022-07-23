@@ -30,6 +30,7 @@ class SettingsFragment :
             settingsPhoneNumber.text = phone
         }
         settingsBtnChangeUsername.setOnClickListener { replaceFragment(ChangeUsernameFragment()) }
+        settingsBtnChangeBio.setOnClickListener { replaceFragment(ChangeBioFragment()) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
