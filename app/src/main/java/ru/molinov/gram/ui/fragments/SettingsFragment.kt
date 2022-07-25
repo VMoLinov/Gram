@@ -7,10 +7,7 @@ import ru.molinov.gram.MainActivity
 import ru.molinov.gram.R
 import ru.molinov.gram.databinding.FragmentSettingsBinding
 import ru.molinov.gram.ui.activities.RegisterActivity
-import ru.molinov.gram.utilites.AUTH
-import ru.molinov.gram.utilites.USER
-import ru.molinov.gram.utilites.replaceActivity
-import ru.molinov.gram.utilites.replaceFragment
+import ru.molinov.gram.utilites.*
 
 class SettingsFragment :
     OptionsFragment<FragmentSettingsBinding>(FragmentSettingsBinding::inflate) {
@@ -28,9 +25,15 @@ class SettingsFragment :
             settingsFullName.text = fullName
             settingsUserStatus.text = status
             settingsPhoneNumber.text = phone
+            REFERENCE_STORAGE.child("users_images").child(CURRENT_UID).downloadUrl
+                .addOnSuccessListener {
+                    showToast(it.toString())
+                    settingsUserPhoto.setImageURI(it)
+                }
         }
         settingsBtnChangeUsername.setOnClickListener { replaceFragment(ChangeUsernameFragment()) }
         settingsBtnChangeBio.setOnClickListener { replaceFragment(ChangeBioFragment()) }
+        settingsChangePhoto.setOnClickListener { (activity as MainActivity).startCrop() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

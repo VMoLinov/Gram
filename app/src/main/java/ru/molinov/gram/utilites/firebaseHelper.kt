@@ -4,12 +4,15 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import ru.molinov.gram.BuildConfig
 import ru.molinov.gram.ui.models.User
 
 lateinit var AUTH: FirebaseAuth
-lateinit var UID: String
+lateinit var CURRENT_UID: String
 lateinit var REFERENCE_DB: DatabaseReference
+lateinit var REFERENCE_STORAGE: StorageReference
 lateinit var USER: User
 
 const val NODE_USERS = "users"
@@ -24,6 +27,7 @@ fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
     if (BuildConfig.DEBUG) AUTH.firebaseAuthSettings.setAppVerificationDisabledForTesting(true)
     REFERENCE_DB = Firebase.database(BuildConfig.FIREBASE_REFERENCE).reference
+    REFERENCE_STORAGE = Firebase.storage.reference
     USER = User()
-    UID = AUTH.currentUser?.uid.toString()
+    CURRENT_UID = AUTH.currentUser?.uid.toString()
 }

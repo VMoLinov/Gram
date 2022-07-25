@@ -24,10 +24,10 @@ class EnterCodeFragment(private val phoneNumber: String, val id: String) :
         AUTH.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
                 val map = mutableMapOf<String, Any>()
-                map[USER_ID] = UID
+                map[USER_ID] = CURRENT_UID
                 map[USER_PHONE] = phoneNumber
-                map[USER_NAME] = USER.username.ifEmpty { UID }
-                REFERENCE_DB.child(NODE_USERS).child(UID).updateChildren(map)
+                map[USER_NAME] = USER.username.ifEmpty { CURRENT_UID }
+                REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).updateChildren(map)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             showToast(getString(R.string.authorization_successful))

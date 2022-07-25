@@ -22,7 +22,7 @@ class ChangeBioFragment :
 
     override fun changeCheck() {
         val newBio = binding.changeInputBio.text.toString()
-        REFERENCE_DB.child(NODE_USERS).child(UID).child(USER_BIO)
+        REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_BIO)
             .setValue(newBio)
             .addOnCompleteListener {
                 if (it.isSuccessful) {

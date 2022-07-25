@@ -44,7 +44,7 @@ class ChangeFullNameFragment :
     }
 
     private fun changeName(fullName: String) {
-        REFERENCE_DB.child(NODE_USERS).child(UID).child(USER_FULL_NAME).setValue(fullName)
+        REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_FULL_NAME).setValue(fullName)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     showToast(getString(R.string.toast_data_update))

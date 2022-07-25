@@ -30,9 +30,9 @@ class ChangeUsernameFragment :
 
     private fun changeUsername(newUsername: String) {
         REFERENCE_DB.child(NODE_USERNAMES).child(USER.username).removeValue().addOnSuccessListener {
-            REFERENCE_DB.child(NODE_USERNAMES).child(newUsername).setValue(UID)
+            REFERENCE_DB.child(NODE_USERNAMES).child(newUsername).setValue(CURRENT_UID)
             USER.username = newUsername
-            REFERENCE_DB.child(NODE_USERS).child(UID).child(USER_NAME).setValue(newUsername)
+            REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_NAME).setValue(newUsername)
                 .addOnCompleteListener {
                     showToast(getString(R.string.toast_data_update))
                     parentFragmentManager.popBackStack()
