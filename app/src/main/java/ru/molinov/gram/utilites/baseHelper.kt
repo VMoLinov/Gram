@@ -15,11 +15,14 @@ lateinit var REFERENCE_DB: DatabaseReference
 lateinit var REFERENCE_STORAGE: StorageReference
 lateinit var USER: User
 
+const val STORAGE_IMAGES = "users_images"
+
 const val NODE_USERS = "users"
 const val NODE_USERNAMES = "usernames"
 const val USER_ID = "uid"
 const val USER_PHONE = "phone"
 const val USER_NAME = "username"
+const val USER_PHOTO_URL = "photoUrl"
 const val USER_FULL_NAME = "fullName"
 const val USER_BIO = "bio"
 

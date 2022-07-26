@@ -23,10 +23,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-    }
-
-    override fun onStart() {
-        super.onStart()
         initProperties()
         initFunc()
     }
@@ -44,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private fun initProperties() {
         toolbar = binding.mainToolbar
         appDrawer = AppDrawer(this, toolbar)
+        MAIN_ACTIVITY = this
         initFirebase()
         initUser()
     }
@@ -55,23 +52,7 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
-        if (result.isSuccessful) {
-            result.uriContent?.let {
-                REFERENCE_STORAGE.child("users_images").child(CURRENT_UID).putFile(it)
-                    .addOnSuccessListener {
-                        showToast(getString(R.string.toast_data_update))
-                    }
-            }
-        } else showToast(result.error.toString())
-    }
 
-    fun startCrop() {
-        cropImage.launch(
-            options {
-                setGuidelines(CropImageView.Guidelines.ON)
-                setAspectRatio(1, 1)
-            }
-        )
-    }
+
+
 }
