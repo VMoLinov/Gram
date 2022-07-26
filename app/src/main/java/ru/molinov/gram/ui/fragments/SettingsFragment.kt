@@ -7,7 +7,6 @@ import com.bumptech.glide.Glide
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
-import de.hdodenhof.circleimageview.CircleImageView
 import ru.molinov.gram.R
 import ru.molinov.gram.databinding.FragmentSettingsBinding
 import ru.molinov.gram.ui.activities.RegisterActivity
@@ -29,23 +28,23 @@ class SettingsFragment :
             settingsFullName.text = fullName
             settingsUserStatus.text = status
             settingsPhoneNumber.text = phone
-            initUserPhoto()
+            initUserPhoto(photoUrl)
         }
         settingsBtnChangeUsername.setOnClickListener { replaceFragment(ChangeUsernameFragment()) }
         settingsBtnChangeBio.setOnClickListener { replaceFragment(ChangeBioFragment()) }
         settingsChangePhoto.setOnClickListener { startCrop() }
     }
 
-    private fun initUserPhoto() {
-        if (USER.photoUrl.isBlank()) {
+    private fun initUserPhoto(photoUrl: String) {
+        if (photoUrl.isBlank()) {
             REFERENCE_STORAGE.child(STORAGE_IMAGES).child(CURRENT_UID).downloadUrl
                 .addOnSuccessListener {
                     val url = it.toString()
-                    setPhoto(url)
+                    setUserPhoto(url)
                     REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_PHOTO_URL)
                         .setValue(url)
                 }
-        } else setPhoto(USER.photoUrl)
+        } else setUserPhoto(photoUrl)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -64,7 +63,7 @@ class SettingsFragment :
         return true
     }
 
-    private fun setPhoto(url: String) {
+    private fun setUserPhoto(url: String) {
         Glide.with(this)
             .load(url)
             .placeholder(R.drawable.ic_default_user)
@@ -73,18 +72,16 @@ class SettingsFragment :
 
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
-            result.uriContent?.let {
-                REFERENCE_STORAGE.child(STORAGE_IMAGES).child(CURRENT_UID).putFile(it)
-                    .addOnSuccessListener { uploadTask ->
-                        uploadTask.storage.downloadUrl.addOnSuccessListener { uri ->
-                            val url = uri.toString()
-                            setPhoto(url)
-                            REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_PHOTO_URL)
-                                .setValue(url)
-                            USER.photoUrl = url
-                            showToast(getString(R.string.toast_data_update))
-                        }
+            val uri = result.uriContent
+            val path = REFERENCE_STORAGE.child(STORAGE_IMAGES).child(CURRENT_UID)
+            putImageToStore(uri, path) {
+                getUrlFromStorage(path) { url ->
+                    putUrlToDataBase(url) {
+                        setUserPhoto(url)
+                        USER.photoUrl = url
+                        showToast(getString(R.string.toast_data_update))
                     }
+                }
             }
         } else showToast(result.error.toString())
     }

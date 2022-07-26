@@ -3,9 +3,6 @@ package ru.molinov.gram
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import com.canhub.cropper.CropImageContract
-import com.canhub.cropper.CropImageView
-import com.canhub.cropper.options
 import ru.molinov.gram.databinding.ActivityMainBinding
 import ru.molinov.gram.ui.activities.RegisterActivity
 import ru.molinov.gram.ui.fragments.ChatsFragment
@@ -32,15 +29,13 @@ class MainActivity : AppCompatActivity() {
             setSupportActionBar(toolbar)
             appDrawer.create()
             addFragment(ChatsFragment())
-        } else {
-            replaceActivity(RegisterActivity())
-        }
+        } else replaceActivity(RegisterActivity())
     }
 
     private fun initProperties() {
+        MAIN_ACTIVITY = this
         toolbar = binding.mainToolbar
         appDrawer = AppDrawer(this, toolbar)
-        MAIN_ACTIVITY = this
         initFirebase()
         initUser()
     }
@@ -51,8 +46,4 @@ class MainActivity : AppCompatActivity() {
                 USER = it.getValue(User::class.java) ?: User()
             })
     }
-
-
-
-
 }

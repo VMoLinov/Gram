@@ -1,5 +1,6 @@
 package ru.molinov.gram.utilites
 
+import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -33,4 +34,24 @@ fun initFirebase() {
     REFERENCE_STORAGE = Firebase.storage.reference
     USER = User()
     CURRENT_UID = AUTH.currentUser?.uid.toString()
+}
+
+inline fun putUrlToDataBase(url: String, crossinline function: () -> Unit) {
+    REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_PHOTO_URL).setValue(url)
+        .addOnSuccessListener { function() }
+        .addOnFailureListener { showToast(it.toString()) }
+}
+
+inline fun getUrlFromStorage(path: StorageReference, crossinline function: (url: String) -> Unit) {
+    path.downloadUrl
+        .addOnSuccessListener { function(it.toString()) }
+        .addOnFailureListener { showToast(it.toString()) }
+}
+
+inline fun putImageToStore(uri: Uri?, path: StorageReference, crossinline function: () -> Unit) {
+    uri?.let {
+        path.putFile(it)
+            .addOnSuccessListener { function() }
+            .addOnFailureListener { exception -> showToast(exception.message.toString()) }
+    }
 }
