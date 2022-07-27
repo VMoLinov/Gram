@@ -39,19 +39,28 @@ fun initFirebase() {
 inline fun putUrlToDataBase(url: String, crossinline function: () -> Unit) {
     REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_PHOTO_URL).setValue(url)
         .addOnSuccessListener { function() }
-        .addOnFailureListener { showToast(it.toString()) }
+        .addOnFailureListener { showToast(it.message.toString()) }
 }
 
 inline fun getUrlFromStorage(path: StorageReference, crossinline function: (url: String) -> Unit) {
     path.downloadUrl
         .addOnSuccessListener { function(it.toString()) }
-        .addOnFailureListener { showToast(it.toString()) }
+        .addOnFailureListener { showToast(it.message.toString()) }
 }
 
 inline fun putImageToStore(uri: Uri?, path: StorageReference, crossinline function: () -> Unit) {
-    uri?.let {
-        path.putFile(it)
+    uri?.let { file ->
+        path.putFile(file)
             .addOnSuccessListener { function() }
-            .addOnFailureListener { exception -> showToast(exception.message.toString()) }
+            .addOnFailureListener { showToast(it.message.toString()) }
     }
+}
+
+inline fun initUser(crossinline function: () -> Unit) {
+    REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID)
+        .addListenerForSingleValueEvent(AppValueEventListener {
+            USER = it.getValue(User::class.java) ?: User()
+            if (USER.username.isEmpty()) USER.username = CURRENT_UID
+            function()
+        })
 }

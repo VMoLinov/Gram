@@ -6,7 +6,6 @@ import androidx.appcompat.widget.Toolbar
 import ru.molinov.gram.databinding.ActivityMainBinding
 import ru.molinov.gram.ui.activities.RegisterActivity
 import ru.molinov.gram.ui.fragments.ChatsFragment
-import ru.molinov.gram.ui.models.User
 import ru.molinov.gram.ui.objects.AppDrawer
 import ru.molinov.gram.utilites.*
 
@@ -20,8 +19,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initProperties()
-        initFunc()
+        initFirebase()
+        initUser {
+            initProperties()
+            initFunc()
+        }
     }
 
     private fun initFunc() {
@@ -36,14 +38,5 @@ class MainActivity : AppCompatActivity() {
         MAIN_ACTIVITY = this
         toolbar = binding.mainToolbar
         appDrawer = AppDrawer(this, toolbar)
-        initFirebase()
-        initUser()
-    }
-
-    private fun initUser() {
-        REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID)
-            .addListenerForSingleValueEvent(AppValueEventListener {
-                USER = it.getValue(User::class.java) ?: User()
-            })
     }
 }

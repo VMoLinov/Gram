@@ -3,7 +3,6 @@ package ru.molinov.gram.ui.fragments
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import com.bumptech.glide.Glide
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
@@ -64,10 +63,7 @@ class SettingsFragment :
     }
 
     private fun setUserPhoto(url: String) {
-        Glide.with(this)
-            .load(url)
-            .placeholder(R.drawable.ic_default_user)
-            .into(binding.settingsUserPhoto)
+        binding.settingsUserPhoto.downloadAndSetImage(url, R.drawable.ic_default_user)
     }
 
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
@@ -79,6 +75,7 @@ class SettingsFragment :
                     putUrlToDataBase(url) {
                         setUserPhoto(url)
                         USER.photoUrl = url
+                        updateDrawerHeader()
                         showToast(getString(R.string.toast_data_update))
                     }
                 }

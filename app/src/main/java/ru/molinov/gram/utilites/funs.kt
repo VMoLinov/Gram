@@ -3,9 +3,11 @@ package ru.molinov.gram.utilites
 import android.content.Context
 import android.content.Intent
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import ru.molinov.gram.R
 
 fun showToast(text: String) {
@@ -39,6 +41,13 @@ fun Fragment.replaceFragment(fragment: Fragment) {
         .replace(R.id.dataContainer, fragment)
         .addToBackStack(null)
         .commit()
+}
+
+fun ImageView.downloadAndSetImage(url: String, placeholder: Int) {
+    Glide.with(this)
+        .load(url)
+        .placeholder(placeholder)
+        .into(this)
 }
 
 fun hideKeyboard() {
