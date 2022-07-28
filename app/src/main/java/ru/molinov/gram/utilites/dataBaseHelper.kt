@@ -1,6 +1,7 @@
 package ru.molinov.gram.utilites
 
 import android.net.Uri
+import android.provider.ContactsContract
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -8,6 +9,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import ru.molinov.gram.BuildConfig
+import ru.molinov.gram.ui.models.CommonModel
 import ru.molinov.gram.ui.models.User
 
 lateinit var AUTH: FirebaseAuth
@@ -64,4 +66,28 @@ inline fun initUser(crossinline function: () -> Unit) {
             if (USER.username.isEmpty()) USER.username = CURRENT_UID
             function()
         })
+}
+
+fun initContacts() {
+    if (checkPermission(READ_CONTACTS)) {
+        val arrayContacts = arrayListOf<CommonModel>()
+        val cursor = MAIN_ACTIVITY.contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            null,
+            null,
+            null,
+            null
+        )
+        cursor?.let {
+            while (it.moveToNext()) {
+                val fullNameColumn = it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+                val phoneColumn = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                val newModel = CommonModel()
+                newModel.fullName = it.getString(fullNameColumn)
+                newModel.phone = it.getString(phoneColumn).replace(Regex("[\\s,-]"), "")
+                arrayContacts.add(newModel)
+            }
+        }
+        cursor?.close()
+    }
 }
