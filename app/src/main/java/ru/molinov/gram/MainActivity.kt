@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        MAIN_ACTIVITY = this
         initFirebase()
         initUser {
             initProperties()
@@ -35,8 +36,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initProperties() {
-        MAIN_ACTIVITY = this
         toolbar = binding.mainToolbar
         appDrawer = AppDrawer(this, toolbar)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        AppStates.updateState(AppStates.ONLINE)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        AppStates.updateState(AppStates.OFFLINE)
     }
 }
