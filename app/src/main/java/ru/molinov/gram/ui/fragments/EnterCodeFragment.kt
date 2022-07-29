@@ -21,20 +21,28 @@ class EnterCodeFragment(private val phoneNumber: String, val id: String) :
     private fun verifyCode() {
         val code = binding.registerInputCode.text.toString()
         val credential = PhoneAuthProvider.getCredential(id, code)
-        AUTH.signInWithCredential(credential).addOnCompleteListener {
-            if (it.isSuccessful) {
+        AUTH.signInWithCredential(credential)
+            .addOnSuccessListener {
+                val uid = AUTH.currentUser?.uid.toString()
                 val map = mutableMapOf<String, Any>()
-                map[USER_ID] = CURRENT_UID
+                map[USER_ID] = uid
                 map[USER_PHONE] = phoneNumber
-                map[USER_NAME] = USER.username.ifEmpty { CURRENT_UID }
-                REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).updateChildren(map)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            showToast(getString(R.string.authorization_successful))
-                            (activity as RegisterActivity).replaceActivity(MainActivity())
-                        } else showToast(getString(R.string.authorization_error) + task.exception?.message.toString())
+                map[USER_NAME] = USER.username.ifEmpty { uid }
+                pushData(map)
+            }
+            .addOnFailureListener { showToast(it.message.toString()) }
+    }
+
+    private fun pushData(map: MutableMap<String, Any>) {
+        REFERENCE_DB.child(NODE_PHONES).child(map[USER_PHONE].toString()).setValue(map[USER_ID])
+            .addOnSuccessListener { _ ->
+                REFERENCE_DB.child(NODE_USERS).child(map[USER_ID].toString()).updateChildren(map)
+                    .addOnSuccessListener {
+                        showToast(getString(R.string.authorization_successful))
+                        (activity as RegisterActivity).replaceActivity(MainActivity())
                     }
-            } else showToast(it.exception?.message.toString())
-        }
+                    .addOnFailureListener { showToast(it.message.toString()) }
+            }
+            .addOnFailureListener { showToast(it.message.toString()) }
     }
 }

@@ -22,6 +22,9 @@ const val STORAGE_IMAGES = "users_images"
 
 const val NODE_USERS = "users"
 const val NODE_USERNAMES = "usernames"
+const val NODE_PHONES = "phones"
+const val NODE_PHONES_CONTACTS = "phone_contacts"
+
 const val USER_ID = "uid"
 const val USER_PHONE = "phone"
 const val USER_NAME = "username"
@@ -89,5 +92,21 @@ fun initContacts() {
             }
         }
         cursor?.close()
+        updatePhonesToDatabase(arrayContacts)
     }
+}
+
+fun updatePhonesToDatabase(arrayContacts: ArrayList<CommonModel>) {
+    REFERENCE_DB.child(NODE_PHONES).addListenerForSingleValueEvent(AppValueEventListener {
+        it.children.forEach { snapshot ->
+            arrayContacts.forEach { contact ->
+                if (snapshot.key == contact.phone) {
+                    REFERENCE_DB.child(NODE_PHONES_CONTACTS).child(CURRENT_UID)
+                        .child(snapshot.value.toString()).child(USER_ID)
+                        .setValue(snapshot.value.toString())
+                        .addOnFailureListener { exception -> showToast(exception.message.toString()) }
+                }
+            }
+        }
+    })
 }

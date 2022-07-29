@@ -48,12 +48,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        AppStates.updateState(AppStates.ONLINE)
+        if (AUTH.currentUser != null) AppStates.updateState(AppStates.ONLINE)
     }
 
     override fun onStop() {
         super.onStop()
-        AppStates.updateState(AppStates.OFFLINE)
+        if (AUTH.currentUser != null) AppStates.updateState(AppStates.OFFLINE)
     }
 
     override fun onRequestPermissionsResult(
