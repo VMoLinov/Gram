@@ -22,7 +22,7 @@
             android:name="com.canhub.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
-            android:name=".ui.activities.RegisterActivity"
+            android:name="ru.molinov.gram.activities.RegisterActivity"
             android:exported="true"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity

@@ -1,4 +1,4 @@
-package ru.molinov.gram.ui.activities
+package ru.molinov.gram.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

@@ -35,7 +35,7 @@ class ChangeUsernameFragment :
             REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_NAME).setValue(newUsername)
                 .addOnCompleteListener {
                     updateDrawerHeader()
-                    showToast(getString(R.string.toast_data_update))
+                    showToast(getString(R.string.app_toast_data_update))
                     parentFragmentManager.popBackStack()
                 }
         }

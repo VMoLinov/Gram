@@ -11,7 +11,7 @@
         style="@style/editText"
         android:layout_width="match_parent"
         android:gravity="start"
-        android:hint="@string/setttings_edit_text_bio"
+        android:hint="@string/settings_edit_text_bio"
         android:importantForAutofill="no"
         android:inputType="textCapSentences|textMultiLine"
         android:maxLines="200"

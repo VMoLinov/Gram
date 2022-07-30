@@ -47,7 +47,8 @@ class ChangeFullNameFragment :
         REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_FULL_NAME).setValue(fullName)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    showToast(getString(R.string.toast_data_update))
+                    updateDrawerHeader()
+                    showToast(getString(R.string.app_toast_data_update))
                     USER.fullName = fullName
                     parentFragmentManager.popBackStack()
                 } else showToast("Data update error: ${it.exception?.message}")

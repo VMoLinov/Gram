@@ -28,7 +28,7 @@ class ChangeBioFragment :
                 if (it.isSuccessful) {
                     USER.bio = newBio
                     updateDrawerHeader()
-                    showToast(getString(R.string.toast_data_update))
+                    showToast(getString(R.string.app_toast_data_update))
                     parentFragmentManager.popBackStack()
                 } else showToast(it.exception?.message.toString())
             }

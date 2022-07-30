@@ -6,8 +6,8 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import ru.molinov.gram.MainActivity
 import ru.molinov.gram.R
+import ru.molinov.gram.activities.RegisterActivity
 import ru.molinov.gram.databinding.FragmentEnterPhoneNumberBinding
-import ru.molinov.gram.ui.activities.RegisterActivity
 import ru.molinov.gram.utilites.AUTH
 import ru.molinov.gram.utilites.replaceActivity
 import ru.molinov.gram.utilites.replaceFragment
@@ -26,7 +26,7 @@ class EnterPhoneNumberFragment :
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
                 AUTH.signInWithCredential(credential).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        showToast(getString(R.string.authorization_successful))
+                        showToast(getString(R.string.register_authorization_successful))
                         (activity as RegisterActivity).replaceActivity(MainActivity())
                     } else showToast(it.exception?.message.toString())
                 }

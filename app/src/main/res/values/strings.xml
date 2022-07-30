@@ -1,9 +1,9 @@
 <resources>
-    <!-- Main -->
+    <!-- App -->
     <string name="app_name">Gram</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="empty_string" />
-    <string name="toast_data_update">Data is update</string>
+    <string name="app_hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_empty_string" />
+    <string name="app_toast_data_update">Data is update</string>
     <!-- Settings -->
     <string name="settings_default_user_name">Vadim Molinov</string>
     <string name="settings_status_online">Online</string>
@@ -23,16 +23,18 @@
     <string name="settings_name_is_empty">Name must be not empty</string>
     <string name="settings_edit_username">Username</string>
     <string name="settings_change_username_already_exists">This name already exists</string>
+    <string name="settings_edit_text_bio">Bio</string>
     <!-- Register -->
     <string name="register_next">next</string>
-    <string name="cd_register_image">registerImage</string>
+    <string name="register_cd_image">registerImage</string>
     <string name="register_text_enter_code">Enter code</string>
     <string name="register_text_we_sent">We sent SMS with check code on your phone</string>
     <string name="register_hint_default_code">- - - - - -</string>
     <string name="register_title_your_phone">Your phone</string>
     <string name="register_enter_phone">Enter phone number</string>
-    <string name="enter_phone_number_hint">+79111234567</string>
-    <string name="authorization_successful">Authorization successful</string>
-    <string name="authorization_error">Authorization error</string>
-    <string name="setttings_edit_text_bio">Bio</string>
+    <string name="register_enter_phone_number_hint">+79111234567</string>
+    <string name="register_authorization_successful">Authorization successful</string>
+    <string name="register_authorization_error">Authorization error</string>
+    <!-- Contacts -->
+    <string name="contacts_title">Contacts</string>
 </resources>

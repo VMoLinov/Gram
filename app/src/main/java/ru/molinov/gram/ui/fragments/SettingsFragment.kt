@@ -7,8 +7,8 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
 import ru.molinov.gram.R
+import ru.molinov.gram.activities.RegisterActivity
 import ru.molinov.gram.databinding.FragmentSettingsBinding
-import ru.molinov.gram.ui.activities.RegisterActivity
 import ru.molinov.gram.utilites.*
 
 class SettingsFragment :
@@ -76,7 +76,7 @@ class SettingsFragment :
                         setUserPhoto(url)
                         USER.photoUrl = url
                         updateDrawerHeader()
-                        showToast(getString(R.string.toast_data_update))
+                        showToast(getString(R.string.app_toast_data_update))
                     }
                 }
             }

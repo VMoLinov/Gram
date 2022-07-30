@@ -4,6 +4,6 @@
     <item
         android:id="@+id/changeNameConfirm"
         android:icon="@drawable/ic_btn_confirm"
-        android:title="@string/empty_string"
+        android:title="@string/app_empty_string"
         app:showAsAction="ifRoom" />
 </menu>

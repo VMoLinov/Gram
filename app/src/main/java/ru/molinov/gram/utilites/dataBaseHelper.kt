@@ -3,14 +3,15 @@ package ru.molinov.gram.utilites
 import android.net.Uri
 import android.provider.ContactsContract
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import ru.molinov.gram.BuildConfig
-import ru.molinov.gram.ui.models.CommonModel
-import ru.molinov.gram.ui.models.User
+import ru.molinov.gram.models.CommonModel
+import ru.molinov.gram.models.User
 
 lateinit var AUTH: FirebaseAuth
 lateinit var CURRENT_UID: String
@@ -25,7 +26,7 @@ const val NODE_USERNAMES = "usernames"
 const val NODE_PHONES = "phones"
 const val NODE_PHONES_CONTACTS = "phone_contacts"
 
-const val USER_ID = "uid"
+const val USER_ID = "id"
 const val USER_PHONE = "phone"
 const val USER_NAME = "username"
 const val USER_PHOTO_URL = "photoUrl"
@@ -110,3 +111,6 @@ fun updatePhonesToDatabase(arrayContacts: ArrayList<CommonModel>) {
         }
     })
 }
+
+fun DataSnapshot.getCommonModel(): CommonModel =
+    this.getValue(CommonModel::class.java) ?: CommonModel()

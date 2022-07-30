@@ -8,8 +8,8 @@ import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.molinov.gram.activities.RegisterActivity
 import ru.molinov.gram.databinding.ActivityMainBinding
-import ru.molinov.gram.ui.activities.RegisterActivity
 import ru.molinov.gram.ui.fragments.ChatsFragment
 import ru.molinov.gram.ui.objects.AppDrawer
 import ru.molinov.gram.utilites.*
@@ -17,7 +17,7 @@ import ru.molinov.gram.utilites.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var toolbar: Toolbar
+    internal lateinit var toolbar: Toolbar
     internal lateinit var appDrawer: AppDrawer
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initProperties() {
         toolbar = binding.mainToolbar
-        appDrawer = AppDrawer(this, toolbar)
+        appDrawer = AppDrawer()
     }
 
     override fun onStart() {

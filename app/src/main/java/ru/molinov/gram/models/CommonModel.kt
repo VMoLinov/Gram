@@ -1,6 +1,6 @@
-package ru.molinov.gram.ui.models
+package ru.molinov.gram.models
 
-data class User(
+data class CommonModel(
     val id: String = "",
     var username: String = "",
     var bio: String = "",
