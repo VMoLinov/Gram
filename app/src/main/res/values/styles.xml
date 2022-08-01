@@ -54,4 +54,21 @@
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textSize">@dimen/normal_text</item>
     </style>
+
+    <style name="app_normal_text">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/normal_margin</item>
+        <item name="android:layout_marginTop">@dimen/small_margin</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">@dimen/normal_text</item>
+    </style>
+
+    <style name="app_small_text">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/normal_margin</item>
+        <item name="android:textColor">@color/colorAccentDark</item>
+        <item name="android:textSize">@dimen/small_text</item>
+    </style>
 </resources>

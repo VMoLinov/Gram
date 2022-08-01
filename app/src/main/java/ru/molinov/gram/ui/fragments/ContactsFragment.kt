@@ -62,6 +62,7 @@ class ContactsFragment :
             contactStatus.text = contact.status
             contactPhoto
                 .downloadAndSetImage(contact.photoUrl, R.drawable.ic_default_user)
+            holder.itemView.setOnClickListener { replaceFragment(SingleChatFragment.newInstance(contact)) }
         }
     }
 

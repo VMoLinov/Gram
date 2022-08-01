@@ -1,5 +1,9 @@
 package ru.molinov.gram.models
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class CommonModel(
     val id: String = "",
     var username: String = "",
@@ -8,4 +12,4 @@ data class CommonModel(
     var status: String = "",
     var photoUrl: String = "",
     var phone: String = ""
-)
+) : Parcelable

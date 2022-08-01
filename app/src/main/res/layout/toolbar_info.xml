@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/colorPrimary">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/toolbarImage"
+        android:layout_width="@dimen/toolbar_image_size"
+        android:layout_height="@dimen/toolbar_image_size"
+        android:layout_marginHorizontal="@dimen/normal_margin"
+
+        android:src="@drawable/ic_default_user"
+        app:civ_circle_background_color="@color/accent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/toolbarFullName"
+        style="@style/app_normal_text"
+        android:layout_marginTop="0dp"
+        app:layout_constraintStart_toEndOf="@id/toolbarImage"
+        app:layout_constraintTop_toTopOf="@id/toolbarImage"
+        tools:text="@string/settings_default_user_name" />
+
+    <TextView
+        android:id="@+id/toolbarUserStatus"
+        style="@style/app_small_text"
+        app:layout_constraintStart_toEndOf="@id/toolbarImage"
+        app:layout_constraintTop_toBottomOf="@id/toolbarFullName"
+        tools:text="@string/settings_status_online" />
+</androidx.constraintlayout.widget.ConstraintLayout>

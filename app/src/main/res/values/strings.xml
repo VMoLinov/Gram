@@ -37,4 +37,7 @@
     <string name="register_authorization_error">Authorization error</string>
     <!-- Contacts -->
     <string name="contacts_title">Contacts</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="single_chat_message">Message</string>
 </resources>

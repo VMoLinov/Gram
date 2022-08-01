@@ -29,26 +29,17 @@
 
         <TextView
             android:id="@+id/settingsFullName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/normal_margin"
-            android:layout_marginTop="@dimen/small_margin"
             tools:text="@string/settings_default_user_name"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/normal_text"
             app:layout_constraintStart_toEndOf="@id/settingsUserPhoto"
-            app:layout_constraintTop_toTopOf="@id/settingsUserPhoto" />
+            app:layout_constraintTop_toTopOf="@id/settingsUserPhoto"
+            style="@style/app_normal_text" />
 
         <TextView
             android:id="@+id/settingsUserStatus"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/normal_margin"
             tools:text="@string/settings_status_online"
-            android:textColor="@color/colorAccentDark"
-            android:textSize="@dimen/small_text"
             app:layout_constraintStart_toEndOf="@id/settingsUserPhoto"
-            app:layout_constraintTop_toBottomOf="@id/settingsFullName" />
+            app:layout_constraintTop_toBottomOf="@id/settingsFullName"
+            style="@style/app_small_text" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
