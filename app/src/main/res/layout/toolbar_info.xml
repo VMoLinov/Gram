@@ -10,8 +10,6 @@
         android:id="@+id/toolbarImage"
         android:layout_width="@dimen/toolbar_image_size"
         android:layout_height="@dimen/toolbar_image_size"
-        android:layout_marginHorizontal="@dimen/normal_margin"
-
         android:src="@drawable/ic_default_user"
         app:civ_circle_background_color="@color/accent"
         app:layout_constraintBottom_toBottomOf="parent"
