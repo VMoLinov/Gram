@@ -11,13 +11,13 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import ru.molinov.gram.BuildConfig
 import ru.molinov.gram.models.CommonModel
-import ru.molinov.gram.models.User
+import ru.molinov.gram.models.UserModel
 
 lateinit var AUTH: FirebaseAuth
 lateinit var CURRENT_UID: String
 lateinit var REFERENCE_DB: DatabaseReference
 lateinit var REFERENCE_STORAGE: StorageReference
-lateinit var USER: User
+lateinit var USER: UserModel
 
 const val STORAGE_IMAGES = "users_images"
 
@@ -39,7 +39,7 @@ fun initFirebase() {
     if (BuildConfig.DEBUG) AUTH.firebaseAuthSettings.setAppVerificationDisabledForTesting(true)
     REFERENCE_DB = Firebase.database(BuildConfig.FIREBASE_REFERENCE).reference
     REFERENCE_STORAGE = Firebase.storage.reference
-    USER = User()
+    USER = UserModel()
     CURRENT_UID = AUTH.currentUser?.uid.toString()
 }
 
@@ -66,7 +66,7 @@ inline fun putImageToStore(uri: Uri?, path: StorageReference, crossinline functi
 inline fun initUser(crossinline function: () -> Unit) {
     REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID)
         .addListenerForSingleValueEvent(AppValueEventListener {
-            USER = it.getValue(User::class.java) ?: User()
+            USER = it.getValue(UserModel::class.java) ?: UserModel()
             if (USER.username.isEmpty()) USER.username = CURRENT_UID
             function()
         })
@@ -114,3 +114,6 @@ fun updatePhonesToDatabase(arrayContacts: ArrayList<CommonModel>) {
 
 fun DataSnapshot.getCommonModel(): CommonModel =
     this.getValue(CommonModel::class.java) ?: CommonModel()
+
+fun DataSnapshot.getUserModel(): UserModel =
+    this.getValue(UserModel::class.java) ?: UserModel()
