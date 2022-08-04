@@ -11,5 +11,9 @@ data class CommonModel(
     var fullName: String = "",
     var status: String = "",
     var photoUrl: String = "",
-    var phone: String = ""
+    var phone: String = "",
+    var text: String = "",
+    var type: String = "",
+    var from: String = "",
+    var timestamp: String = ""
 ) : Parcelable

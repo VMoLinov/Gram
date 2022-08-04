@@ -4,6 +4,7 @@ import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ServerValue
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
@@ -18,12 +19,15 @@ lateinit var REFERENCE_DB: DatabaseReference
 lateinit var REFERENCE_STORAGE: StorageReference
 lateinit var USER: UserModel
 
+const val TYPE_TEXT = "text"
+
 const val STORAGE_IMAGES = "users_images"
 
 const val NODE_USERS = "users"
 const val NODE_USERNAMES = "usernames"
 const val NODE_PHONES = "phones"
 const val NODE_PHONES_CONTACTS = "phone_contacts"
+const val NODE_MESSAGES = "messages"
 
 const val USER_ID = "id"
 const val USER_PHONE = "phone"
@@ -32,6 +36,10 @@ const val USER_PHOTO_URL = "photoUrl"
 const val USER_STATUS = "status"
 const val USER_FULL_NAME = "fullName"
 const val USER_BIO = "bio"
+const val USER_TEXT = "text"
+const val USER_TYPE = "type"
+const val USER_FROM = "from"
+const val USER_TIMESTAMP = "timestamp"
 
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
@@ -88,6 +96,23 @@ fun updatePhonesToDatabase(arrayContacts: ArrayList<CommonModel>) {
             }
         }
     })
+}
+
+fun sendMessage(message: String, receivingUserId: String, typeText: String, function: () -> Unit) {
+    val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"
+    val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"
+    val messageKey = REFERENCE_DB.child(refDialogUser).push().key
+    val mapMessage = hashMapOf<String, Any>()
+    mapMessage[USER_FROM] = CURRENT_UID
+    mapMessage[USER_TYPE] = typeText
+    mapMessage[USER_TEXT] = message
+    mapMessage[USER_TIMESTAMP] = ServerValue.TIMESTAMP
+    val mapDialog = hashMapOf<String, Any>()
+    mapDialog["$refDialogUser/$messageKey"] = mapMessage
+    mapDialog["$refDialogReceivingUser/$message"] = mapMessage
+    REFERENCE_DB.updateChildren(mapDialog)
+        .addOnSuccessListener { function() }
+        .addOnFailureListener { showToast(it.message.toString()) }
 }
 
 fun DataSnapshot.getCommonModel(): CommonModel =

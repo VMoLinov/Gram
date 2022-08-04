@@ -37,6 +37,13 @@ class SingleChatFragment :
             initToolbar()
         }
         refUser.addValueEventListener(listenerToolbar)
+        binding.singleChatBtnSent.setOnClickListener {
+            val message = binding.singleChatMessage.text.toString()
+            if (message.isEmpty()) showToast("Enter a message")
+            else sendMessage(message, model.id, TYPE_TEXT) {
+                binding.singleChatMessage.setText("")
+            }
+        }
     }
 
     private fun initToolbar() {

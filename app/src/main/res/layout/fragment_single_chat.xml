@@ -31,11 +31,11 @@
         android:textColor="@color/colorBlack"
         android:textColorHint="@color/colorGray"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/singleChatSent"
+        app:layout_constraintEnd_toStartOf="@id/singleChatBtnSent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/singleChatSent"
+        android:id="@+id/singleChatBtnSent"
         android:layout_width="50dp"
         android:layout_height="0dp"
         android:contentDescription="@string/single_chat_sent_message"
