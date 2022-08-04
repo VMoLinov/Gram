@@ -46,7 +46,7 @@ class ContactsFragment :
                 holder: ContactsHolder, position: Int, model: CommonModel
             ) {
                 refUser = REFERENCE_DB.child(NODE_USERS).child(model.id)
-                val listener = getAppValueEventListener(holder)
+                val listener = getAppValueEventListener(holder, model)
                 refUser.addValueEventListener(listener)
                 listenersMap[refUser] = listener
             }
@@ -55,16 +55,20 @@ class ContactsFragment :
         adapter.startListening()
     }
 
-    private fun getAppValueEventListener(holder: ContactsHolder) = AppValueEventListener {
-        val contact = it.getCommonModel()
-        with(holder.binding) {
-            contactFullName.text = contact.fullName
-            contactStatus.text = contact.status
-            contactPhoto
-                .downloadAndSetImage(contact.photoUrl, R.drawable.ic_default_user)
-            holder.itemView.setOnClickListener { replaceFragment(SingleChatFragment.newInstance(contact)) }
+    private fun getAppValueEventListener(holder: ContactsHolder, model: CommonModel) =
+        AppValueEventListener {
+            val contact = it.getCommonModel()
+            with(holder.binding) {
+                if (contact.fullName.isEmpty()) contactFullName.text = model.fullName
+                else contactFullName.text = contact.fullName
+                contactStatus.text = contact.status
+                contactPhoto
+                    .downloadAndSetImage(contact.photoUrl, R.drawable.ic_default_user)
+                holder.itemView.setOnClickListener {
+                    replaceFragment(SingleChatFragment.newInstance(model))
+                }
+            }
         }
-    }
 
     override fun onPause() {
         super.onPause()

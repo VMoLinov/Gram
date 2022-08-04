@@ -1,7 +1,6 @@
 package ru.molinov.gram.utilites
 
 import android.net.Uri
-import android.provider.ContactsContract
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
@@ -72,31 +71,6 @@ inline fun initUser(crossinline function: () -> Unit) {
         })
 }
 
-fun initContacts() {
-    if (checkPermission(READ_CONTACTS)) {
-        val arrayContacts = arrayListOf<CommonModel>()
-        val cursor = MAIN_ACTIVITY.contentResolver.query(
-            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-            null,
-            null,
-            null,
-            null
-        )
-        cursor?.let {
-            while (it.moveToNext()) {
-                val fullNameColumn = it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
-                val phoneColumn = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
-                val newModel = CommonModel()
-                newModel.fullName = it.getString(fullNameColumn)
-                newModel.phone = it.getString(phoneColumn).replace(Regex("[\\s,-]"), "")
-                arrayContacts.add(newModel)
-            }
-        }
-        cursor?.close()
-        updatePhonesToDatabase(arrayContacts)
-    }
-}
-
 fun updatePhonesToDatabase(arrayContacts: ArrayList<CommonModel>) {
     REFERENCE_DB.child(NODE_PHONES).addListenerForSingleValueEvent(AppValueEventListener {
         it.children.forEach { snapshot ->
@@ -105,6 +79,10 @@ fun updatePhonesToDatabase(arrayContacts: ArrayList<CommonModel>) {
                     REFERENCE_DB.child(NODE_PHONES_CONTACTS).child(CURRENT_UID)
                         .child(snapshot.value.toString()).child(USER_ID)
                         .setValue(snapshot.value.toString())
+                        .addOnFailureListener { exception -> showToast(exception.message.toString()) }
+                    REFERENCE_DB.child(NODE_PHONES_CONTACTS).child(CURRENT_UID)
+                        .child(snapshot.value.toString()).child(USER_FULL_NAME)
+                        .setValue(contact.fullName)
                         .addOnFailureListener { exception -> showToast(exception.message.toString()) }
                 }
             }

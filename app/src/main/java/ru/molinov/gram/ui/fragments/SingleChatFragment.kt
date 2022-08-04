@@ -20,13 +20,13 @@ class SingleChatFragment :
     private lateinit var listenerToolbar: AppValueEventListener
     private lateinit var receivingUser: UserModel
     private lateinit var refUser: DatabaseReference
-    private lateinit var contact: CommonModel
+    private lateinit var model: CommonModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        contact = arguments?.getParcelable(ARGS_KEY) ?: CommonModel()
+        model = arguments?.getParcelable(ARGS_KEY) ?: CommonModel()
         toolbar = MAIN_ACTIVITY.toolbar.findViewById(R.id.toolbarInfo)
-        refUser = REFERENCE_DB.root.child(NODE_USERS).child(contact.id)
+        refUser = REFERENCE_DB.root.child(NODE_USERS).child(model.id)
     }
 
     override fun onResume() {
@@ -40,9 +40,13 @@ class SingleChatFragment :
     }
 
     private fun initToolbar() {
+        if (receivingUser.fullName.isEmpty()) {
+            toolbar.findViewById<TextView>(R.id.toolbarFullName).text = model.fullName
+        } else {
+            toolbar.findViewById<TextView>(R.id.toolbarFullName).text = receivingUser.fullName
+        }
         toolbar.findViewById<CircleImageView>(R.id.toolbarImage)
             .downloadAndSetImage(receivingUser.photoUrl, R.drawable.ic_default_user)
-        toolbar.findViewById<TextView>(R.id.toolbarFullName).text = receivingUser.fullName
         toolbar.findViewById<TextView>(R.id.toolbarUserStatus).text = receivingUser.status
     }
 
@@ -54,10 +58,10 @@ class SingleChatFragment :
 
     companion object {
         private const val ARGS_KEY = "SINGLE_CHAT_ARGS_KEY"
-        fun newInstance(contact: CommonModel = CommonModel()): SingleChatFragment {
+        fun newInstance(model: CommonModel = CommonModel()): SingleChatFragment {
             val fragment = SingleChatFragment()
             val args = Bundle()
-            args.putParcelable(ARGS_KEY, contact)
+            args.putParcelable(ARGS_KEY, model)
             fragment.arguments = args
             return fragment
         }
