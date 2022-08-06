@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import ru.molinov.gram.R
 import ru.molinov.gram.models.CommonModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 fun showToast(text: String) {
     Toast.makeText(MAIN_ACTIVITY, text, Toast.LENGTH_SHORT).show()
@@ -81,4 +83,10 @@ fun initContacts() {
         cursor?.close()
         if (AUTH.currentUser != null) updatePhonesToDatabase(arrayContacts)
     }
+}
+
+fun String.asTime(): String {
+    val time = Date(this.toLong())
+    val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+    return timeFormat.format(time)
 }
