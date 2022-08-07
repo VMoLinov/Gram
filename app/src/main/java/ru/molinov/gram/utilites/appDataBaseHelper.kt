@@ -2,14 +2,13 @@ package ru.molinov.gram.utilites
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ServerValue
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import ru.molinov.gram.BuildConfig
+import ru.molinov.gram.activities.RegisterActivity
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.models.UserModel
 
@@ -72,10 +71,16 @@ inline fun putImageToStore(uri: Uri?, path: StorageReference, crossinline functi
 
 inline fun initUser(crossinline function: () -> Unit) {
     REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID)
-        .addListenerForSingleValueEvent(AppValueEventListener {
-            USER = it.getValue(UserModel::class.java) ?: UserModel()
-            if (USER.username.isEmpty()) USER.username = CURRENT_UID
-            function()
+        .addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                USER = snapshot.getUserModel()
+                if (USER.username.isEmpty()) USER.username = CURRENT_UID
+                function()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                MAIN_ACTIVITY.replaceActivity(RegisterActivity())
+            }
         })
 }
 

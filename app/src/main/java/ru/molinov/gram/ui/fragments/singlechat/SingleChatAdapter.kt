@@ -1,5 +1,6 @@
-package ru.molinov.gram.ui.fragments
+package ru.molinov.gram.ui.fragments.singlechat
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -13,8 +14,10 @@ class SingleChatAdapter : RecyclerView.Adapter<SingleChatAdapter.SingleChatViewH
 
     private var messagesList = emptyList<CommonModel>()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setMessagesList(list: List<CommonModel>) {
         messagesList = list
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleChatViewHolder {

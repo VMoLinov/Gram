@@ -10,6 +10,7 @@ import ru.molinov.gram.R
 import ru.molinov.gram.databinding.ContactItemBinding
 import ru.molinov.gram.databinding.FragmentContactsBinding
 import ru.molinov.gram.models.CommonModel
+import ru.molinov.gram.ui.fragments.singlechat.SingleChatFragment
 import ru.molinov.gram.utilites.*
 
 class ContactsFragment :

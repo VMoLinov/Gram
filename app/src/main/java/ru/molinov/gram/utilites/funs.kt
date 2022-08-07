@@ -85,8 +85,8 @@ fun initContacts() {
     }
 }
 
-fun String.asTime(): String {
-    val time = Date(this.toLong())
+fun Long.asTime(): String {
+    val time = Date(this)
     val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
     return timeFormat.format(time)
 }

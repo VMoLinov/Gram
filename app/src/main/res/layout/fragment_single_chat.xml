@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.SingleChatFragment">
+    tools:context=".ui.fragments.singlechat.SingleChatFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/singleChatRecyclerView"
@@ -26,7 +26,7 @@
         android:autofillHints=""
         android:gravity="center"
         android:hint="@string/single_chat_message"
-        android:inputType="textCapCharacters"
+        android:inputType="textCapSentences"
         android:padding="16dp"
         android:textColor="@color/colorBlack"
         android:textColorHint="@color/colorGray"
