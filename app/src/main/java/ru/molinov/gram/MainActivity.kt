@@ -8,9 +8,12 @@ import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.molinov.gram.activities.RegisterActivity
+import ru.molinov.gram.database.AUTH
+import ru.molinov.gram.database.initFirebase
+import ru.molinov.gram.database.initUser
 import ru.molinov.gram.databinding.ActivityMainBinding
-import ru.molinov.gram.ui.fragments.ChatsFragment
+import ru.molinov.gram.ui.fragments.MainFragment
+import ru.molinov.gram.ui.fragments.register.EnterPhoneNumberFragment
 import ru.molinov.gram.ui.objects.AppDrawer
 import ru.molinov.gram.utilites.*
 
@@ -34,11 +37,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunc() {
+        setSupportActionBar(toolbar)
         if (AUTH.currentUser != null) {
-            setSupportActionBar(toolbar)
             appDrawer.create()
-            addFragment(ChatsFragment())
-        } else replaceActivity(RegisterActivity())
+            addFragment(MainFragment())
+        } else addFragment(EnterPhoneNumberFragment())
     }
 
     private fun initProperties() {

@@ -7,7 +7,10 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
 import ru.molinov.gram.R
-import ru.molinov.gram.activities.RegisterActivity
+import ru.molinov.gram.database.AUTH
+import ru.molinov.gram.database.USER
+import ru.molinov.gram.database.changeUserPhoto
+import ru.molinov.gram.database.loadUserPhoto
 import ru.molinov.gram.databinding.FragmentSettingsBinding
 import ru.molinov.gram.utilites.*
 
@@ -35,15 +38,8 @@ class SettingsFragment :
     }
 
     private fun initUserPhoto(photoUrl: String) {
-        if (photoUrl.isBlank()) {
-            REFERENCE_STORAGE.child(STORAGE_IMAGES).child(CURRENT_UID).downloadUrl
-                .addOnSuccessListener {
-                    val url = it.toString()
-                    setUserPhoto(url)
-                    REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_PHOTO_URL)
-                        .setValue(url)
-                }
-        } else setUserPhoto(photoUrl)
+        if (photoUrl.isBlank()) loadUserPhoto { setUserPhoto(it) }
+        else setUserPhoto(photoUrl)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -55,7 +51,7 @@ class SettingsFragment :
             R.id.settings_menu_exit -> {
                 AppStates.updateState(AppStates.OFFLINE)
                 AUTH.signOut()
-                MAIN_ACTIVITY.replaceActivity(RegisterActivity())
+                restartActivity()
                 return true
             }
             R.id.settings_menu_change_name -> replaceFragment(ChangeFullNameFragment())
@@ -70,16 +66,10 @@ class SettingsFragment :
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
             val uri = result.uriContent
-            val path = REFERENCE_STORAGE.child(STORAGE_IMAGES).child(CURRENT_UID)
-            putImageToStore(uri, path) {
-                getUrlFromStorage(path) { url ->
-                    putUrlToDataBase(url) {
-                        setUserPhoto(url)
-                        USER.photoUrl = url
-                        updateDrawerHeader()
-                        showToast(getString(R.string.app_toast_data_update))
-                    }
-                }
+            changeUserPhoto(uri) {
+                setUserPhoto(it)
+                updateDrawerHeader()
+                showToast(getString(R.string.app_toast_data_update))
             }
         } else showToast(result.error.toString())
     }

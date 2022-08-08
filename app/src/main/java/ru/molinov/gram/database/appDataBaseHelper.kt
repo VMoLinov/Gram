@@ -1,4 +1,4 @@
-package ru.molinov.gram.utilites
+package ru.molinov.gram.database
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
@@ -8,9 +8,12 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import ru.molinov.gram.BuildConfig
-import ru.molinov.gram.activities.RegisterActivity
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.models.UserModel
+import ru.molinov.gram.ui.fragments.register.EnterPhoneNumberFragment
+import ru.molinov.gram.utilites.AppValueEventListener
+import ru.molinov.gram.utilites.addFragment
+import ru.molinov.gram.utilites.showToast
 
 lateinit var AUTH: FirebaseAuth
 lateinit var CURRENT_UID: String
@@ -79,7 +82,7 @@ inline fun initUser(crossinline function: () -> Unit) {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                MAIN_ACTIVITY.replaceActivity(RegisterActivity())
+                addFragment(EnterPhoneNumberFragment())
             }
         })
 }
@@ -118,6 +121,55 @@ fun sendMessage(message: String, receivingUserId: String, typeText: String, func
     REFERENCE_DB.updateChildren(mapDialog)
         .addOnSuccessListener { function() }
         .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+fun changeUserPhoto(uri: Uri?, function: (String) -> Unit) {
+    val path = REFERENCE_STORAGE.child(STORAGE_IMAGES).child(CURRENT_UID)
+    putImageToStore(uri, path) {
+        getUrlFromStorage(path) { url ->
+            putUrlToDataBase(url) {
+                USER.photoUrl = url
+                function(url)
+            }
+        }
+    }
+}
+
+fun loadUserPhoto(function: (String) -> Unit) {
+    REFERENCE_STORAGE.child(STORAGE_IMAGES).child(CURRENT_UID).downloadUrl
+        .addOnSuccessListener {
+            val url = it.toString()
+            REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_PHOTO_URL)
+                .setValue(url)
+            function(url)
+        }.addOnFailureListener { showToast(it.message.toString()) }
+}
+
+fun changeUsernameInDatabase(newUsername: String, function: () -> Unit) {
+    REFERENCE_DB.child(NODE_USERNAMES).child(USER.username).removeValue().addOnSuccessListener {
+        REFERENCE_DB.child(NODE_USERNAMES).child(newUsername).setValue(CURRENT_UID)
+        USER.username = newUsername
+        REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_NAME).setValue(newUsername)
+            .addOnSuccessListener { function() }
+            .addOnFailureListener { showToast(it.message.toString()) }
+    }
+}
+
+fun changeUserFullName(fullName: String, function: () -> Unit) {
+    REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_FULL_NAME).setValue(fullName)
+        .addOnSuccessListener {
+            USER.fullName = fullName
+            function()
+        }.addOnFailureListener { showToast(it.message.toString()) }
+}
+
+fun changeUserBio(newBio: String, function: () -> Unit) {
+    REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_BIO)
+        .setValue(newBio)
+        .addOnSuccessListener {
+            USER.bio = newBio
+            function()
+        }.addOnFailureListener { showToast(it.message.toString()) }
 }
 
 fun DataSnapshot.getCommonModel(): CommonModel =

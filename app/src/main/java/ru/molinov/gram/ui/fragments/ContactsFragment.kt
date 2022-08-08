@@ -7,11 +7,15 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.DatabaseReference
 import ru.molinov.gram.R
+import ru.molinov.gram.database.*
 import ru.molinov.gram.databinding.ContactItemBinding
 import ru.molinov.gram.databinding.FragmentContactsBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.ui.fragments.singlechat.SingleChatFragment
-import ru.molinov.gram.utilites.*
+import ru.molinov.gram.utilites.AppValueEventListener
+import ru.molinov.gram.utilites.MAIN_ACTIVITY
+import ru.molinov.gram.utilites.downloadAndSetImage
+import ru.molinov.gram.utilites.replaceFragment
 
 class ContactsFragment :
     OptionsFragment<FragmentContactsBinding>(FragmentContactsBinding::inflate) {

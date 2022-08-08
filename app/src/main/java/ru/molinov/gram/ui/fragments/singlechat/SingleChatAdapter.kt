@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import ru.molinov.gram.database.CURRENT_UID
 import ru.molinov.gram.databinding.MessageItemBinding
 import ru.molinov.gram.models.CommonModel
-import ru.molinov.gram.utilites.CURRENT_UID
 import ru.molinov.gram.utilites.asTime
 
 class SingleChatAdapter : RecyclerView.Adapter<SingleChatAdapter.SingleChatViewHolder>() {

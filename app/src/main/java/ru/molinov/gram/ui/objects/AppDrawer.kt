@@ -16,10 +16,10 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import ru.molinov.gram.R
+import ru.molinov.gram.database.USER
 import ru.molinov.gram.ui.fragments.ContactsFragment
 import ru.molinov.gram.ui.fragments.SettingsFragment
 import ru.molinov.gram.utilites.MAIN_ACTIVITY
-import ru.molinov.gram.utilites.USER
 import ru.molinov.gram.utilites.downloadAndSetImage
 import ru.molinov.gram.utilites.replaceFragment
 

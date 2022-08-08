@@ -14,11 +14,6 @@ open class OptionsFragment<T : ViewBinding>(
         MAIN_ACTIVITY.appDrawer.lockDrawer()
     }
 
-    override fun onStop() {
-        super.onStop()
-        MAIN_ACTIVITY.appDrawer.unlockDrawer()
-    }
-
     /** update user's data on navigation drawer header */
     fun updateDrawerHeader() {
         MAIN_ACTIVITY.appDrawer.updateHeader()

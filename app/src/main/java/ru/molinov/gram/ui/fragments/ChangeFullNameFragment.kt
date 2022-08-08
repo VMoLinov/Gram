@@ -1,8 +1,11 @@
 package ru.molinov.gram.ui.fragments
 
 import ru.molinov.gram.R
+import ru.molinov.gram.database.USER
+import ru.molinov.gram.database.changeUserFullName
 import ru.molinov.gram.databinding.FragmentChangeFullNameBinding
-import ru.molinov.gram.utilites.*
+import ru.molinov.gram.utilites.AppTextWatcher
+import ru.molinov.gram.utilites.showToast
 
 class ChangeFullNameFragment :
     BaseChangeFragment<FragmentChangeFullNameBinding>(FragmentChangeFullNameBinding::inflate) {
@@ -40,18 +43,10 @@ class ChangeFullNameFragment :
         val name = changeInputName.text.toString()
         val lastName = changeInputLastName.text.toString()
         if (name.isEmpty()) showToast(getString(R.string.settings_name_is_empty))
-        else changeName("$name $lastName")
-    }
-
-    private fun changeName(fullName: String) {
-        REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_FULL_NAME).setValue(fullName)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    updateDrawerHeader()
-                    showToast(getString(R.string.app_toast_data_update))
-                    USER.fullName = fullName
-                    parentFragmentManager.popBackStack()
-                } else showToast("Data update error: ${it.exception?.message}")
-            }
+        else changeUserFullName("$name $lastName") {
+            updateDrawerHeader()
+            showToast(getString(R.string.app_toast_data_update))
+            parentFragmentManager.popBackStack()
+        }
     }
 }

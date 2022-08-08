@@ -1,18 +1,32 @@
-package ru.molinov.gram.ui.fragments
+package ru.molinov.gram.ui.fragments.register
 
+import android.os.Bundle
+import android.view.View
 import com.google.firebase.auth.PhoneAuthProvider
-import ru.molinov.gram.MainActivity
 import ru.molinov.gram.R
-import ru.molinov.gram.activities.RegisterActivity
+import ru.molinov.gram.database.*
 import ru.molinov.gram.databinding.FragmentEnterCodeBinding
+import ru.molinov.gram.ui.fragments.BaseFragment
 import ru.molinov.gram.utilites.*
 
-class EnterCodeFragment(private val phoneNumber: String, val id: String) :
+class EnterCodeFragment :
     BaseFragment<FragmentEnterCodeBinding>(FragmentEnterCodeBinding::inflate) {
+
+    private lateinit var phoneNumber: String
+    private lateinit var id: String
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val args = arguments?.getStringArray(ARGS)
+        args?.let {
+            phoneNumber = it.first()
+            id = it.last()
+        }
+    }
 
     override fun onStart() {
         super.onStart()
-        (activity as RegisterActivity).title = phoneNumber
+        MAIN_ACTIVITY.title = phoneNumber
         binding.registerInputCode.addTextChangedListener(AppTextWatcher {
             if (it.length == 6) verifyCode()
         })
@@ -39,10 +53,22 @@ class EnterCodeFragment(private val phoneNumber: String, val id: String) :
                 REFERENCE_DB.child(NODE_USERS).child(map[USER_ID].toString()).updateChildren(map)
                     .addOnSuccessListener {
                         showToast(getString(R.string.register_authorization_successful))
-                        (activity as RegisterActivity).replaceActivity(MainActivity())
+                        hideKeyboard()
+                        restartActivity()
                     }
                     .addOnFailureListener { showToast(it.message.toString()) }
             }
             .addOnFailureListener { showToast(it.message.toString()) }
+    }
+
+    companion object {
+        private const val ARGS = "args"
+        fun newInstance(number: String, id: String): EnterCodeFragment {
+            val bundle = Bundle()
+            bundle.putStringArray(ARGS, arrayOf(number, id))
+            val fragment = EnterCodeFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 }

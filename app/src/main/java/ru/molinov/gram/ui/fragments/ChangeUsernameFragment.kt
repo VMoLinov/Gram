@@ -1,8 +1,15 @@
 package ru.molinov.gram.ui.fragments
 
 import ru.molinov.gram.R
+import ru.molinov.gram.database.NODE_USERNAMES
+import ru.molinov.gram.database.REFERENCE_DB
+import ru.molinov.gram.database.USER
+import ru.molinov.gram.database.changeUsernameInDatabase
 import ru.molinov.gram.databinding.FragmentChangeUsernameBinding
-import ru.molinov.gram.utilites.*
+import ru.molinov.gram.utilites.AppTextWatcher
+import ru.molinov.gram.utilites.AppValueEventListener
+import ru.molinov.gram.utilites.MAIN_ACTIVITY
+import ru.molinov.gram.utilites.showToast
 
 class ChangeUsernameFragment :
     BaseChangeFragment<FragmentChangeUsernameBinding>(FragmentChangeUsernameBinding::inflate) {
@@ -22,22 +29,17 @@ class ChangeUsernameFragment :
 
     override fun changeCheck() {
         val newUsername = binding.changeUsername.text.toString()
-        REFERENCE_DB.child(NODE_USERNAMES).addListenerForSingleValueEvent(AppValueEventListener {
-            if (it.hasChild(newUsername)) showToast(getString(R.string.settings_change_username_already_exists))
-            else changeUsername(newUsername)
-        })
+        changeUsername(newUsername)
     }
 
     private fun changeUsername(newUsername: String) {
-        REFERENCE_DB.child(NODE_USERNAMES).child(USER.username).removeValue().addOnSuccessListener {
-            REFERENCE_DB.child(NODE_USERNAMES).child(newUsername).setValue(CURRENT_UID)
-            USER.username = newUsername
-            REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_NAME).setValue(newUsername)
-                .addOnCompleteListener {
-                    updateDrawerHeader()
-                    showToast(getString(R.string.app_toast_data_update))
-                    parentFragmentManager.popBackStack()
-                }
-        }
+        REFERENCE_DB.child(NODE_USERNAMES).addListenerForSingleValueEvent(AppValueEventListener {
+            if (it.hasChild(newUsername)) showToast(MAIN_ACTIVITY.getString(R.string.settings_change_username_already_exists))
+            else changeUsernameInDatabase(newUsername) {
+                updateDrawerHeader()
+                showToast(getString(R.string.app_toast_data_update))
+                parentFragmentManager.popBackStack()
+            }
+        })
     }
 }
