@@ -117,7 +117,7 @@ fun sendMessage(message: String, receivingUserId: String, typeText: String, func
     mapMessage[USER_TIMESTAMP] = ServerValue.TIMESTAMP
     val mapDialog = hashMapOf<String, Any>()
     mapDialog["$refDialogUser/$messageKey"] = mapMessage
-    mapDialog["$refDialogReceivingUser/$message"] = mapMessage
+    mapDialog["$refDialogReceivingUser/$messageKey"] = mapMessage
     REFERENCE_DB.updateChildren(mapDialog)
         .addOnSuccessListener { function() }
         .addOnFailureListener { showToast(it.message.toString()) }

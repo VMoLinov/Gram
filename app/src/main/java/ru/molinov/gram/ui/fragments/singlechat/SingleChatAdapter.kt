@@ -1,23 +1,33 @@
 package ru.molinov.gram.ui.fragments.singlechat
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.molinov.gram.database.CURRENT_UID
 import ru.molinov.gram.databinding.MessageItemBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.utilites.asTime
 
-class SingleChatAdapter : RecyclerView.Adapter<SingleChatAdapter.SingleChatViewHolder>() {
+class SingleChatAdapter :
+    ListAdapter<CommonModel, SingleChatAdapter.SingleChatViewHolder>(SingleChatDiffCallback) {
 
-    private var messagesList = emptyList<CommonModel>()
+    private object SingleChatDiffCallback : DiffUtil.ItemCallback<CommonModel>() {
+        override fun areItemsTheSame(oldItem: CommonModel, newItem: CommonModel): Boolean =
+            oldItem.timestamp == newItem.timestamp
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun setMessagesList(list: List<CommonModel>) {
-        messagesList = list
-        notifyDataSetChanged()
+        override fun areContentsTheSame(oldItem: CommonModel, newItem: CommonModel): Boolean =
+            oldItem == newItem
+    }
+
+    private val messagesList = mutableListOf<CommonModel>()
+
+    fun addItem(item: CommonModel) {
+        messagesList.add(item)
+        submitList(messagesList)
+        notifyItemInserted(itemCount)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleChatViewHolder {
@@ -27,10 +37,10 @@ class SingleChatAdapter : RecyclerView.Adapter<SingleChatAdapter.SingleChatViewH
     }
 
     override fun onBindViewHolder(holder: SingleChatViewHolder, position: Int) {
-        holder.bind(messagesList[position])
+        holder.bind(currentList[position])
     }
 
-    override fun getItemCount(): Int = messagesList.size
+    override fun getItemCount(): Int = currentList.size
 
     inner class SingleChatViewHolder(val binding: MessageItemBinding) :
         RecyclerView.ViewHolder(binding.root) {

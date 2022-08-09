@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DatabaseReference
 import de.hdodenhof.circleimageview.CircleImageView
 import ru.molinov.gram.R
@@ -21,14 +22,13 @@ class SingleChatFragment :
 
     private lateinit var toolbar: ViewGroup
     private lateinit var listenerToolbar: AppValueEventListener
-    private lateinit var listenerRecycler: AppValueEventListener
+    private lateinit var listenerRecycler: ChildEventListener
     private lateinit var receivingUser: UserModel
     private lateinit var refUser: DatabaseReference
     private lateinit var refMessages: DatabaseReference
     private lateinit var contact: CommonModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SingleChatAdapter
-    private var messagesList = emptyList<CommonModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,12 +50,11 @@ class SingleChatFragment :
         refMessages = REFERENCE_DB.child(NODE_MESSAGES)
             .child(CURRENT_UID)
             .child(contact.id)
-        listenerRecycler = AppValueEventListener { dataSnapshot ->
-            messagesList = dataSnapshot.children.map { it.getCommonModel() }
-            adapter.setMessagesList(messagesList)
+        listenerRecycler = AppChildEventListener {
+            adapter.addItem(it.getCommonModel())
             recyclerView.smoothScrollToPosition(adapter.itemCount)
         }
-        refMessages.addValueEventListener(listenerRecycler)
+        refMessages.addChildEventListener(listenerRecycler)
     }
 
     private fun initToolbar() {
@@ -70,7 +69,6 @@ class SingleChatFragment :
             if (message.isEmpty()) showToast("Enter a message")
             else sendMessage(message, contact.id, TYPE_TEXT) {
                 binding.singleChatMessage.setText("")
-                hideKeyboard()
             }
         }
     }
