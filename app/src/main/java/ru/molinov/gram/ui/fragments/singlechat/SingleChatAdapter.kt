@@ -25,9 +25,12 @@ class SingleChatAdapter :
     private val messagesList = mutableListOf<CommonModel>()
 
     fun addItem(item: CommonModel) {
-        messagesList.add(item)
-        submitList(messagesList)
-        notifyItemInserted(itemCount)
+        if (!messagesList.contains(item)) {
+            messagesList.add(item)
+            messagesList.sortBy { it.timestamp }
+            submitList(messagesList)
+            notifyItemInserted(currentList.indexOf(item))
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleChatViewHolder {
