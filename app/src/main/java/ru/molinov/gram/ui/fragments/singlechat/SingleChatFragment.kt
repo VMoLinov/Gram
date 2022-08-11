@@ -28,8 +28,6 @@ class SingleChatFragment :
     private lateinit var refUser: DatabaseReference
     private lateinit var refMessages: DatabaseReference
     private lateinit var contact: CommonModel
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: SingleChatAdapter
     private var isSmoothScroll = true
     private var isScrolling = false
     private var messagesCount = 10
@@ -48,16 +46,15 @@ class SingleChatFragment :
         initRecyclerView()
     }
 
-    private fun initRecyclerView() {
-        recyclerView = binding.singleChatRecyclerView
-        adapter = SingleChatAdapter()
-        recyclerView.adapter = adapter
+    private fun initRecyclerView() = with(binding) {
+        val adapter = SingleChatAdapter()
+        singleChatRecyclerView.adapter = adapter
         listenerRecycler = AppChildEventListener {
-            adapter.addItem(it.getCommonModel())
-            if (isSmoothScroll) recyclerView.smoothScrollToPosition(adapter.itemCount)
+            adapter.addItem(it.getCommonModel()) { swipeRefresh.isRefreshing = false }
+            if (isSmoothScroll) singleChatRecyclerView.smoothScrollToPosition(adapter.itemCount)
         }
         refMessages.limitToLast(messagesCount).addChildEventListener(listenerRecycler)
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        singleChatRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (isScrolling && dy < 0) updateData()
@@ -70,6 +67,7 @@ class SingleChatFragment :
                 }
             }
         })
+        swipeRefresh.setOnRefreshListener { updateData() }
     }
 
     private fun updateData() {
