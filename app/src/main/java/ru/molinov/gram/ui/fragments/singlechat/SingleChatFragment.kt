@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DatabaseReference
@@ -49,6 +50,10 @@ class SingleChatFragment :
     private fun initRecyclerView() = with(binding) {
         val adapter = SingleChatAdapter()
         singleChatRecyclerView.adapter = adapter
+        val layoutManager = LinearLayoutManager(requireContext())
+        singleChatRecyclerView.layoutManager = layoutManager
+        singleChatRecyclerView.setHasFixedSize(true)
+        singleChatRecyclerView.isNestedScrollingEnabled = false
         listenerRecycler = AppChildEventListener {
             adapter.addItem(it.getCommonModel()) { swipeRefresh.isRefreshing = false }
             if (isSmoothScroll) singleChatRecyclerView.smoothScrollToPosition(adapter.itemCount)
@@ -57,7 +62,9 @@ class SingleChatFragment :
         singleChatRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (isScrolling && dy < 0) updateData()
+                if (isScrolling && dy < 0 && layoutManager.findFirstVisibleItemPosition() <= ITEMS_PRE_LOAD) {
+                    updateData()
+                }
             }
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -116,6 +123,7 @@ class SingleChatFragment :
     }
 
     companion object {
+        private const val ITEMS_PRE_LOAD = 3
         private const val ARGS_KEY = "SINGLE_CHAT_ARGS_KEY"
         fun newInstance(model: CommonModel = CommonModel()): SingleChatFragment {
             val fragment = SingleChatFragment()

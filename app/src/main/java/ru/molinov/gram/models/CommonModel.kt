@@ -16,4 +16,11 @@ data class CommonModel(
     var type: String = "",
     var from: String = "",
     var timestamp: Long = 0
-) : Parcelable
+) : Parcelable {
+
+    override fun equals(other: Any?): Boolean {
+        return (other as CommonModel).id == this.id
+    }
+
+    override fun hashCode(): Int = id.hashCode()
+}

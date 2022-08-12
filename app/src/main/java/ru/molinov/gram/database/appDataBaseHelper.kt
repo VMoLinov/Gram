@@ -114,6 +114,7 @@ fun sendMessage(message: String, receivingUserId: String, typeText: String, func
     mapMessage[USER_FROM] = CURRENT_UID
     mapMessage[USER_TYPE] = typeText
     mapMessage[USER_TEXT] = message
+    mapMessage[USER_ID] = messageKey.toString()
     mapMessage[USER_TIMESTAMP] = ServerValue.TIMESTAMP
     val mapDialog = hashMapOf<String, Any>()
     mapDialog["$refDialogUser/$messageKey"] = mapMessage
