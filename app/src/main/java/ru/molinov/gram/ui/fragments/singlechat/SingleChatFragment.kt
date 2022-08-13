@@ -6,8 +6,12 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageView
+import com.canhub.cropper.options
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DatabaseReference
 import de.hdodenhof.circleimageview.CircleImageView
@@ -32,6 +36,10 @@ class SingleChatFragment :
     private var isSmoothScroll = true
     private var isScrolling = false
     private var messagesCount = 10
+    private val loadAttach = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) loadAttach(result.uriContent, contact.id)
+        else showToast(result.error.toString())
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,17 +57,17 @@ class SingleChatFragment :
 
     private fun initRecyclerView() = with(binding) {
         val adapter = SingleChatAdapter()
-        singleChatRecyclerView.adapter = adapter
+        chatRecyclerView.adapter = adapter
         val layoutManager = LinearLayoutManager(requireContext())
-        singleChatRecyclerView.layoutManager = layoutManager
-        singleChatRecyclerView.setHasFixedSize(true)
-        singleChatRecyclerView.isNestedScrollingEnabled = false
+        chatRecyclerView.layoutManager = layoutManager
+        chatRecyclerView.setHasFixedSize(true)
+        chatRecyclerView.isNestedScrollingEnabled = false
         listenerRecycler = AppChildEventListener {
             adapter.addItem(it.getCommonModel()) { swipeRefresh.isRefreshing = false }
-            if (isSmoothScroll) singleChatRecyclerView.smoothScrollToPosition(adapter.itemCount)
+            if (isSmoothScroll) chatRecyclerView.smoothScrollToPosition(adapter.itemCount)
         }
         refMessages.limitToLast(messagesCount).addChildEventListener(listenerRecycler)
-        singleChatRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        chatRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (isScrolling && dy < 0 && layoutManager.findFirstVisibleItemPosition() <= ITEMS_PRE_LOAD) {
@@ -92,14 +100,39 @@ class SingleChatFragment :
             initToolbarInfo()
         }
         refUser.addValueEventListener(listenerToolbar)
-        binding.singleChatBtnSent.setOnClickListener {
+        binding.btnSent.setOnClickListener {
             isSmoothScroll = true
-            val message = binding.singleChatMessage.text.toString()
+            val message = binding.message.text.toString()
             if (message.isEmpty()) showToast(getString(R.string.single_chat_enter_a_message))
             else sendMessage(message, contact.id, TYPE_TEXT) {
-                binding.singleChatMessage.setText(getString(R.string.app_empty_string))
+                binding.message.setText(getString(R.string.app_empty_string))
             }
         }
+        binding.message.addTextChangedListener {
+            AppTextWatcher {
+                val string = it.toString()
+                if (string.isEmpty()) {
+                    binding.btnSent.isVisible = true
+                    binding.btnAttach.isVisible = false
+                } else {
+                    binding.btnSent.isVisible = false
+                    binding.btnAttach.isVisible = true
+                }
+            }
+        }
+        binding.btnAttach.setOnClickListener { attachFile() }
+    }
+
+    private fun attachFile() {
+        loadAttach.launch(
+            options {
+                setGuidelines(CropImageView.Guidelines.OFF)
+                setRequestedSize(250, 250)
+                setAspectRatio(1, 1)
+                setBorderCornerLength(0f)
+                setBorderCornerThickness(0f)
+            }
+        )
     }
 
     private fun initToolbarInfo() {

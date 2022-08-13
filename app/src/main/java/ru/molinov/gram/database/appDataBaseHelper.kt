@@ -12,6 +12,7 @@ import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.models.UserModel
 import ru.molinov.gram.ui.fragments.register.EnterPhoneNumberFragment
 import ru.molinov.gram.utilites.AppValueEventListener
+import ru.molinov.gram.utilites.TYPE_MESSAGE_IMAGE
 import ru.molinov.gram.utilites.addFragment
 import ru.molinov.gram.utilites.showToast
 
@@ -24,6 +25,7 @@ lateinit var USER: UserModel
 const val TYPE_TEXT = "text"
 
 const val STORAGE_IMAGES = "users_images"
+const val MESSAGES_IMAGES = "message_image"
 
 const val NODE_USERS = "users"
 const val NODE_USERNAMES = "usernames"
@@ -42,6 +44,7 @@ const val USER_TEXT = "text"
 const val USER_TYPE = "type"
 const val USER_FROM = "from"
 const val USER_TIMESTAMP = "timestamp"
+const val USER_IMAGE_URL = "imageUrl"
 
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
@@ -121,6 +124,35 @@ fun sendMessage(message: String, receivingUserId: String, typeText: String, func
     mapDialog["$refDialogReceivingUser/$messageKey"] = mapMessage
     REFERENCE_DB.updateChildren(mapDialog)
         .addOnSuccessListener { function() }
+        .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+fun loadAttach(uri: Uri?, contactId: String) {
+    val messageKey = REFERENCE_DB.child(NODE_MESSAGES).child(CURRENT_UID).child(contactId)
+        .push().key.toString()
+    val path = REFERENCE_STORAGE.child(MESSAGES_IMAGES).child(messageKey)
+    putImageToStore(uri, path) {
+        getUrlFromStorage(path) { url ->
+            putUrlToDataBase(url) {
+                sendMessageAsImage(contactId, url, messageKey)
+            }
+        }
+    }
+}
+
+fun sendMessageAsImage(receivingUserId: String, imageUrl: Any, messageKey: String) {
+    val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"
+    val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"
+    val mapMessage = hashMapOf<String, Any>()
+    mapMessage[USER_FROM] = CURRENT_UID
+    mapMessage[USER_TYPE] = TYPE_MESSAGE_IMAGE
+    mapMessage[USER_ID] = messageKey
+    mapMessage[USER_TIMESTAMP] = ServerValue.TIMESTAMP
+    mapMessage[USER_IMAGE_URL] = imageUrl
+    val mapDialog = hashMapOf<String, Any>()
+    mapDialog["$refDialogUser/$messageKey"] = mapMessage
+    mapDialog["$refDialogReceivingUser/$messageKey"] = mapMessage
+    REFERENCE_DB.updateChildren(mapDialog)
         .addOnFailureListener { showToast(it.message.toString()) }
 }
 

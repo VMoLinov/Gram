@@ -78,7 +78,7 @@ class SettingsFragment :
         cropImage.launch(
             options {
                 setGuidelines(CropImageView.Guidelines.OFF)
-                setRequestedSize(600, 600)
+                setRequestedSize(250, 250)
                 setAspectRatio(1, 1)
                 setCropShape(CropImageView.CropShape.OVAL)
                 setBorderCornerLength(0f)

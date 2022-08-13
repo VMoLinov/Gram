@@ -10,13 +10,13 @@
         android:id="@+id/swipeRefresh"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/singleChatMessage"
+        app:layout_constraintBottom_toTopOf="@id/message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/singleChatRecyclerView"
+            android:id="@+id/chatRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/colorBlueWish"
@@ -25,7 +25,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <EditText
-        android:id="@+id/singleChatMessage"
+        android:id="@+id/message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:autofillHints=""
@@ -36,17 +36,30 @@
         android:textColor="@color/colorBlack"
         android:textColorHint="@color/colorGray"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/singleChatBtnSent"
+        app:layout_constraintEnd_toStartOf="@id/btnSent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/singleChatBtnSent"
+        android:id="@+id/btnSent"
         android:layout_width="50dp"
         android:layout_height="0dp"
         android:contentDescription="@string/single_chat_sent_message"
         android:padding="16dp"
         android:src="@drawable/ic_sent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/singleChatMessage" />
+        app:layout_constraintStart_toEndOf="@id/message" />
+
+    <ImageView
+        android:id="@+id/btnAttach"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:background="@color/colorAccent"
+        android:contentDescription="@string/single_chat_sent_message"
+        android:padding="16dp"
+        android:src="@drawable/ic_attach"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/message" />
 </androidx.constraintlayout.widget.ConstraintLayout>
