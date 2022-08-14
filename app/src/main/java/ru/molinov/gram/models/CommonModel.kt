@@ -13,7 +13,7 @@ data class CommonModel(
     var photoUrl: String = "",
     var phone: String = "",
     var text: String = "",
-    var type: String = "",
+    var type: Int = 0,
     var from: String = "",
     var timestamp: Long = 0,
     var imageUrl: String = ""

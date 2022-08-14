@@ -45,4 +45,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="single_chat_enter_a_message">Enter a message</string>
+    <string name="single_chat_user_s_image">user\'s image send</string>
+    <string name="single_chat_received_message">received_image</string>
+    <string name="single_chat_attach_file">Attach file or image</string>
 </resources>

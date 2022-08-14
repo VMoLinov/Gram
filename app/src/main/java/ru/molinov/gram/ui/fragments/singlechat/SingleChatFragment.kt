@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.canhub.cropper.CropImageContract
@@ -57,8 +57,8 @@ class SingleChatFragment :
 
     private fun initRecyclerView() = with(binding) {
         val adapter = SingleChatAdapter()
-        chatRecyclerView.adapter = adapter
         val layoutManager = LinearLayoutManager(requireContext())
+        chatRecyclerView.adapter = adapter
         chatRecyclerView.layoutManager = layoutManager
         chatRecyclerView.setHasFixedSize(true)
         chatRecyclerView.isNestedScrollingEnabled = false
@@ -100,27 +100,37 @@ class SingleChatFragment :
             initToolbarInfo()
         }
         refUser.addValueEventListener(listenerToolbar)
-        binding.btnSent.setOnClickListener {
-            isSmoothScroll = true
-            val message = binding.message.text.toString()
-            if (message.isEmpty()) showToast(getString(R.string.single_chat_enter_a_message))
-            else sendMessage(message, contact.id, TYPE_TEXT) {
-                binding.message.setText(getString(R.string.app_empty_string))
-            }
-        }
-        binding.message.addTextChangedListener {
-            AppTextWatcher {
-                val string = it.toString()
-                if (string.isEmpty()) {
-                    binding.btnSent.isVisible = true
-                    binding.btnAttach.isVisible = false
-                } else {
-                    binding.btnSent.isVisible = false
-                    binding.btnAttach.isVisible = true
+        with(binding) {
+            btnSent.setOnClickListener {
+                isSmoothScroll = true
+                val enterMessage = message.text.toString()
+                if (enterMessage.isEmpty()) showToast(getString(R.string.single_chat_enter_a_message))
+                else sendMessage(enterMessage, contact.id) {
+                    message.setText(getString(R.string.app_empty_string))
                 }
             }
+            message.addTextChangedListener(
+                AppTextWatcher {
+                    if (it.isNotEmpty()) {
+                        btnSent.isVisible = true
+                        btnAttach.isVisible = false
+                        changeMessageViewConstraints(btnSent.id)
+                    } else {
+                        btnSent.isVisible = false
+                        btnAttach.isVisible = true
+                        changeMessageViewConstraints(btnAttach.id)
+                    }
+                })
+            btnAttach.setOnClickListener { attachFile() }
         }
-        binding.btnAttach.setOnClickListener { attachFile() }
+    }
+
+    private fun changeMessageViewConstraints(targetId: Int) {
+        ConstraintSet().apply {
+            clone(binding.root)
+            connect(binding.message.id, ConstraintSet.END, targetId, ConstraintSet.START)
+            applyTo(binding.root)
+        }
     }
 
     private fun attachFile() {
@@ -137,11 +147,8 @@ class SingleChatFragment :
 
     private fun initToolbarInfo() {
         toolbar.apply {
-            if (receivingUser.fullName.isEmpty()) {
-                findViewById<TextView>(R.id.toolbarFullName).text = contact.fullName
-            } else {
-                findViewById<TextView>(R.id.toolbarFullName).text = receivingUser.fullName
-            }
+            findViewById<TextView>(R.id.toolbarFullName).text =
+                receivingUser.fullName.ifEmpty { contact.fullName }
             findViewById<CircleImageView>(R.id.toolbarImage)
                 .downloadAndSetImage(receivingUser.photoUrl, R.drawable.ic_default_user)
             findViewById<TextView>(R.id.toolbarUserStatus).text = receivingUser.status

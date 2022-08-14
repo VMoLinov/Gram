@@ -41,6 +41,12 @@ fun replaceFragment(fragment: Fragment) {
         .commit()
 }
 
+fun ImageView.downloadAndSetImage(url: String) {
+    Glide.with(this)
+        .load(url)
+        .into(this)
+}
+
 fun ImageView.downloadAndSetImage(url: String, placeholder: Int) {
     Glide.with(this)
         .load(url)

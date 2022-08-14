@@ -8,24 +8,28 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/blockUserMessage"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:background="@drawable/bg_user_message"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
 
-        <TextView
+        <ImageView
             android:id="@+id/userMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/single_chat_user_s_image"
             android:gravity="end"
             android:padding="16dp"
             android:textColor="@color/colorBlack"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Hello! I'm Vadim" />
+            tools:src="@android:drawable/stat_sys_warning" />
 
         <TextView
             android:id="@+id/userMessageTime"
@@ -33,15 +37,15 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/small_margin"
             android:gravity="end"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="@id/userMessage"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/userMessage"
             tools:text="21:45" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/blockReceivedMessage"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="100dp"
         android:background="@drawable/bg_receiving_message"
@@ -49,16 +53,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <ImageView
             android:id="@+id/receivedMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end"
+            android:contentDescription="@string/single_chat_received_message"
             android:padding="16dp"
             android:textColor="@color/colorBlack"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Hello! I'm Vadim" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/receivedMessageTime"
@@ -67,8 +71,8 @@
             android:layout_marginEnd="@dimen/small_margin"
             android:gravity="end"
             android:textColor="@color/colorBlack"
+            app:layout_constraintBottom_toBottomOf="@id/receivedMessage"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/receivedMessage"
             tools:text="21:45" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,7 +21,7 @@
             android:layout_height="0dp"
             android:background="@color/colorBlueWish"
             android:orientation="vertical"
-            tools:listitem="@layout/message_item" />
+            tools:listitem="@layout/message_text_item" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <EditText
@@ -36,7 +36,7 @@
         android:textColor="@color/colorBlack"
         android:textColorHint="@color/colorGray"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnSent"
+        app:layout_constraintEnd_toStartOf="@id/btnAttach"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
@@ -56,7 +56,7 @@
         android:layout_width="50dp"
         android:layout_height="0dp"
         android:background="@color/colorAccent"
-        android:contentDescription="@string/single_chat_sent_message"
+        android:contentDescription="@string/single_chat_attach_file"
         android:padding="16dp"
         android:src="@drawable/ic_attach"
         app:layout_constraintBottom_toBottomOf="parent"

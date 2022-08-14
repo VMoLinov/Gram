@@ -11,18 +11,13 @@ import ru.molinov.gram.BuildConfig
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.models.UserModel
 import ru.molinov.gram.ui.fragments.register.EnterPhoneNumberFragment
-import ru.molinov.gram.utilites.AppValueEventListener
-import ru.molinov.gram.utilites.TYPE_MESSAGE_IMAGE
-import ru.molinov.gram.utilites.addFragment
-import ru.molinov.gram.utilites.showToast
+import ru.molinov.gram.utilites.*
 
 lateinit var AUTH: FirebaseAuth
 lateinit var CURRENT_UID: String
 lateinit var REFERENCE_DB: DatabaseReference
 lateinit var REFERENCE_STORAGE: StorageReference
 lateinit var USER: UserModel
-
-const val TYPE_TEXT = "text"
 
 const val STORAGE_IMAGES = "users_images"
 const val MESSAGES_IMAGES = "message_image"
@@ -55,33 +50,33 @@ fun initFirebase() {
     CURRENT_UID = AUTH.currentUser?.uid.toString()
 }
 
-inline fun putUrlToDataBase(url: String, crossinline function: () -> Unit) {
+inline fun putUrlToDataBase(url: String, crossinline onSuccess: () -> Unit) {
     REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_PHOTO_URL).setValue(url)
-        .addOnSuccessListener { function() }
+        .addOnSuccessListener { onSuccess() }
         .addOnFailureListener { showToast(it.message.toString()) }
 }
 
-inline fun getUrlFromStorage(path: StorageReference, crossinline function: (url: String) -> Unit) {
+inline fun getUrlFromStorage(path: StorageReference, crossinline onSuccess: (url: String) -> Unit) {
     path.downloadUrl
-        .addOnSuccessListener { function(it.toString()) }
+        .addOnSuccessListener { onSuccess(it.toString()) }
         .addOnFailureListener { showToast(it.message.toString()) }
 }
 
-inline fun putImageToStore(uri: Uri?, path: StorageReference, crossinline function: () -> Unit) {
+inline fun putImageToStore(uri: Uri?, path: StorageReference, crossinline onSuccess: () -> Unit) {
     uri?.let { file ->
         path.putFile(file)
-            .addOnSuccessListener { function() }
+            .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { showToast(it.message.toString()) }
     }
 }
 
-inline fun initUser(crossinline function: () -> Unit) {
+inline fun initUser(crossinline onSuccess: () -> Unit) {
     REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID)
         .addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 USER = snapshot.getUserModel()
                 if (USER.username.isEmpty()) USER.username = CURRENT_UID
-                function()
+                onSuccess()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -109,13 +104,13 @@ fun updatePhonesToDatabase(arrayContacts: ArrayList<CommonModel>) {
     })
 }
 
-fun sendMessage(message: String, receivingUserId: String, typeText: String, function: () -> Unit) {
+fun sendMessage(message: String, receivingUserId: String, onSuccess: () -> Unit) {
     val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"
     val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"
     val messageKey = REFERENCE_DB.child(refDialogUser).push().key
     val mapMessage = hashMapOf<String, Any>()
     mapMessage[USER_FROM] = CURRENT_UID
-    mapMessage[USER_TYPE] = typeText
+    mapMessage[USER_TYPE] = TYPE_MESSAGE_TEXT
     mapMessage[USER_TEXT] = message
     mapMessage[USER_ID] = messageKey.toString()
     mapMessage[USER_TIMESTAMP] = ServerValue.TIMESTAMP
@@ -123,7 +118,7 @@ fun sendMessage(message: String, receivingUserId: String, typeText: String, func
     mapDialog["$refDialogUser/$messageKey"] = mapMessage
     mapDialog["$refDialogReceivingUser/$messageKey"] = mapMessage
     REFERENCE_DB.updateChildren(mapDialog)
-        .addOnSuccessListener { function() }
+        .addOnSuccessListener { onSuccess() }
         .addOnFailureListener { showToast(it.message.toString()) }
 }
 
@@ -156,52 +151,52 @@ fun sendMessageAsImage(receivingUserId: String, imageUrl: Any, messageKey: Strin
         .addOnFailureListener { showToast(it.message.toString()) }
 }
 
-fun changeUserPhoto(uri: Uri?, function: (String) -> Unit) {
+fun changeUserPhoto(uri: Uri?, onSuccess: (String) -> Unit) {
     val path = REFERENCE_STORAGE.child(STORAGE_IMAGES).child(CURRENT_UID)
     putImageToStore(uri, path) {
         getUrlFromStorage(path) { url ->
             putUrlToDataBase(url) {
                 USER.photoUrl = url
-                function(url)
+                onSuccess(url)
             }
         }
     }
 }
 
-fun loadUserPhoto(function: (String) -> Unit) {
+fun loadUserPhoto(onSuccess: (String) -> Unit) {
     REFERENCE_STORAGE.child(STORAGE_IMAGES).child(CURRENT_UID).downloadUrl
         .addOnSuccessListener {
             val url = it.toString()
             REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_PHOTO_URL)
                 .setValue(url)
-            function(url)
+            onSuccess(url)
         }.addOnFailureListener { showToast(it.message.toString()) }
 }
 
-fun changeUsernameInDatabase(newUsername: String, function: () -> Unit) {
+fun changeUsernameInDatabase(newUsername: String, onSuccess: () -> Unit) {
     REFERENCE_DB.child(NODE_USERNAMES).child(USER.username).removeValue().addOnSuccessListener {
         REFERENCE_DB.child(NODE_USERNAMES).child(newUsername).setValue(CURRENT_UID)
         USER.username = newUsername
         REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_NAME).setValue(newUsername)
-            .addOnSuccessListener { function() }
+            .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { showToast(it.message.toString()) }
     }
 }
 
-fun changeUserFullName(fullName: String, function: () -> Unit) {
+fun changeUserFullName(fullName: String, onSuccess: () -> Unit) {
     REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_FULL_NAME).setValue(fullName)
         .addOnSuccessListener {
             USER.fullName = fullName
-            function()
+            onSuccess()
         }.addOnFailureListener { showToast(it.message.toString()) }
 }
 
-fun changeUserBio(newBio: String, function: () -> Unit) {
+fun changeUserBio(newBio: String, onSuccess: () -> Unit) {
     REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID).child(USER_BIO)
         .setValue(newBio)
         .addOnSuccessListener {
             USER.bio = newBio
-            function()
+            onSuccess()
         }.addOnFailureListener { showToast(it.message.toString()) }
 }
 
