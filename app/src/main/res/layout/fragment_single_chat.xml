@@ -39,6 +39,21 @@
         app:layout_constraintEnd_toStartOf="@id/btnAttach"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/recording"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/single_chat_recording"
+        android:textColor="@color/colorBlack"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/message"
+        app:layout_constraintEnd_toEndOf="@id/message"
+        app:layout_constraintStart_toStartOf="@id/message"
+        app:layout_constraintTop_toTopOf="@id/message" />
+
     <ImageView
         android:id="@+id/btnSent"
         android:layout_width="50dp"
@@ -55,11 +70,21 @@
         android:id="@+id/btnAttach"
         android:layout_width="50dp"
         android:layout_height="0dp"
-        android:background="@color/colorAccent"
         android:contentDescription="@string/single_chat_attach_file"
         android:padding="16dp"
         android:src="@drawable/ic_attach"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnVoice"
         app:layout_constraintStart_toEndOf="@id/message" />
+
+    <ImageView
+        android:id="@+id/btnVoice"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/single_chat_send_voice_message"
+        android:padding="16dp"
+        android:src="@drawable/ic_voice"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnAttach" />
 </androidx.constraintlayout.widget.ConstraintLayout>

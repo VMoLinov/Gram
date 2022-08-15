@@ -1,11 +1,13 @@
 package ru.molinov.gram.ui.fragments.singlechat
 
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +17,9 @@ import com.canhub.cropper.options
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DatabaseReference
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.molinov.gram.R
 import ru.molinov.gram.database.*
 import ru.molinov.gram.databinding.FragmentSingleChatBinding
@@ -111,17 +116,38 @@ class SingleChatFragment :
             }
             message.addTextChangedListener(
                 AppTextWatcher {
-                    if (it.isNotEmpty()) {
-                        btnSent.isVisible = true
-                        btnAttach.isVisible = false
-                        changeMessageViewConstraints(btnSent.id)
-                    } else {
+                    if (it.isEmpty()) {
                         btnSent.isVisible = false
                         btnAttach.isVisible = true
+                        btnVoice.isVisible = true
                         changeMessageViewConstraints(btnAttach.id)
+                    } else {
+                        btnSent.isVisible = true
+                        btnAttach.isVisible = false
+                        btnVoice.isVisible = false
+                        changeMessageViewConstraints(btnSent.id)
                     }
                 })
             btnAttach.setOnClickListener { attachFile() }
+            CoroutineScope(Dispatchers.IO).launch {
+                btnVoice.setOnTouchListener { view, motionEvent ->
+                    if (checkPermission(RECORD_AUDIO)) {
+                        if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                            recording.isVisible = true
+                            btnVoice.setColorFilter(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    com.mikepenz.materialize.R.color.primary
+                                )
+                            )
+                        } else if (motionEvent.action == MotionEvent.ACTION_UP) {
+                            recording.isVisible = false
+                            btnVoice.colorFilter = null
+                        }
+                    }
+                    true
+                }
+            }
         }
     }
 

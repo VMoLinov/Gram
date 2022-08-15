@@ -48,4 +48,6 @@
     <string name="single_chat_user_s_image">user\'s image send</string>
     <string name="single_chat_received_message">received_image</string>
     <string name="single_chat_attach_file">Attach file or image</string>
+    <string name="single_chat_send_voice_message">Send voice message</string>
+    <string name="single_chat_recording">Recording...</string>
 </resources>

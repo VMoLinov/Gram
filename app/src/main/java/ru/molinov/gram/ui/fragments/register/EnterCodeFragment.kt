@@ -41,8 +41,11 @@ class EnterCodeFragment :
                 val map = mutableMapOf<String, Any>()
                 map[USER_ID] = uid
                 map[USER_PHONE] = phoneNumber
-                map[USER_NAME] = USER.username.ifEmpty { uid }
-                pushData(map)
+                REFERENCE_DB.child(NODE_USERS).child(uid)
+                    .addListenerForSingleValueEvent(AppValueEventListener {
+                        if (!it.hasChild(USER_NAME)) map[USER_NAME] = USER.username.ifEmpty { uid }
+                        pushData(map)
+                    })
             }
             .addOnFailureListener { showToast(it.message.toString()) }
     }
