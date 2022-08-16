@@ -8,6 +8,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.molinov.gram.MainActivity
 import ru.molinov.gram.R
 import ru.molinov.gram.database.AUTH
@@ -44,6 +46,7 @@ fun replaceFragment(fragment: Fragment) {
 fun ImageView.downloadAndSetImage(url: String) {
     Glide.with(this)
         .load(url)
+        .transform(CenterInside(), RoundedCorners(20))
         .into(this)
 }
 
@@ -51,6 +54,7 @@ fun ImageView.downloadAndSetImage(url: String, placeholder: Int) {
     Glide.with(this)
         .load(url)
         .placeholder(placeholder)
+        .centerCrop()
         .into(this)
 }
 

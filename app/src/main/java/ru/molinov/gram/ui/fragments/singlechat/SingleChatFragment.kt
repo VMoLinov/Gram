@@ -1,5 +1,6 @@
 package ru.molinov.gram.ui.fragments.singlechat
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -58,6 +59,33 @@ class SingleChatFragment :
         super.onResume()
         initToolbar()
         initRecyclerView()
+        initFields()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        toolbar.isVisible = false
+        refUser.removeEventListener(listenerToolbar)
+        refMessages.removeEventListener(listenerRecycler)
+    }
+
+    private fun initToolbar() {
+        toolbar.isVisible = true
+        listenerToolbar = AppValueEventListener {
+            receivingUser = it.getUserModel()
+            initToolbarInfo()
+        }
+        refUser.addValueEventListener(listenerToolbar)
+    }
+
+    private fun initToolbarInfo() {
+        toolbar.apply {
+            findViewById<TextView>(R.id.toolbarFullName).text =
+                receivingUser.fullName.ifEmpty { contact.fullName }
+            findViewById<CircleImageView>(R.id.toolbarImage)
+                .downloadAndSetImage(receivingUser.photoUrl, R.drawable.ic_default_user)
+            findViewById<TextView>(R.id.toolbarUserStatus).text = receivingUser.status
+        }
     }
 
     private fun initRecyclerView() = with(binding) {
@@ -98,65 +126,11 @@ class SingleChatFragment :
         refMessages.limitToLast(messagesCount).addChildEventListener(listenerRecycler)
     }
 
-    private fun initToolbar() {
-        toolbar.isVisible = true
-        listenerToolbar = AppValueEventListener {
-            receivingUser = it.getUserModel()
-            initToolbarInfo()
-        }
-        refUser.addValueEventListener(listenerToolbar)
-        with(binding) {
-            btnSent.setOnClickListener {
-                isSmoothScroll = true
-                val enterMessage = message.text.toString()
-                if (enterMessage.isEmpty()) showToast(getString(R.string.single_chat_enter_a_message))
-                else sendMessage(enterMessage, contact.id) {
-                    message.setText(getString(R.string.app_empty_string))
-                }
-            }
-            message.addTextChangedListener(
-                AppTextWatcher {
-                    if (it.isEmpty()) {
-                        btnSent.isVisible = false
-                        btnAttach.isVisible = true
-                        btnVoice.isVisible = true
-                        changeMessageViewConstraints(btnAttach.id)
-                    } else {
-                        btnSent.isVisible = true
-                        btnAttach.isVisible = false
-                        btnVoice.isVisible = false
-                        changeMessageViewConstraints(btnSent.id)
-                    }
-                })
-            btnAttach.setOnClickListener { attachFile() }
-            CoroutineScope(Dispatchers.IO).launch {
-                btnVoice.setOnTouchListener { view, motionEvent ->
-                    if (checkPermission(RECORD_AUDIO)) {
-                        if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                            recording.isVisible = true
-                            btnVoice.setColorFilter(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    com.mikepenz.materialize.R.color.primary
-                                )
-                            )
-                        } else if (motionEvent.action == MotionEvent.ACTION_UP) {
-                            recording.isVisible = false
-                            btnVoice.colorFilter = null
-                        }
-                    }
-                    true
-                }
-            }
-        }
-    }
-
-    private fun changeMessageViewConstraints(targetId: Int) {
-        ConstraintSet().apply {
-            clone(binding.root)
-            connect(binding.message.id, ConstraintSet.END, targetId, ConstraintSet.START)
-            applyTo(binding.root)
-        }
+    private fun initFields() {
+        binding.btnAttach.setOnClickListener { attachFile() }
+        setSent()
+        setMessage()
+        setVoice()
     }
 
     private fun attachFile() {
@@ -171,21 +145,61 @@ class SingleChatFragment :
         )
     }
 
-    private fun initToolbarInfo() {
-        toolbar.apply {
-            findViewById<TextView>(R.id.toolbarFullName).text =
-                receivingUser.fullName.ifEmpty { contact.fullName }
-            findViewById<CircleImageView>(R.id.toolbarImage)
-                .downloadAndSetImage(receivingUser.photoUrl, R.drawable.ic_default_user)
-            findViewById<TextView>(R.id.toolbarUserStatus).text = receivingUser.status
+    private fun setSent() = with(binding) {
+        btnSent.setOnClickListener {
+            isSmoothScroll = true
+            val enterMessage = message.text.toString()
+            if (enterMessage.isEmpty()) showToast(getString(R.string.single_chat_enter_a_message))
+            else sendMessage(enterMessage, contact.id) {
+                message.setText(getString(R.string.app_empty_string))
+            }
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        toolbar.isVisible = false
-        refUser.removeEventListener(listenerToolbar)
-        refMessages.removeEventListener(listenerRecycler)
+    private fun setMessage() = with(binding) {
+        message.addTextChangedListener(
+            AppTextWatcher {
+                if (it.isEmpty()) {
+                    btnSent.isVisible = false
+                    btnAttach.isVisible = true
+                    btnVoice.isVisible = true
+                    changeMessageViewConstraints(btnAttach.id)
+                } else {
+                    btnSent.isVisible = true
+                    btnAttach.isVisible = false
+                    btnVoice.isVisible = false
+                    changeMessageViewConstraints(btnSent.id)
+                }
+            })
+    }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setVoice() = with(binding) {
+        CoroutineScope(Dispatchers.IO).launch {
+            btnVoice.setOnTouchListener { view, motionEvent ->
+                if (checkPermission(RECORD_AUDIO)) {
+                    if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                        recording.isVisible = true
+                        btnVoice.setColorFilter(
+                            ContextCompat.getColor(requireContext(), R.color.colorPrimary)
+                        )
+                    } else if (motionEvent.action == MotionEvent.ACTION_UP) {
+                        recording.isVisible = false
+                        btnVoice.colorFilter = null
+                    }
+                }
+                true
+            }
+        }
+    }
+
+    private fun changeMessageViewConstraints(targetId: Int) {
+        ConstraintSet().apply {
+            clone(binding.root)
+            connect(binding.message.id, ConstraintSet.END, targetId, ConstraintSet.START)
+            applyTo(binding.root)
+        }
     }
 
     companion object {

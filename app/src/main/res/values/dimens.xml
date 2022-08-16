@@ -13,4 +13,6 @@
     <dimen name="settings_user_photo_border">2dp</dimen>
     <dimen name="settings_ripple_effect_radius">4dp</dimen>
     <dimen name="toolbar_image_size">45dp</dimen>
+    <dimen name="image_item_padding">4dp</dimen>
+    <dimen name="timestamp_end_margin">4dp</dimen>
 </resources>
