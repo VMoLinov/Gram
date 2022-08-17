@@ -71,4 +71,11 @@
         <item name="android:textColor">@color/colorAccentDark</item>
         <item name="android:textSize">@dimen/small_text</item>
     </style>
+
+    <style name="BezelImageView">
+        <item name="biv_maskDrawable">@drawable/material_drawer_circle_mask</item>
+        <item name="biv_drawCircularShadow">true</item>
+        <item name="biv_selectorOnPress">@color/material_drawer_primary</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
 </resources>

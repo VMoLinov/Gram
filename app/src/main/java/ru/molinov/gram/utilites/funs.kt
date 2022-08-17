@@ -54,7 +54,6 @@ fun ImageView.downloadAndSetImage(url: String, placeholder: Int) {
     Glide.with(this)
         .load(url)
         .placeholder(placeholder)
-        .centerCrop()
         .into(this)
 }
 

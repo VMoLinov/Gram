@@ -7,17 +7,14 @@ plugins {
 
 android {
     compileSdk 32
-
     defaultConfig {
         applicationId "ru.molinov.gram"
         minSdk 24
         targetSdk 32
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         all {
             def localProperties = new Properties()
@@ -36,29 +33,24 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
     buildFeatures {
         viewBinding true
     }
 }
 
 dependencies {
-
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation "com.mikepenz:materialdrawer:7.0.0"
-    implementation "androidx.appcompat:appcompat:1.4.2"
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation "androidx.annotation:annotation:1.4.0"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
     implementation 'com.github.CanHub:Android-Image-Cropper:4.3.1'
-
     implementation 'com.firebaseui:firebase-ui-database:8.0.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.3'
     implementation 'com.github.bumptech.glide:glide:4.13.2'
     implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
-    implementation 'com.google.firebase:firebase-auth-ktx:21.0.6'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.7'
     implementation 'com.google.firebase:firebase-database-ktx:20.0.5'
     implementation 'com.google.firebase:firebase-storage-ktx:20.0.1'
     testImplementation 'junit:junit:4.13.2'
