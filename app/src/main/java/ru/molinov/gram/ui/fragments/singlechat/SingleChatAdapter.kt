@@ -101,12 +101,12 @@ class SingleChatAdapter :
 
         override fun bind(model: CommonModel) = with(binding) {
             if (model.from == CURRENT_UID) {
-                userMessage.downloadAndSetImage(model.imageUrl)
+                userMessage.downloadAndSetImage(model.fileUrl)
                 userMessageTime.text = model.timestamp.asTime()
                 blockUserMessage.isVisible = true
                 blockReceivedMessage.isVisible = false
             } else {
-                receivedMessage.downloadAndSetImage(model.imageUrl)
+                receivedMessage.downloadAndSetImage(model.fileUrl)
                 receivedMessageTime.text = model.timestamp.asTime()
                 blockReceivedMessage.isVisible = true
                 blockUserMessage.isVisible = false

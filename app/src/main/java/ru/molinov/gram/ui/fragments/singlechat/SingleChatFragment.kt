@@ -1,6 +1,7 @@
 package ru.molinov.gram.ui.fragments.singlechat
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -39,6 +40,7 @@ class SingleChatFragment :
     private lateinit var refUser: DatabaseReference
     private lateinit var refMessages: DatabaseReference
     private lateinit var contact: CommonModel
+    private lateinit var voiceRecorder: AppVoiceRecorder
     private var isSmoothScroll = true
     private var isScrolling = false
     private var messagesCount = 10
@@ -67,6 +69,11 @@ class SingleChatFragment :
         toolbar.isVisible = false
         refUser.removeEventListener(listenerToolbar)
         refMessages.removeEventListener(listenerRecycler)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceRecorder.releaseRecorder()
     }
 
     private fun initToolbar() {
@@ -127,6 +134,7 @@ class SingleChatFragment :
     }
 
     private fun initFields() {
+        voiceRecorder = AppVoiceRecorder()
         binding.btnAttach.setOnClickListener { attachFile() }
         setSent()
         setMessage()
@@ -184,9 +192,13 @@ class SingleChatFragment :
                         btnVoice.setColorFilter(
                             ContextCompat.getColor(requireContext(), R.color.colorPrimary)
                         )
+                        voiceRecorder.startRecording(getMessageKey(contact.id))
                     } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                         recording.isVisible = false
                         btnVoice.colorFilter = null
+                        voiceRecorder.stopRecording { file, messageKey ->
+                            uploadFileToStorage(Uri.fromFile(file), messageKey)
+                        }
                     }
                 }
                 true

@@ -16,7 +16,7 @@ data class CommonModel(
     var type: Int = 0,
     var from: String = "",
     var timestamp: Long = 0,
-    var imageUrl: String = ""
+    var fileUrl: String = ""
 ) : Parcelable {
 
     override fun equals(other: Any?): Boolean {

@@ -39,7 +39,7 @@ const val USER_TEXT = "text"
 const val USER_TYPE = "type"
 const val USER_FROM = "from"
 const val USER_TIMESTAMP = "timestamp"
-const val USER_IMAGE_URL = "imageUrl"
+const val USER_FILE_URL = "fileUrl"
 
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
@@ -123,8 +123,7 @@ fun sendMessage(message: String, receivingUserId: String, onSuccess: () -> Unit)
 }
 
 fun loadAttach(uri: Uri?, contactId: String) {
-    val messageKey = REFERENCE_DB.child(NODE_MESSAGES).child(CURRENT_UID).child(contactId)
-        .push().key.toString()
+    val messageKey = getMessageKey(contactId)
     val path = REFERENCE_STORAGE.child(MESSAGES_IMAGES).child(messageKey)
     putImageToStore(uri, path) {
         getUrlFromStorage(path) { url ->
@@ -143,7 +142,7 @@ fun sendMessageAsImage(receivingUserId: String, imageUrl: Any, messageKey: Strin
     mapMessage[USER_TYPE] = TYPE_MESSAGE_IMAGE
     mapMessage[USER_ID] = messageKey
     mapMessage[USER_TIMESTAMP] = ServerValue.TIMESTAMP
-    mapMessage[USER_IMAGE_URL] = imageUrl
+    mapMessage[USER_FILE_URL] = imageUrl
     val mapDialog = hashMapOf<String, Any>()
     mapDialog["$refDialogUser/$messageKey"] = mapMessage
     mapDialog["$refDialogReceivingUser/$messageKey"] = mapMessage
@@ -198,6 +197,18 @@ fun changeUserBio(newBio: String, onSuccess: () -> Unit) {
             USER.bio = newBio
             onSuccess()
         }.addOnFailureListener { showToast(it.message.toString()) }
+}
+
+fun uploadFileToStorage(uri: Uri, messageKey: String) {
+    showToast("Record Ok")
+}
+
+fun getMessageKey(id: String): String {
+    return REFERENCE_DB
+        .child(NODE_MESSAGES)
+        .child(CURRENT_UID)
+        .child(id)
+        .push().key.toString()
 }
 
 fun DataSnapshot.getCommonModel(): CommonModel =
