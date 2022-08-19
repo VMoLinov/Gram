@@ -4,7 +4,7 @@ import ru.molinov.gram.R
 import ru.molinov.gram.database.NODE_USERNAMES
 import ru.molinov.gram.database.REFERENCE_DB
 import ru.molinov.gram.database.USER
-import ru.molinov.gram.database.changeUsernameInDatabase
+import ru.molinov.gram.database.changeUsername
 import ru.molinov.gram.databinding.FragmentChangeUsernameBinding
 import ru.molinov.gram.utilites.AppTextWatcher
 import ru.molinov.gram.utilites.AppValueEventListener
@@ -35,7 +35,7 @@ class ChangeUsernameFragment :
     private fun changeUsername(newUsername: String) {
         REFERENCE_DB.child(NODE_USERNAMES).addListenerForSingleValueEvent(AppValueEventListener {
             if (it.hasChild(newUsername)) showToast(MAIN_ACTIVITY.getString(R.string.settings_change_username_already_exists))
-            else changeUsernameInDatabase(newUsername) {
+            else changeUsername(newUsername) {
                 updateDrawerHeader()
                 showToast(getString(R.string.app_toast_data_update))
                 parentFragmentManager.popBackStack()

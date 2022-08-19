@@ -45,8 +45,10 @@ class SingleChatFragment :
     private var isScrolling = false
     private var messagesCount = 10
     private val loadAttach = registerForActivityResult(CropImageContract()) { result ->
-        if (result.isSuccessful) loadAttach(result.uriContent, contact.id)
-        else showToast(result.error.toString())
+        if (result.isSuccessful) {
+            uploadFile(result.uriContent, contact.id, TYPE_MESSAGE_IMAGE)
+            isSmoothScroll = true
+        } else showToast(result.error.toString())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -158,7 +160,7 @@ class SingleChatFragment :
             isSmoothScroll = true
             val enterMessage = message.text.toString()
             if (enterMessage.isEmpty()) showToast(getString(R.string.single_chat_enter_a_message))
-            else sendMessage(enterMessage, contact.id) {
+            else sendMessageAsText(enterMessage, contact.id) {
                 message.setText(getString(R.string.app_empty_string))
             }
         }
@@ -192,12 +194,13 @@ class SingleChatFragment :
                         btnVoice.setColorFilter(
                             ContextCompat.getColor(requireContext(), R.color.colorPrimary)
                         )
-                        voiceRecorder.startRecording(getMessageKey(contact.id))
+                        voiceRecorder.startRecording(contact.id)
                     } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                         recording.isVisible = false
                         btnVoice.colorFilter = null
-                        voiceRecorder.stopRecording { file, messageKey ->
-                            uploadFileToStorage(Uri.fromFile(file), messageKey)
+                        voiceRecorder.stopRecording { file, contactId ->
+                            uploadFile(Uri.fromFile(file), contactId, TYPE_MESSAGE_VOICE)
+                            isSmoothScroll = true
                         }
                     }
                 }

@@ -10,11 +10,11 @@ class AppVoiceRecorder {
         MediaRecorder(MAIN_ACTIVITY)
     } else MediaRecorder()
     private lateinit var file: File
-    private lateinit var messageKey: String
+    private lateinit var id: String
 
-    fun startRecording(messageKey: String) {
+    fun startRecording(contactId: String) {
         try {
-            this.messageKey = messageKey
+            id = contactId
             createFileForRecord()
             prepareMediaRecorder()
             mediaRecorder.start()
@@ -35,14 +35,14 @@ class AppVoiceRecorder {
     }
 
     private fun createFileForRecord() {
-        file = File(MAIN_ACTIVITY.filesDir, messageKey)
+        file = File(MAIN_ACTIVITY.filesDir, id)
         file.createNewFile()
     }
 
     fun stopRecording(onSuccess: (File, String) -> Unit) {
         try {
             mediaRecorder.stop()
-            onSuccess(file, messageKey)
+            onSuccess(file, id)
         } catch (e: Exception) {
             showToast(e.message.toString())
             file.delete()

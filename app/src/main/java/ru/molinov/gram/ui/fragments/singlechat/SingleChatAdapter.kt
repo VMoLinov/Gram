@@ -50,16 +50,9 @@ class SingleChatAdapter :
                     )
                 )
             }
-            TYPE_MESSAGE_IMAGE -> {
+            else -> {
                 SingleChatImageViewHolder(
                     MessageImageItemBinding.inflate(
-                        LayoutInflater.from(parent.context), parent, false
-                    )
-                )
-            }
-            else -> {
-                SingleChatTextViewHolder(
-                    MessageTextItemBinding.inflate(
                         LayoutInflater.from(parent.context), parent, false
                     )
                 )

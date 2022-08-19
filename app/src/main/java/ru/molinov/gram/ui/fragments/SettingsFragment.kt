@@ -10,7 +10,7 @@ import ru.molinov.gram.R
 import ru.molinov.gram.database.AUTH
 import ru.molinov.gram.database.USER
 import ru.molinov.gram.database.changeUserPhoto
-import ru.molinov.gram.database.loadUserPhoto
+import ru.molinov.gram.database.getUserPhoto
 import ru.molinov.gram.databinding.FragmentSettingsBinding
 import ru.molinov.gram.utilites.*
 
@@ -38,7 +38,7 @@ class SettingsFragment :
     }
 
     private fun initUserPhoto(photoUrl: String) {
-        if (photoUrl.isBlank()) loadUserPhoto { setUserPhoto(it) }
+        if (photoUrl.isBlank()) getUserPhoto { setUserPhoto(it) }
         else setUserPhoto(photoUrl)
     }
 

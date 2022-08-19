@@ -13,7 +13,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.molinov.gram.MainActivity
 import ru.molinov.gram.R
 import ru.molinov.gram.database.AUTH
-import ru.molinov.gram.database.updatePhonesToDatabase
+import ru.molinov.gram.database.setPhones
 import ru.molinov.gram.models.CommonModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -84,7 +84,7 @@ fun initContacts() {
             }
         }
         cursor?.close()
-        if (AUTH.currentUser != null) updatePhonesToDatabase(arrayContacts)
+        if (AUTH.currentUser != null) setPhones(arrayContacts)
     }
 }
 
