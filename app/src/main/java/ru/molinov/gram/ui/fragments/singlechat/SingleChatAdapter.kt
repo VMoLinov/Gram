@@ -10,6 +10,7 @@ import androidx.viewbinding.ViewBinding
 import ru.molinov.gram.database.CURRENT_UID
 import ru.molinov.gram.databinding.MessageImageItemBinding
 import ru.molinov.gram.databinding.MessageTextItemBinding
+import ru.molinov.gram.databinding.MessageVoiceItemBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.utilites.TYPE_MESSAGE_IMAGE
 import ru.molinov.gram.utilites.TYPE_MESSAGE_TEXT
@@ -50,9 +51,16 @@ class SingleChatAdapter :
                     )
                 )
             }
-            else -> {
+            TYPE_MESSAGE_IMAGE -> {
                 SingleChatImageViewHolder(
                     MessageImageItemBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    )
+                )
+            }
+            else -> {
+                SingleChatVoiceViewHolder(
+                    MessageVoiceItemBinding.inflate(
                         LayoutInflater.from(parent.context), parent, false
                     )
                 )
@@ -79,12 +87,10 @@ class SingleChatAdapter :
                 userMessage.text = model.text
                 userMessageTime.text = model.timestamp.asTime()
                 blockUserMessage.isVisible = true
-                blockReceivedMessage.isVisible = false
             } else {
                 receivedMessage.text = model.text
                 receivedMessageTime.text = model.timestamp.asTime()
                 blockReceivedMessage.isVisible = true
-                blockUserMessage.isVisible = false
             }
         }
     }
@@ -97,12 +103,40 @@ class SingleChatAdapter :
                 userMessage.downloadAndSetImage(model.fileUrl)
                 userMessageTime.text = model.timestamp.asTime()
                 blockUserMessage.isVisible = true
-                blockReceivedMessage.isVisible = false
             } else {
                 receivedMessage.downloadAndSetImage(model.fileUrl)
                 receivedMessageTime.text = model.timestamp.asTime()
                 blockReceivedMessage.isVisible = true
-                blockUserMessage.isVisible = false
+            }
+        }
+    }
+
+    inner class SingleChatVoiceViewHolder(val binding: MessageVoiceItemBinding) :
+        SingleChatBaseViewHolder(binding) {
+
+        override fun bind(model: CommonModel) = with(binding) {
+            if (model.from == CURRENT_UID) {
+                userMessagePlay.setOnClickListener {
+                    it.isVisible = false
+                    userMessageStop.isVisible = true
+                }
+                userMessageStop.setOnClickListener {
+                    it.isVisible = false
+                    userMessagePlay.isVisible = true
+                }
+                userMessageTime.text = model.timestamp.asTime()
+                blockUserMessage.isVisible = true
+            } else {
+                receivedMessagePlay.setOnClickListener {
+                    it.isVisible = false
+                    receivedMessageStop.isVisible = true
+                }
+                receivedMessageStop.setOnClickListener {
+                    it.isVisible = false
+                    receivedMessagePlay.isVisible = true
+                }
+                receivedMessageTime.text = model.timestamp.asTime()
+                blockReceivedMessage.isVisible = true
             }
         }
     }

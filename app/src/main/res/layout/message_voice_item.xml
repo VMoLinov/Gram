@@ -8,9 +8,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/blockUserMessage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
+        android:layout_width="@dimen/message_voice_block_width"
+        android:layout_height="@dimen/message_voice_block_height"
         android:background="@drawable/bg_user_message"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,16 +18,25 @@
         tools:visibility="visible">
 
         <ImageView
-            android:id="@+id/userMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/single_chat_user_s_image"
-            android:gravity="end"
-            android:padding="@dimen/image_item_padding"
+            android:id="@+id/userMessagePlay"
+            android:layout_width="@dimen/message_voice_btn_size"
+            android:layout_height="@dimen/message_voice_btn_size"
+            android:contentDescription="@string/message_voice_play"
+            android:src="@drawable/ic_play_green"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@android:drawable/stat_sys_warning" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/userMessageStop"
+            android:layout_width="@dimen/message_voice_btn_size"
+            android:layout_height="@dimen/message_voice_btn_size"
+            android:contentDescription="@string/message_voice_stop"
+            android:src="@drawable/ic_stop_green"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/userMessageTime"
@@ -37,17 +45,16 @@
             android:layout_marginEnd="@dimen/timestamp_end_margin"
             android:gravity="end"
             android:padding="@dimen/image_item_padding"
-            android:textColor="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="@id/userMessage"
+            android:textColor="@color/colorGreenDark"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="21:45" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/blockReceivedMessage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="100dp"
+        android:layout_width="@dimen/message_voice_block_width"
+        android:layout_height="@dimen/message_voice_block_height"
         android:background="@drawable/bg_receiving_message"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -55,13 +62,24 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/receivedMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/single_chat_received_message"
-            android:padding="@dimen/image_item_padding"
+            android:id="@+id/receivedMessagePlay"
+            android:layout_width="@dimen/message_voice_btn_size"
+            android:layout_height="@dimen/message_voice_btn_size"
+            android:contentDescription="@string/message_voice_play"
+            android:src="@drawable/ic_play_blue"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/receivedMessageStop"
+            android:layout_width="@dimen/message_voice_btn_size"
+            android:layout_height="@dimen/message_voice_btn_size"
+            android:contentDescription="@string/message_voice_stop"
+            android:src="@drawable/ic_stop_blue"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -71,8 +89,8 @@
             android:layout_marginEnd="@dimen/timestamp_end_margin"
             android:gravity="end"
             android:padding="@dimen/image_item_padding"
-            android:textColor="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="@id/receivedMessage"
+            android:textColor="@color/colorGray"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="21:45" />
     </androidx.constraintlayout.widget.ConstraintLayout>

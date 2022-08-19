@@ -50,4 +50,6 @@
     <string name="single_chat_attach_file">Attach file or image</string>
     <string name="single_chat_send_voice_message">Send voice message</string>
     <string name="single_chat_recording">Recording...</string>
+    <string name="message_voice_play">Play button</string>
+    <string name="message_voice_stop">Stop button</string>
 </resources>
