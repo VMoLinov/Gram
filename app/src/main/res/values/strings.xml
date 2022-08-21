@@ -37,19 +37,18 @@
     <string name="register_authorization_error">Authorization error</string>
     <!-- Contacts -->
     <string name="contacts_title">Contacts</string>
-    <!-- Single chat -->
-    <string name="single_chat_message">Message</string>
-    <string name="single_chat_sent_message">Sent message</string>
     <!-- Chat -->
     <string name="chats_title">Chats</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Single chat -->
+    <string name="single_chat_sent_message">Sent message</string>
+    <string name="single_chat_message">Message</string>
     <string name="single_chat_enter_a_message">Enter a message</string>
     <string name="single_chat_user_s_image">user\'s image send</string>
     <string name="single_chat_received_message">received_image</string>
     <string name="single_chat_attach_file">Attach file or image</string>
     <string name="single_chat_send_voice_message">Send voice message</string>
-    <string name="single_chat_recording">Recording...</string>
-    <string name="message_voice_play">Play button</string>
-    <string name="message_voice_stop">Stop button</string>
+    <string name="single_chat_recording">Recording…</string>
+    <string name="single_chat_voice_play">Play button</string>
+    <string name="single_chat_voice_stop">Stop button</string>
 </resources>
