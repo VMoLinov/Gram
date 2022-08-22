@@ -22,7 +22,9 @@ fun initFirebase() {
 }
 
 inline fun initUser(crossinline onSuccess: () -> Unit) {
-    REFERENCE_DB.child(NODE_USERS).child(CURRENT_UID)
+    REFERENCE_DB
+        .child(NODE_USERS)
+        .child(CURRENT_UID)
         .addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 USER = snapshot.getUserModel()

@@ -37,11 +37,3 @@ fun sendMessageAsFile(receivingUserId: String, fileUrl: Any, messageKey: String,
     REFERENCE_DB.updateChildren(mapDialog)
         .addOnFailureListener { showToast(it.message.toString()) }
 }
-
-fun getMessageKey(id: String): String {
-    return REFERENCE_DB
-        .child(NODE_MESSAGES)
-        .child(CURRENT_UID)
-        .child(id)
-        .push().key.toString()
-}

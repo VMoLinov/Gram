@@ -41,6 +41,7 @@ class SingleChatFragment :
     private lateinit var refMessages: DatabaseReference
     private lateinit var contact: CommonModel
     private lateinit var voiceRecorder: AppVoiceRecorder
+    private lateinit var adapter: SingleChatAdapter
     private var isSmoothScroll = true
     private var isScrolling = false
     private var messagesCount = 10
@@ -76,6 +77,7 @@ class SingleChatFragment :
     override fun onDestroy() {
         super.onDestroy()
         voiceRecorder.releaseRecorder()
+        adapter.onDestroy()
     }
 
     private fun initToolbar() {
@@ -98,7 +100,7 @@ class SingleChatFragment :
     }
 
     private fun initRecyclerView() = with(binding) {
-        val adapter = SingleChatAdapter()
+        adapter = SingleChatAdapter()
         val layoutManager = LinearLayoutManager(requireContext())
         chatRecyclerView.adapter = adapter
         chatRecyclerView.layoutManager = layoutManager

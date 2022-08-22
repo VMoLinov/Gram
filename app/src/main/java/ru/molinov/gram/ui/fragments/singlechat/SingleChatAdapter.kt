@@ -2,23 +2,21 @@ package ru.molinov.gram.ui.fragments.singlechat
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
-import ru.molinov.gram.database.CURRENT_UID
 import ru.molinov.gram.databinding.MessageImageItemBinding
 import ru.molinov.gram.databinding.MessageTextItemBinding
 import ru.molinov.gram.databinding.MessageVoiceItemBinding
 import ru.molinov.gram.models.CommonModel
+import ru.molinov.gram.ui.fragments.singlechat.holders.SingleChatBaseViewHolder
+import ru.molinov.gram.ui.fragments.singlechat.holders.SingleChatImageViewHolder
+import ru.molinov.gram.ui.fragments.singlechat.holders.SingleChatTextViewHolder
+import ru.molinov.gram.ui.fragments.singlechat.holders.SingleChatVoiceViewHolder
 import ru.molinov.gram.utilites.TYPE_MESSAGE_IMAGE
 import ru.molinov.gram.utilites.TYPE_MESSAGE_TEXT
-import ru.molinov.gram.utilites.asTime
-import ru.molinov.gram.utilites.downloadAndSetImage
 
 class SingleChatAdapter :
-    ListAdapter<CommonModel, SingleChatAdapter.SingleChatBaseViewHolder>(SingleChatDiffCallback) {
+    ListAdapter<CommonModel, SingleChatBaseViewHolder>(SingleChatDiffCallback) {
 
     private object SingleChatDiffCallback : DiffUtil.ItemCallback<CommonModel>() {
         override fun areItemsTheSame(oldItem: CommonModel, newItem: CommonModel): Boolean =
@@ -29,6 +27,7 @@ class SingleChatAdapter :
     }
 
     private val messagesList = mutableListOf<CommonModel>()
+    private val holdersList = mutableListOf<SingleChatBaseViewHolder>()
 
     fun addItem(item: CommonModel, onSuccess: () -> Unit) {
         if (!messagesList.contains(item)) {
@@ -74,70 +73,21 @@ class SingleChatAdapter :
 
     override fun getItemCount(): Int = currentList.size
 
-    abstract inner class SingleChatBaseViewHolder(binding: ViewBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        abstract fun bind(model: CommonModel)
+    override fun onViewAttachedToWindow(holder: SingleChatBaseViewHolder) {
+        holder.attach(currentList[holder.absoluteAdapterPosition])
+        holdersList.add(holder)
+        super.onViewAttachedToWindow(holder)
     }
 
-    inner class SingleChatTextViewHolder(val binding: MessageTextItemBinding) :
-        SingleChatBaseViewHolder(binding) {
-
-        override fun bind(model: CommonModel) = with(binding) {
-            if (model.from == CURRENT_UID) {
-                userMessage.text = model.text
-                userMessageTime.text = model.timestamp.asTime()
-                blockUserMessage.isVisible = true
-            } else {
-                receivedMessage.text = model.text
-                receivedMessageTime.text = model.timestamp.asTime()
-                blockReceivedMessage.isVisible = true
-            }
-        }
+    override fun onViewDetachedFromWindow(holder: SingleChatBaseViewHolder) {
+        holder.detach()
+        holdersList.remove(holder)
+        super.onViewDetachedFromWindow(holder)
     }
 
-    inner class SingleChatImageViewHolder(val binding: MessageImageItemBinding) :
-        SingleChatBaseViewHolder(binding) {
-
-        override fun bind(model: CommonModel) = with(binding) {
-            if (model.from == CURRENT_UID) {
-                userMessage.downloadAndSetImage(model.fileUrl)
-                userMessageTime.text = model.timestamp.asTime()
-                blockUserMessage.isVisible = true
-            } else {
-                receivedMessage.downloadAndSetImage(model.fileUrl)
-                receivedMessageTime.text = model.timestamp.asTime()
-                blockReceivedMessage.isVisible = true
-            }
-        }
-    }
-
-    inner class SingleChatVoiceViewHolder(val binding: MessageVoiceItemBinding) :
-        SingleChatBaseViewHolder(binding) {
-
-        override fun bind(model: CommonModel) = with(binding) {
-            if (model.from == CURRENT_UID) {
-                userMessagePlay.setOnClickListener {
-                    it.isVisible = false
-                    userMessageStop.isVisible = true
-                }
-                userMessageStop.setOnClickListener {
-                    it.isVisible = false
-                    userMessagePlay.isVisible = true
-                }
-                userMessageTime.text = model.timestamp.asTime()
-                blockUserMessage.isVisible = true
-            } else {
-                receivedMessagePlay.setOnClickListener {
-                    it.isVisible = false
-                    receivedMessageStop.isVisible = true
-                }
-                receivedMessageStop.setOnClickListener {
-                    it.isVisible = false
-                    receivedMessagePlay.isVisible = true
-                }
-                receivedMessageTime.text = model.timestamp.asTime()
-                blockReceivedMessage.isVisible = true
-            }
+    fun onDestroy() {
+        holdersList.forEach {
+            it.detach()
         }
     }
 }
