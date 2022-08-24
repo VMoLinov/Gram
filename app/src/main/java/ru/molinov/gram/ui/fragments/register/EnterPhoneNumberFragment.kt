@@ -22,7 +22,7 @@ class EnterPhoneNumberFragment :
 
     override fun onStart() {
         super.onStart()
-        MAIN_ACTIVITY.title = getString(R.string.register_title_your_phone)
+        MAIN_ACTIVITY.toolbar.title = getString(R.string.register_title_your_phone)
         callback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
                 AUTH.signInWithCredential(credential).addOnCompleteListener {

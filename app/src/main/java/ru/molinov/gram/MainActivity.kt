@@ -29,9 +29,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         MAIN_ACTIVITY = this
         initFirebase()
+        initProperties()
         initUser {
             CoroutineScope(Dispatchers.IO).launch { initContacts() }
-            initProperties()
             initFunc()
         }
     }
