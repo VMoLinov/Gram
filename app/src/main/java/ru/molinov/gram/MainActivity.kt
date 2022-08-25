@@ -29,9 +29,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         MAIN_ACTIVITY = this
         initFirebase()
-        initProperties()
+        toolbar = binding.mainToolbar
         initUser {
             CoroutineScope(Dispatchers.IO).launch { initContacts() }
+            initProperties()
             initFunc()
         }
     }
@@ -45,7 +46,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initProperties() {
-        toolbar = binding.mainToolbar
         appDrawer = AppDrawer()
     }
 
