@@ -22,10 +22,6 @@ fun initFirebase() {
 }
 
 inline fun initUser(crossinline onSuccess: () -> Unit) {
-    if (CURRENT_UID == "null") {
-        addFragment(EnterPhoneNumberFragment())
-        return
-    }
     REFERENCE_DB
         .child(NODE_USERS)
         .child(CURRENT_UID)

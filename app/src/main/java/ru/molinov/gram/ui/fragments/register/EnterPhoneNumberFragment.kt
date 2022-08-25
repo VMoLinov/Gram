@@ -54,7 +54,7 @@ class EnterPhoneNumberFragment :
         PhoneAuthProvider.verifyPhoneNumber(
             PhoneAuthOptions.newBuilder(AUTH)
                 .setPhoneNumber(phoneNumber)
-                .setTimeout(60L, TimeUnit.SECONDS)
+                .setTimeout(30L, TimeUnit.SECONDS)
                 .setActivity(MAIN_ACTIVITY)
                 .setCallbacks(callback)
                 .build()
