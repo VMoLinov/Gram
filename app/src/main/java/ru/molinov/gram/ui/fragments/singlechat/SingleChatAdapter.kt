@@ -14,6 +14,7 @@ import ru.molinov.gram.ui.fragments.singlechat.holders.SingleChatTextViewHolder
 import ru.molinov.gram.ui.fragments.singlechat.holders.SingleChatVoiceViewHolder
 import ru.molinov.gram.utilites.TYPE_MESSAGE_IMAGE
 import ru.molinov.gram.utilites.TYPE_MESSAGE_TEXT
+import ru.molinov.gram.utilites.TYPE_MESSAGE_VOICE
 
 class SingleChatAdapter :
     ListAdapter<CommonModel, SingleChatBaseViewHolder>(SingleChatDiffCallback) {
@@ -57,9 +58,16 @@ class SingleChatAdapter :
                     )
                 )
             }
-            else -> {
+            TYPE_MESSAGE_VOICE -> {
                 SingleChatVoiceViewHolder(
                     MessageVoiceItemBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    )
+                )
+            }
+            else -> {
+                SingleChatTextViewHolder(
+                    MessageTextItemBinding.inflate(
                         LayoutInflater.from(parent.context), parent, false
                     )
                 )
@@ -86,8 +94,6 @@ class SingleChatAdapter :
     }
 
     fun onDestroy() {
-        holdersList.forEach {
-            it.detach()
-        }
+        holdersList.forEach { it.detach() }
     }
 }

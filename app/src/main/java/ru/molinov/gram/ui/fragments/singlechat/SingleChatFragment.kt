@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DatabaseReference
 import de.hdodenhof.circleimageview.CircleImageView
@@ -42,6 +44,7 @@ class SingleChatFragment :
     private lateinit var contact: CommonModel
     private lateinit var voiceRecorder: AppVoiceRecorder
     private lateinit var adapter: SingleChatAdapter
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
     private var isSmoothScroll = true
     private var isScrolling = false
     private var messagesCount = 10
@@ -50,6 +53,9 @@ class SingleChatFragment :
             uploadFile(result.uriContent, contact.id, TYPE_MESSAGE_IMAGE)
             isSmoothScroll = true
         } else showToast(result.error.toString())
+    }
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        it?.let { uploadFile(it, contact.id, TYPE_MESSAGE_FILE) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -138,14 +144,24 @@ class SingleChatFragment :
     }
 
     private fun initFields() {
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet.root)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         voiceRecorder = AppVoiceRecorder()
-        binding.btnAttach.setOnClickListener { attachFile() }
+        binding.btnAttach.setOnClickListener { attach() }
         setSent()
         setMessage()
         setVoice()
     }
 
-    private fun attachFile() {
+    private fun attach() {
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        binding.bottomSheet.apply {
+            btnAttachImage.setOnClickListener { attachImage() }
+            btnAttachFile.setOnClickListener { getContent.launch("*/*") }
+        }
+    }
+
+    private fun attachImage() {
         loadAttach.launch(
             options {
                 setGuidelines(CropImageView.Guidelines.OFF)
@@ -213,9 +229,9 @@ class SingleChatFragment :
 
     private fun changeMessageViewConstraints(targetId: Int) {
         ConstraintSet().apply {
-            clone(binding.root)
+            clone(binding.constraint)
             connect(binding.message.id, ConstraintSet.END, targetId, ConstraintSet.START)
-            applyTo(binding.root)
+            applyTo(binding.constraint)
         }
     }
 
