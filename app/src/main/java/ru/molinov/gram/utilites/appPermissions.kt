@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 
 const val READ_CONTACTS = Manifest.permission.READ_CONTACTS
 const val RECORD_AUDIO = Manifest.permission.RECORD_AUDIO
+const val WRITE_FILES = Manifest.permission.WRITE_EXTERNAL_STORAGE
 const val PERMISSION_REQUEST = 200
 
 @SuppressLint("ObsoleteSdkInt")

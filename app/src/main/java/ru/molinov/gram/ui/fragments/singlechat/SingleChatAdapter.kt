@@ -1,20 +1,10 @@
 package ru.molinov.gram.ui.fragments.singlechat
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import ru.molinov.gram.databinding.MessageImageItemBinding
-import ru.molinov.gram.databinding.MessageTextItemBinding
-import ru.molinov.gram.databinding.MessageVoiceItemBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.ui.fragments.singlechat.holders.SingleChatBaseViewHolder
-import ru.molinov.gram.ui.fragments.singlechat.holders.SingleChatImageViewHolder
-import ru.molinov.gram.ui.fragments.singlechat.holders.SingleChatTextViewHolder
-import ru.molinov.gram.ui.fragments.singlechat.holders.SingleChatVoiceViewHolder
-import ru.molinov.gram.utilites.TYPE_MESSAGE_IMAGE
-import ru.molinov.gram.utilites.TYPE_MESSAGE_TEXT
-import ru.molinov.gram.utilites.TYPE_MESSAGE_VOICE
 
 class SingleChatAdapter :
     ListAdapter<CommonModel, SingleChatBaseViewHolder>(SingleChatDiffCallback) {
@@ -42,42 +32,11 @@ class SingleChatAdapter :
 
     override fun getItemViewType(position: Int) = currentList[position].type
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleChatBaseViewHolder {
-        return when (viewType) {
-            TYPE_MESSAGE_TEXT -> {
-                SingleChatTextViewHolder(
-                    MessageTextItemBinding.inflate(
-                        LayoutInflater.from(parent.context), parent, false
-                    )
-                )
-            }
-            TYPE_MESSAGE_IMAGE -> {
-                SingleChatImageViewHolder(
-                    MessageImageItemBinding.inflate(
-                        LayoutInflater.from(parent.context), parent, false
-                    )
-                )
-            }
-            TYPE_MESSAGE_VOICE -> {
-                SingleChatVoiceViewHolder(
-                    MessageVoiceItemBinding.inflate(
-                        LayoutInflater.from(parent.context), parent, false
-                    )
-                )
-            }
-            else -> {
-                SingleChatTextViewHolder(
-                    MessageTextItemBinding.inflate(
-                        LayoutInflater.from(parent.context), parent, false
-                    )
-                )
-            }
-        }
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleChatBaseViewHolder =
+        SingleChatBaseViewHolder.getHolder(parent, viewType)
 
-    override fun onBindViewHolder(holder: SingleChatBaseViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SingleChatBaseViewHolder, position: Int) =
         holder.bind(currentList[position])
-    }
 
     override fun getItemCount(): Int = currentList.size
 
@@ -93,7 +52,5 @@ class SingleChatAdapter :
         super.onViewDetachedFromWindow(holder)
     }
 
-    fun onDestroy() {
-        holdersList.forEach { it.detach() }
-    }
+    fun onDestroy() = holdersList.forEach { it.detach() }
 }

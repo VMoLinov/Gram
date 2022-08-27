@@ -1,7 +1,9 @@
 package ru.molinov.gram.database
 
+import android.net.Uri
 import com.google.firebase.database.ServerValue
 import ru.molinov.gram.utilites.TYPE_MESSAGE_TEXT
+import ru.molinov.gram.utilites.getFileNameFromUrl
 import ru.molinov.gram.utilites.showToast
 
 fun sendMessageAsText(message: String, receivingUserId: String, onSuccess: () -> Unit) {
@@ -22,7 +24,9 @@ fun sendMessageAsText(message: String, receivingUserId: String, onSuccess: () ->
         .addOnFailureListener { showToast(it.message.toString()) }
 }
 
-fun sendMessageAsFile(receivingUserId: String, fileUrl: Any, messageKey: String, typeMessage: Int) {
+fun sendMessageAsFile(
+    receivingUserId: String, fileUrl: Any, uri: Uri?, messageKey: String, typeMessage: Int
+) {
     val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"
     val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"
     val mapMessage = hashMapOf<String, Any>()
@@ -31,6 +35,7 @@ fun sendMessageAsFile(receivingUserId: String, fileUrl: Any, messageKey: String,
     mapMessage[USER_ID] = messageKey
     mapMessage[USER_TIMESTAMP] = ServerValue.TIMESTAMP
     mapMessage[USER_FILE_URL] = fileUrl
+    mapMessage[USER_TEXT] = getFileNameFromUrl(uri)
     val mapDialog = hashMapOf<String, Any>()
     mapDialog["$refDialogUser/$messageKey"] = mapMessage
     mapDialog["$refDialogReceivingUser/$messageKey"] = mapMessage

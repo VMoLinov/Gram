@@ -53,4 +53,5 @@
     <string name="single_chat_voice_stop">Stop button</string>
     <string name="bottom_sheet_attach_image">Attach image</string>
     <string name="bottom_sheet_attach_file">Attach file</string>
+    <string name="single_chat_file_play">Open file</string>
 </resources>

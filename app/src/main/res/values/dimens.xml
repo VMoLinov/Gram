@@ -18,6 +18,9 @@
     <dimen name="message_voice_btn_size">50dp</dimen>
     <dimen name="message_voice_block_width">180dp</dimen>
     <dimen name="message_voice_block_height">50dp</dimen>
+    <dimen name="message_file_btn_size">50dp</dimen>
+    <dimen name="message_file_block_width">180dp</dimen>
+    <dimen name="message_file_block_height">50dp</dimen>
     <dimen name="bottom_sheet_height">70dp</dimen>
     <dimen name="bottom_sheet_image_size">50dp</dimen>
 </resources>

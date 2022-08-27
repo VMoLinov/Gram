@@ -59,7 +59,7 @@ fun uploadFile(uri: Uri?, contactId: String, typeMessage: Int) {
     putFile(uri, path) {
         getUrl(path) { url ->
             putUrl(url) {
-                sendMessageAsFile(contactId, url, messageKey, typeMessage)
+                sendMessageAsFile(contactId, url, uri, messageKey, typeMessage)
             }
         }
     }

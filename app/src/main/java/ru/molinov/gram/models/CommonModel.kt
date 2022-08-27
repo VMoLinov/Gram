@@ -2,6 +2,7 @@ package ru.molinov.gram.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import ru.molinov.gram.database.CURRENT_UID
 
 @Parcelize
 data class CommonModel(
@@ -18,6 +19,8 @@ data class CommonModel(
     var timestamp: Long = 0,
     var fileUrl: String = ""
 ) : Parcelable {
+
+    fun isFromUser(): Boolean = from == CURRENT_UID
 
     override fun equals(other: Any?): Boolean {
         return (other as CommonModel).id == this.id
