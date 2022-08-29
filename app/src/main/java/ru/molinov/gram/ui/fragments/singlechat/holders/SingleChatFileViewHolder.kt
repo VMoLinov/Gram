@@ -51,6 +51,8 @@ class SingleChatFileViewHolder(val binding: MessageFileItemBinding) :
             }
         } catch (e: Exception) {
             showToast(e.message.toString())
+        } finally {
+            progressBarInvisible(from)
         }
     }
 

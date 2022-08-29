@@ -28,7 +28,7 @@ inline fun initUser(crossinline onSuccess: () -> Unit) {
         .addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 USER = snapshot.getUserModel()
-                if (USER.username.isEmpty()) USER.username = CURRENT_UID
+                USER.username.ifEmpty { CURRENT_UID }
                 onSuccess()
             }
 

@@ -65,7 +65,7 @@ class EnterCodeFragment :
     }
 
     companion object {
-        private const val ARGS = "args"
+        private const val ARGS = "Enter Code Fragment ARGS"
         fun newInstance(number: String, id: String): EnterCodeFragment {
             val bundle = Bundle()
             bundle.putStringArray(ARGS, arrayOf(number, id))

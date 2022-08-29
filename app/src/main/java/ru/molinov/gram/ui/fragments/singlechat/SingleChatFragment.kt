@@ -179,6 +179,7 @@ class SingleChatFragment :
             val enterMessage = message.text.toString()
             if (enterMessage.isEmpty()) showToast(getString(R.string.single_chat_enter_a_message))
             else sendMessageAsText(enterMessage, contact.id) {
+                saveToMainList(contact.id, TYPE_CHAT)
                 message.setText(getString(R.string.app_empty_string))
             }
         }
@@ -200,7 +201,6 @@ class SingleChatFragment :
                 }
             })
     }
-
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setVoice() = with(binding) {

@@ -42,3 +42,20 @@ fun sendMessageAsFile(
     REFERENCE_DB.updateChildren(mapDialog)
         .addOnFailureListener { showToast(it.message.toString()) }
 }
+
+fun saveToMainList(id: String, type: String) {
+    val refUser = "$NODE_MAIN_LIST/$CURRENT_UID/$id"
+    val refReceived = "$NODE_MAIN_LIST/$id/$CURRENT_UID"
+    val mapUser = hashMapOf<String, Any>()
+    val mapReceived = hashMapOf<String, Any>()
+    mapUser[USER_ID] = id
+    mapUser[USER_TYPE] = type
+    mapReceived[USER_ID] = CURRENT_UID
+    mapReceived[USER_TYPE] = type
+    val commonMap = hashMapOf<String, Any>()
+    commonMap[refUser] = mapUser
+    commonMap[refReceived] = mapReceived
+    REFERENCE_DB
+        .updateChildren(commonMap)
+        .addOnFailureListener { showToast(it.message.toString()) }
+}

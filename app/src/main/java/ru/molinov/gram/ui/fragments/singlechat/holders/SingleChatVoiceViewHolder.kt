@@ -1,7 +1,6 @@
 package ru.molinov.gram.ui.fragments.singlechat.holders
 
 import androidx.core.view.isVisible
-import ru.molinov.gram.database.CURRENT_UID
 import ru.molinov.gram.databinding.MessageVoiceItemBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.utilites.AppVoicePlayer
@@ -13,7 +12,7 @@ class SingleChatVoiceViewHolder(val binding: MessageVoiceItemBinding) :
     private val voicePlayer = AppVoicePlayer()
 
     override fun bind(model: CommonModel) = with(binding) {
-        if (model.from == CURRENT_UID) {
+        if (model.isFromUser()) {
             userMessageTime.text = model.timestamp.asTime()
             blockUserMessage.isVisible = true
         } else {
@@ -25,7 +24,7 @@ class SingleChatVoiceViewHolder(val binding: MessageVoiceItemBinding) :
 
     override fun attach(model: CommonModel) = with(binding) {
         voicePlayer.init()
-        if (model.from == CURRENT_UID) {
+        if (model.isFromUser()) {
             userMessagePlay.setOnClickListener { play ->
                 play.isVisible = false
                 userMessageStop.isVisible = true

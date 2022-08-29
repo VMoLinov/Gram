@@ -33,8 +33,8 @@ class EnterPhoneNumberFragment :
                 }
             }
 
-            override fun onVerificationFailed(p0: FirebaseException) {
-                showToast(p0.toString())
+            override fun onVerificationFailed(exception: FirebaseException) {
+                showToast(exception.toString())
             }
 
             override fun onCodeSent(id: String, token: PhoneAuthProvider.ForceResendingToken) {

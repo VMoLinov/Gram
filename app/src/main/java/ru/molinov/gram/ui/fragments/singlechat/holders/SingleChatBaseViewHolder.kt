@@ -16,6 +16,7 @@ import ru.molinov.gram.utilites.TYPE_MESSAGE_VOICE
 
 abstract class SingleChatBaseViewHolder(binding: ViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
+
     abstract fun bind(model: CommonModel)
     open fun attach(model: CommonModel) {}
     open fun detach() {}
