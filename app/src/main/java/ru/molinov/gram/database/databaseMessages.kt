@@ -43,7 +43,7 @@ fun sendMessageAsFile(
         .addOnFailureListener { showToast(it.message.toString()) }
 }
 
-fun saveToMainList(id: String, type: String) {
+fun saveToMainList(id: String, type: Int) {
     val refUser = "$NODE_MAIN_LIST/$CURRENT_UID/$id"
     val refReceived = "$NODE_MAIN_LIST/$id/$CURRENT_UID"
     val mapUser = hashMapOf<String, Any>()

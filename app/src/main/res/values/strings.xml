@@ -37,9 +37,8 @@
     <string name="register_authorization_error">Authorization error</string>
     <!-- Contacts -->
     <string name="contacts_title">Contacts</string>
-    <!-- Chat -->
-    <string name="chats_title">Chats</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Main -->
+    <string name="chats_title">Telegram</string>
     <!-- Single chat -->
     <string name="single_chat_sent_message">Sent message</string>
     <string name="single_chat_message">Message</string>

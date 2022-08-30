@@ -12,7 +12,7 @@ import ru.molinov.gram.database.AUTH
 import ru.molinov.gram.database.initFirebase
 import ru.molinov.gram.database.initUser
 import ru.molinov.gram.databinding.ActivityMainBinding
-import ru.molinov.gram.ui.fragments.MainFragment
+import ru.molinov.gram.ui.fragments.mainlist.MainListFragment
 import ru.molinov.gram.ui.fragments.register.EnterPhoneNumberFragment
 import ru.molinov.gram.ui.objects.AppDrawer
 import ru.molinov.gram.utilites.*
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         if (AUTH.currentUser != null) {
             appDrawer.create()
-            addFragment(MainFragment())
+            addFragment(MainListFragment())
         } else addFragment(EnterPhoneNumberFragment())
     }
 

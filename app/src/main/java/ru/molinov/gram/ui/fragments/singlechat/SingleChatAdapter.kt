@@ -30,7 +30,7 @@ class SingleChatAdapter :
         onSuccess()
     }
 
-    override fun getItemViewType(position: Int) = currentList[position].type
+    override fun getItemViewType(position: Int) = currentList[position].messageType
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleChatBaseViewHolder =
         SingleChatBaseViewHolder.getHolder(parent, viewType)

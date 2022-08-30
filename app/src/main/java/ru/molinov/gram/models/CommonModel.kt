@@ -14,10 +14,12 @@ data class CommonModel(
     var photoUrl: String = "",
     var phone: String = "",
     var text: String = "",
-    var type: Int = 0,
+    var messageType: Int = 0,
+    var lastMessageType: Int = 0,
     var from: String = "",
     var timestamp: Long = 0,
-    var fileUrl: String = ""
+    var fileUrl: String = "",
+    var lastMessage: String = ""
 ) : Parcelable {
 
     fun isFromUser(): Boolean = from == CURRENT_UID

@@ -179,7 +179,7 @@ class SingleChatFragment :
             val enterMessage = message.text.toString()
             if (enterMessage.isEmpty()) showToast(getString(R.string.single_chat_enter_a_message))
             else sendMessageAsText(enterMessage, contact.id) {
-                saveToMainList(contact.id, TYPE_CHAT)
+                saveToMainList(contact.id, LAST_MESSAGE_TYPE_CHAT)
                 message.setText(getString(R.string.app_empty_string))
             }
         }
@@ -205,7 +205,7 @@ class SingleChatFragment :
     @SuppressLint("ClickableViewAccessibility")
     private fun setVoice() = with(binding) {
         CoroutineScope(Dispatchers.IO).launch {
-            btnVoice.setOnTouchListener { view, motionEvent ->
+            btnVoice.setOnTouchListener { _, motionEvent ->
                 if (checkPermission(RECORD_AUDIO)) {
                     if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                         recording.isVisible = true
@@ -237,7 +237,7 @@ class SingleChatFragment :
 
     companion object {
         private const val ITEMS_PRE_LOAD = 3
-        private const val ARGS_KEY = "SINGLE_CHAT_ARGS_KEY"
+        private const val ARGS_KEY = "Single Chat args"
         fun newInstance(model: CommonModel = CommonModel()): SingleChatFragment {
             val fragment = SingleChatFragment()
             val args = Bundle()
