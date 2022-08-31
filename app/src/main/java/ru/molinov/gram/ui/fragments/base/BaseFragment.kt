@@ -1,4 +1,4 @@
-package ru.molinov.gram.ui.fragments
+package ru.molinov.gram.ui.fragments.base
 
 import android.os.Bundle
 import android.view.LayoutInflater

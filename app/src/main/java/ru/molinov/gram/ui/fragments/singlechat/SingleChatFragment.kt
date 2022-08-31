@@ -29,11 +29,11 @@ import ru.molinov.gram.database.*
 import ru.molinov.gram.databinding.FragmentSingleChatBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.models.UserModel
-import ru.molinov.gram.ui.fragments.OptionsFragment
+import ru.molinov.gram.ui.fragments.base.BaseOptionsFragment
 import ru.molinov.gram.utilites.*
 
 class SingleChatFragment :
-    OptionsFragment<FragmentSingleChatBinding>(FragmentSingleChatBinding::inflate) {
+    BaseOptionsFragment<FragmentSingleChatBinding>(FragmentSingleChatBinding::inflate) {
 
     private lateinit var toolbar: ViewGroup
     private lateinit var listenerToolbar: AppValueEventListener

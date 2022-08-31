@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.molinov.gram.R
 import ru.molinov.gram.databinding.MainListItemBinding
 import ru.molinov.gram.models.CommonModel
+import ru.molinov.gram.ui.fragments.singlechat.SingleChatFragment
 import ru.molinov.gram.utilites.downloadAndSetImage
+import ru.molinov.gram.utilites.replaceFragment
 
 class MainListAdapter :
     ListAdapter<CommonModel, MainListAdapter.ListAdapterViewHolder>(ListAdapterDiffCallback) {
@@ -32,11 +34,15 @@ class MainListAdapter :
     override fun getItemCount(): Int = currentList.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapterViewHolder {
-        return ListAdapterViewHolder(
+        val holder = ListAdapterViewHolder(
             MainListItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )
+        holder.binding.root.setOnClickListener {
+            replaceFragment(SingleChatFragment.newInstance(currentList[holder.absoluteAdapterPosition]))
+        }
+        return holder
     }
 
     override fun onBindViewHolder(holder: ListAdapterViewHolder, position: Int) {

@@ -1,4 +1,4 @@
-package ru.molinov.gram.ui.fragments
+package ru.molinov.gram.ui.settings
 
 import android.view.Menu
 import android.view.MenuInflater
@@ -12,10 +12,11 @@ import ru.molinov.gram.database.USER
 import ru.molinov.gram.database.changeUserPhoto
 import ru.molinov.gram.database.getUserPhoto
 import ru.molinov.gram.databinding.FragmentSettingsBinding
+import ru.molinov.gram.ui.fragments.base.BaseOptionsFragment
 import ru.molinov.gram.utilites.*
 
 class SettingsFragment :
-    OptionsFragment<FragmentSettingsBinding>(FragmentSettingsBinding::inflate) {
+    BaseOptionsFragment<FragmentSettingsBinding>(FragmentSettingsBinding::inflate) {
 
     override fun onResume() {
         super.onResume()

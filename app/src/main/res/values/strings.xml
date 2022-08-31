@@ -54,4 +54,6 @@
     <!-- Bottom sheet for single chat -->
     <string name="bottom_sheet_attach_image">Attach image</string>
     <string name="bottom_sheet_attach_file">Attach file</string>
+    <string name="single_chat_clear_chat">Clear chat</string>
+    <string name="single_chat_delete_chat">Delete chat</string>
 </resources>

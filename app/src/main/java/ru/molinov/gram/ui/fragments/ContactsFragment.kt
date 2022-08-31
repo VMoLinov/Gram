@@ -11,6 +11,7 @@ import ru.molinov.gram.database.*
 import ru.molinov.gram.databinding.ContactItemBinding
 import ru.molinov.gram.databinding.FragmentContactsBinding
 import ru.molinov.gram.models.CommonModel
+import ru.molinov.gram.ui.fragments.base.BaseOptionsFragment
 import ru.molinov.gram.ui.fragments.singlechat.SingleChatFragment
 import ru.molinov.gram.utilites.AppValueEventListener
 import ru.molinov.gram.utilites.MAIN_ACTIVITY
@@ -18,7 +19,7 @@ import ru.molinov.gram.utilites.downloadAndSetImage
 import ru.molinov.gram.utilites.replaceFragment
 
 class ContactsFragment :
-    OptionsFragment<FragmentContactsBinding>(FragmentContactsBinding::inflate) {
+    BaseOptionsFragment<FragmentContactsBinding>(FragmentContactsBinding::inflate) {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: FirebaseRecyclerAdapter<CommonModel, ContactsHolder>

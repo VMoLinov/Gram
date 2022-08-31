@@ -6,7 +6,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 import ru.molinov.gram.R
 import ru.molinov.gram.database.*
 import ru.molinov.gram.databinding.FragmentEnterCodeBinding
-import ru.molinov.gram.ui.fragments.BaseFragment
+import ru.molinov.gram.ui.fragments.base.BaseFragment
 import ru.molinov.gram.utilites.*
 
 class EnterCodeFragment :

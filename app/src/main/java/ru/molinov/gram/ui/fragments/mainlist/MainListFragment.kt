@@ -1,11 +1,14 @@
 package ru.molinov.gram.ui.fragments.mainlist
 
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.recyclerview.widget.RecyclerView
 import ru.molinov.gram.R
 import ru.molinov.gram.database.*
 import ru.molinov.gram.databinding.FragmentMainListBinding
 import ru.molinov.gram.models.CommonModel
-import ru.molinov.gram.ui.fragments.BaseFragment
+import ru.molinov.gram.ui.fragments.base.BaseFragment
 import ru.molinov.gram.utilites.AppValueEventListener
 import ru.molinov.gram.utilites.MAIN_ACTIVITY
 
@@ -22,10 +25,11 @@ class MainListFragment : BaseFragment<FragmentMainListBinding>(FragmentMainListB
         super.onResume()
         MAIN_ACTIVITY.title = getString(R.string.chats_title)
         MAIN_ACTIVITY.appDrawer.unlockDrawer()
-        initRecyclerView()
+        initFields()
     }
 
-    private fun initRecyclerView() {
+    private fun initFields() {
+        setHasOptionsMenu(true)
         recyclerView = binding.recyclerView
         adapter = MainListAdapter()
         refMainList.addListenerForSingleValueEvent(AppValueEventListener {
@@ -45,5 +49,21 @@ class MainListFragment : BaseFragment<FragmentMainListBinding>(FragmentMainListB
             }
         })
         recyclerView.adapter = adapter
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        requireActivity().menuInflater.inflate(R.menu.single_chat_action_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.clear -> {
+
+            }
+            R.id.delete -> {
+
+            }
+        }
+        return true
     }
 }

@@ -7,7 +7,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 import ru.molinov.gram.R
 import ru.molinov.gram.database.AUTH
 import ru.molinov.gram.databinding.FragmentEnterPhoneNumberBinding
-import ru.molinov.gram.ui.fragments.BaseFragment
+import ru.molinov.gram.ui.fragments.base.BaseFragment
 import ru.molinov.gram.utilites.MAIN_ACTIVITY
 import ru.molinov.gram.utilites.replaceFragment
 import ru.molinov.gram.utilites.restartActivity

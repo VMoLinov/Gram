@@ -1,9 +1,10 @@
-package ru.molinov.gram.ui.fragments
+package ru.molinov.gram.ui.settings
 
 import ru.molinov.gram.R
 import ru.molinov.gram.database.USER
 import ru.molinov.gram.database.changeUserBio
 import ru.molinov.gram.databinding.FragmentChangeBioBinding
+import ru.molinov.gram.ui.fragments.base.BaseChangeFragment
 import ru.molinov.gram.utilites.AppTextWatcher
 import ru.molinov.gram.utilites.showToast
 

@@ -1,4 +1,4 @@
-package ru.molinov.gram.ui.fragments
+package ru.molinov.gram.ui.settings
 
 import ru.molinov.gram.R
 import ru.molinov.gram.database.NODE_USERNAMES
@@ -6,6 +6,7 @@ import ru.molinov.gram.database.REFERENCE_DB
 import ru.molinov.gram.database.USER
 import ru.molinov.gram.database.changeUsername
 import ru.molinov.gram.databinding.FragmentChangeUsernameBinding
+import ru.molinov.gram.ui.fragments.base.BaseChangeFragment
 import ru.molinov.gram.utilites.AppTextWatcher
 import ru.molinov.gram.utilites.AppValueEventListener
 import ru.molinov.gram.utilites.MAIN_ACTIVITY
