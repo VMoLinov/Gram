@@ -1,8 +1,5 @@
 package ru.molinov.gram.ui.fragments.mainlist
 
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import androidx.recyclerview.widget.RecyclerView
 import ru.molinov.gram.R
 import ru.molinov.gram.database.*
@@ -29,7 +26,6 @@ class MainListFragment : BaseFragment<FragmentMainListBinding>(FragmentMainListB
     }
 
     private fun initFields() {
-        setHasOptionsMenu(true)
         recyclerView = binding.recyclerView
         adapter = MainListAdapter()
         refMainList.addListenerForSingleValueEvent(AppValueEventListener {
@@ -40,8 +36,11 @@ class MainListFragment : BaseFragment<FragmentMainListBinding>(FragmentMainListB
                         val newModel = nModel.getCommonModel()
                         refMessages.child(newModel.id).limitToLast(1)
                             .addListenerForSingleValueEvent(AppValueEventListener { snapshot ->
-                                val tempList = snapshot.children.last().getCommonModel()
-                                newModel.lastMessage = tempList.text
+                                newModel.lastMessage = if (snapshot.hasChildren()) {
+                                    snapshot.children.last().getCommonModel().text
+                                } else {
+                                    getString(R.string.single_chat_cleared)
+                                }
                                 newModel.fullName.ifEmpty { newModel.phone }
                                 adapter.updateList(newModel)
                             })
@@ -49,21 +48,5 @@ class MainListFragment : BaseFragment<FragmentMainListBinding>(FragmentMainListB
             }
         })
         recyclerView.adapter = adapter
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        requireActivity().menuInflater.inflate(R.menu.single_chat_action_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.clear -> {
-
-            }
-            R.id.delete -> {
-
-            }
-        }
-        return true
     }
 }

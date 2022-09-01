@@ -3,9 +3,7 @@ package ru.molinov.gram.ui.fragments.singlechat
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AbsListView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,6 +28,7 @@ import ru.molinov.gram.databinding.FragmentSingleChatBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.models.UserModel
 import ru.molinov.gram.ui.fragments.base.BaseOptionsFragment
+import ru.molinov.gram.ui.fragments.mainlist.MainListFragment
 import ru.molinov.gram.utilites.*
 
 class SingleChatFragment :
@@ -144,6 +143,7 @@ class SingleChatFragment :
     }
 
     private fun initFields() {
+        setHasOptionsMenu(true)
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet.root)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         voiceRecorder = AppVoiceRecorder()
@@ -233,6 +233,24 @@ class SingleChatFragment :
             connect(binding.message.id, ConstraintSet.END, targetId, ConstraintSet.START)
             applyTo(binding.constraint)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        requireActivity().menuInflater.inflate(R.menu.single_chat_action_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.clear -> clearChat(contact.id) {
+                showToast(getString(R.string.single_chat_cleared))
+                replaceFragment(MainListFragment())
+            }
+            R.id.delete -> deleteChat(contact.id) {
+                showToast(getString(R.string.single_chat_deleted))
+                replaceFragment(MainListFragment())
+            }
+        }
+        return true
     }
 
     companion object {

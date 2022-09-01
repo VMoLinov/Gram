@@ -56,4 +56,6 @@
     <string name="bottom_sheet_attach_file">Attach file</string>
     <string name="single_chat_clear_chat">Clear chat</string>
     <string name="single_chat_delete_chat">Delete chat</string>
+    <string name="single_chat_deleted">Chat has been deleted</string>
+    <string name="single_chat_cleared">Chat has cleared</string>
 </resources>
