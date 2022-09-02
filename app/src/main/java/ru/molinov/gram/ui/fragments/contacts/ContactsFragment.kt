@@ -1,4 +1,4 @@
-package ru.molinov.gram.ui.fragments
+package ru.molinov.gram.ui.fragments.contacts
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,8 +8,8 @@ import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.DatabaseReference
 import ru.molinov.gram.R
 import ru.molinov.gram.database.*
-import ru.molinov.gram.databinding.ContactItemBinding
 import ru.molinov.gram.databinding.FragmentContactsBinding
+import ru.molinov.gram.databinding.ItemContactBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.ui.fragments.base.BaseOptionsFragment
 import ru.molinov.gram.ui.fragments.singlechat.SingleChatFragment
@@ -42,7 +42,7 @@ class ContactsFragment :
         adapter = object : FirebaseRecyclerAdapter<CommonModel, ContactsHolder>(options) {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactsHolder {
                 return ContactsHolder(
-                    ContactItemBinding.inflate(
+                    ItemContactBinding.inflate(
                         LayoutInflater.from(parent.context), parent, false
                     )
                 )
@@ -82,5 +82,5 @@ class ContactsFragment :
         listenersMap.forEach { it.key.removeEventListener(it.value) }
     }
 
-    class ContactsHolder(val binding: ContactItemBinding) : RecyclerView.ViewHolder(binding.root)
+    class ContactsHolder(val binding: ItemContactBinding) : RecyclerView.ViewHolder(binding.root)
 }

@@ -63,11 +63,8 @@ class MainActivity : AppCompatActivity() {
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (ContextCompat
-                .checkSelfPermission(MAIN_ACTIVITY, READ_CONTACTS)
+        if (ContextCompat.checkSelfPermission(MAIN_ACTIVITY, READ_CONTACTS)
             == PackageManager.PERMISSION_GRANTED
-        ) {
-            initContacts()
-        }
+        ) initContacts()
     }
 }

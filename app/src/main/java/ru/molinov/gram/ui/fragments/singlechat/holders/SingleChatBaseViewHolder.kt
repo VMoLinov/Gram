@@ -4,10 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import ru.molinov.gram.databinding.MessageFileItemBinding
-import ru.molinov.gram.databinding.MessageImageItemBinding
-import ru.molinov.gram.databinding.MessageTextItemBinding
-import ru.molinov.gram.databinding.MessageVoiceItemBinding
+import ru.molinov.gram.databinding.ItemMessageFileBinding
+import ru.molinov.gram.databinding.ItemMessageImageBinding
+import ru.molinov.gram.databinding.ItemMessageTextBinding
+import ru.molinov.gram.databinding.ItemMessageVoiceBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.utilites.TYPE_MESSAGE_FILE
 import ru.molinov.gram.utilites.TYPE_MESSAGE_IMAGE
@@ -26,35 +26,35 @@ abstract class SingleChatBaseViewHolder(binding: ViewBinding) :
             return when (viewType) {
                 TYPE_MESSAGE_TEXT -> {
                     SingleChatTextViewHolder(
-                        MessageTextItemBinding.inflate(
+                        ItemMessageTextBinding.inflate(
                             LayoutInflater.from(parent.context), parent, false
                         )
                     )
                 }
                 TYPE_MESSAGE_IMAGE -> {
                     SingleChatImageViewHolder(
-                        MessageImageItemBinding.inflate(
+                        ItemMessageImageBinding.inflate(
                             LayoutInflater.from(parent.context), parent, false
                         )
                     )
                 }
                 TYPE_MESSAGE_VOICE -> {
                     SingleChatVoiceViewHolder(
-                        MessageVoiceItemBinding.inflate(
+                        ItemMessageVoiceBinding.inflate(
                             LayoutInflater.from(parent.context), parent, false
                         )
                     )
                 }
                 TYPE_MESSAGE_FILE -> {
                     SingleChatFileViewHolder(
-                        MessageFileItemBinding.inflate(
+                        ItemMessageFileBinding.inflate(
                             LayoutInflater.from(parent.context), parent, false
                         )
                     )
                 }
                 else -> {
                     SingleChatTextViewHolder(
-                        MessageTextItemBinding.inflate(
+                        ItemMessageTextBinding.inflate(
                             LayoutInflater.from(parent.context), parent, false
                         )
                     )

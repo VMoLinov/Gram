@@ -27,5 +27,5 @@ fun deleteChat(id: String, onSuccess: () -> Unit) {
         .child(id)
         .removeValue()
         .addOnFailureListener { showToast(it.message.toString()) }
-        .addOnSuccessListener { onSuccess() }
+        .addOnSuccessListener { clearChat(id) { onSuccess() } }
 }

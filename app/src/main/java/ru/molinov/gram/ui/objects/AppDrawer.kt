@@ -17,7 +17,8 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import ru.molinov.gram.R
 import ru.molinov.gram.database.USER
-import ru.molinov.gram.ui.fragments.ContactsFragment
+import ru.molinov.gram.ui.fragments.contacts.ContactsFragment
+import ru.molinov.gram.ui.fragments.groups.AddContactsFragment
 import ru.molinov.gram.ui.settings.SettingsFragment
 import ru.molinov.gram.utilites.MAIN_ACTIVITY
 import ru.molinov.gram.utilites.downloadAndSetImage
@@ -121,6 +122,7 @@ class AppDrawer {
 
     private fun clickToItem(position: Int) {
         when (position) {
+            1 -> replaceFragment(AddContactsFragment())
             7 -> replaceFragment(SettingsFragment())
             4 -> replaceFragment(ContactsFragment())
         }

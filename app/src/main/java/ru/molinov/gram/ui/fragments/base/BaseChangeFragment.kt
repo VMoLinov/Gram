@@ -6,6 +6,7 @@ import ru.molinov.gram.R
 import ru.molinov.gram.utilites.MAIN_ACTIVITY
 import ru.molinov.gram.utilites.hideKeyboard
 
+/** Fragments for change user profile properties. For example - Name, Phone, Photo etc */
 open class BaseChangeFragment<T : ViewBinding>(bindingFactory: (LayoutInflater, ViewGroup?, Boolean) -> T) :
     BaseOptionsFragment<T>(bindingFactory) {
 

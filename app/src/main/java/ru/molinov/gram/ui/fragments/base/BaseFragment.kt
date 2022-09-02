@@ -16,9 +16,7 @@ open class BaseFragment<T : ViewBinding>(
     val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = bindingFactory(inflater, container, false).also { _binding = it }.root
 
     override fun onDestroy() {

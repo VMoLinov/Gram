@@ -4,8 +4,8 @@ import ru.molinov.gram.database.*
 
 enum class AppStates(val status: String) {
     ONLINE("online"),
-    OFFLINE("seen recently");
-//    TYPING("typing...");
+    OFFLINE("seen recently"),
+    TYPING("typing...");
 
     companion object {
         fun updateState(appStates: AppStates) {

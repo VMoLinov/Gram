@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.ContactsFragment">
+    tools:context=".ui.fragments.contacts.ContactsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contactsRecycleView"
@@ -12,5 +12,5 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/contact_item" />
+        tools:listitem="@layout/item_contact" />
 </FrameLayout>

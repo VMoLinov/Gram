@@ -26,7 +26,7 @@
                 android:layout_height="0dp"
                 android:background="@color/colorBlueWish"
                 android:orientation="vertical"
-                tools:listitem="@layout/message_text_item" />
+                tools:listitem="@layout/item_message_text" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <EditText
@@ -96,5 +96,5 @@
 
     <include
         android:id="@+id/bottomSheet"
-        layout="@layout/choice_upload" />
+        layout="@layout/menu_choice_upload" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
