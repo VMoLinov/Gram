@@ -59,4 +59,5 @@
     <string name="single_chat_deleted">Chat has been deleted</string>
     <string name="single_chat_cleared">Chat has cleared</string>
     <string name="add_contacts_add_participants">Add participants</string>
+    <string name="create_group">Create group</string>
 </resources>

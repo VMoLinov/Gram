@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.molinov.gram.R
-import ru.molinov.gram.databinding.AddContactsItemBinding
+import ru.molinov.gram.databinding.ItemAddContactsBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.utilites.downloadAndSetImage
 
@@ -34,7 +34,7 @@ class AddContactsAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddContactsViewHolder {
         val holder = AddContactsViewHolder(
-            AddContactsItemBinding.inflate(
+            ItemAddContactsBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )
@@ -55,7 +55,7 @@ class AddContactsAdapter :
         holder.bind(currentList[position])
     }
 
-    inner class AddContactsViewHolder(val binding: AddContactsItemBinding) :
+    inner class AddContactsViewHolder(val binding: ItemAddContactsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(model: CommonModel) = with(binding) {

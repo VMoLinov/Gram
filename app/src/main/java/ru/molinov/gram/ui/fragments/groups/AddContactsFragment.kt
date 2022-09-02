@@ -5,12 +5,13 @@ import ru.molinov.gram.R
 import ru.molinov.gram.database.*
 import ru.molinov.gram.databinding.FragmentAddContactsBinding
 import ru.molinov.gram.models.CommonModel
-import ru.molinov.gram.ui.fragments.base.BaseFragment
+import ru.molinov.gram.ui.fragments.base.BaseOptionsFragment
 import ru.molinov.gram.utilites.AppValueEventListener
 import ru.molinov.gram.utilites.MAIN_ACTIVITY
+import ru.molinov.gram.utilites.replaceFragment
 
 class AddContactsFragment :
-    BaseFragment<FragmentAddContactsBinding>(FragmentAddContactsBinding::inflate) {
+    BaseOptionsFragment<FragmentAddContactsBinding>(FragmentAddContactsBinding::inflate) {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AddContactsAdapter
@@ -22,12 +23,9 @@ class AddContactsFragment :
     override fun onResume() {
         super.onResume()
         MAIN_ACTIVITY.title = getString(R.string.add_contacts_add_participants)
-        MAIN_ACTIVITY.appDrawer.unlockDrawer()
         initFields()
         binding.addContactsButton.setOnClickListener {
-            listContacts.forEach {
-                println(it.id)
-            }
+            replaceFragment(CreateGroupFragment.newInstance(listContacts))
         }
     }
 

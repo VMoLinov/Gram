@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.molinov.gram.R
-import ru.molinov.gram.databinding.MainListItemBinding
+import ru.molinov.gram.databinding.ItemMainListBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.ui.fragments.singlechat.SingleChatFragment
 import ru.molinov.gram.utilites.downloadAndSetImage
@@ -35,7 +35,7 @@ class MainListAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapterViewHolder {
         val holder = ListAdapterViewHolder(
-            MainListItemBinding.inflate(
+            ItemMainListBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )
@@ -49,7 +49,7 @@ class MainListAdapter :
         holder.bind(currentList[position])
     }
 
-    inner class ListAdapterViewHolder(val binding: MainListItemBinding) :
+    inner class ListAdapterViewHolder(val binding: ItemMainListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(model: CommonModel) = with(binding) {

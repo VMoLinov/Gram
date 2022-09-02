@@ -255,7 +255,7 @@ class SingleChatFragment :
 
     companion object {
         private const val ITEMS_PRE_LOAD = 3
-        private const val ARGS_KEY = "Single Chat args"
+        private const val ARGS_KEY = "Single Chat ARGS"
         fun newInstance(model: CommonModel = CommonModel()): SingleChatFragment {
             val fragment = SingleChatFragment()
             val args = Bundle()
