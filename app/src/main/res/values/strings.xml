@@ -38,26 +38,27 @@
     <!-- Contacts -->
     <string name="contacts_title">Contacts</string>
     <!-- Main -->
-    <string name="chats_title">Telegram</string>
+    <string name="main_title">Gram</string>
     <!-- Single chat -->
     <string name="single_chat_sent_message">Sent message</string>
     <string name="single_chat_message">Message</string>
     <string name="single_chat_enter_a_message">Enter a message</string>
     <string name="single_chat_user_s_image">user\'s image send</string>
-    <string name="single_chat_received_message">received_image</string>
+    <string name="single_chat_received_message">Received image</string>
     <string name="single_chat_attach_file">Attach file or image</string>
     <string name="single_chat_send_voice_message">Send voice message</string>
     <string name="single_chat_recording">Recording…</string>
     <string name="single_chat_voice_play">Play button</string>
     <string name="single_chat_voice_stop">Stop button</string>
     <string name="single_chat_file_play">Open file</string>
-    <!-- Bottom sheet for single chat -->
-    <string name="bottom_sheet_attach_image">Attach image</string>
-    <string name="bottom_sheet_attach_file">Attach file</string>
     <string name="single_chat_clear_chat">Clear chat</string>
     <string name="single_chat_delete_chat">Delete chat</string>
     <string name="single_chat_deleted">Chat has been deleted</string>
     <string name="single_chat_cleared">Chat has cleared</string>
+    <!-- Bottom sheet for single chat -->
+    <string name="bottom_sheet_attach_image">Attach image</string>
+    <string name="bottom_sheet_attach_file">Attach file</string>
+    <!-- Groups -->
     <string name="add_contacts_add_participants">Add participants</string>
     <string name="create_group">Create group</string>
 </resources>

@@ -20,7 +20,7 @@ class MainListFragment : BaseFragment<FragmentMainListBinding>(FragmentMainListB
 
     override fun onResume() {
         super.onResume()
-        MAIN_ACTIVITY.title = getString(R.string.chats_title)
+        MAIN_ACTIVITY.title = getString(R.string.main_title)
         MAIN_ACTIVITY.appDrawer.unlockDrawer()
         initFields()
     }
