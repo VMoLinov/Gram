@@ -4,20 +4,19 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import ru.molinov.gram.R
-import ru.molinov.gram.database.*
 import ru.molinov.gram.databinding.FragmentCreateGroupBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.ui.fragments.base.BaseOptionsFragment
-import ru.molinov.gram.utilites.AppValueEventListener
+import ru.molinov.gram.ui.fragments.groups.adapters.AddGroupAdapter
 import ru.molinov.gram.utilites.MAIN_ACTIVITY
-import ru.molinov.gram.utilites.replaceFragment
+import ru.molinov.gram.utilites.getParticipants
 import ru.molinov.gram.utilites.showToast
 
 class CreateGroupFragment :
     BaseOptionsFragment<FragmentCreateGroupBinding>(FragmentCreateGroupBinding::inflate) {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: AddContactsAdapter
+    private lateinit var adapter: AddGroupAdapter
     private lateinit var listContacts: List<CommonModel>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,12 +38,13 @@ class CreateGroupFragment :
 
     private fun initFields() {
         recyclerView = binding.recyclerView
-        adapter = AddContactsAdapter()
+        adapter = AddGroupAdapter()
         recyclerView.adapter = adapter
         listContacts.forEach {
             adapter.updateList(it)
         }
         binding.createGroupInputName.requestFocus()
+        binding.createGroupCounts.text = getParticipants(listContacts.size)
     }
 
     companion object {

@@ -1,6 +1,5 @@
-package ru.molinov.gram.ui.fragments.groups
+package ru.molinov.gram.ui.fragments.groups.adapters
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
@@ -9,10 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.molinov.gram.R
 import ru.molinov.gram.databinding.ItemAddContactsBinding
 import ru.molinov.gram.models.CommonModel
+import ru.molinov.gram.ui.fragments.groups.AddContactsFragment
 import ru.molinov.gram.utilites.downloadAndSetImage
 
-class AddContactsAdapter :
-    ListAdapter<CommonModel, AddContactsAdapter.AddContactsViewHolder>(ListAdapterDiffCallback) {
+abstract class GroupsBaseAdapter :
+    ListAdapter<CommonModel, GroupsBaseAdapter.AddContactsViewHolder>(ListAdapterDiffCallback) {
 
     private object ListAdapterDiffCallback : DiffUtil.ItemCallback<CommonModel>() {
         override fun areItemsTheSame(oldItem: CommonModel, newItem: CommonModel): Boolean =
@@ -32,24 +32,7 @@ class AddContactsAdapter :
 
     override fun getItemCount(): Int = currentList.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddContactsViewHolder {
-        val holder = AddContactsViewHolder(
-            ItemAddContactsBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            )
-        )
-        holder.binding.apply {
-            root.setOnClickListener {
-                isChoice.isVisible = !isChoice.isVisible
-                if (isChoice.isVisible) {
-                    AddContactsFragment.listContacts.add(currentList[holder.absoluteAdapterPosition])
-                } else {
-                    AddContactsFragment.listContacts.remove(currentList[holder.absoluteAdapterPosition])
-                }
-            }
-        }
-        return holder
-    }
+    abstract override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddContactsViewHolder
 
     override fun onBindViewHolder(holder: AddContactsViewHolder, position: Int) {
         holder.bind(currentList[position])

@@ -114,3 +114,7 @@ fun getFileNameFromUrl(uri: Uri?): String {
     }
     return ""
 }
+
+fun getParticipants(count: Int): String {
+    return MAIN_ACTIVITY.resources.getQuantityString(R.plurals.group_members, count, count)
+}

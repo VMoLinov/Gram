@@ -6,9 +6,11 @@ import ru.molinov.gram.database.*
 import ru.molinov.gram.databinding.FragmentAddContactsBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.ui.fragments.base.BaseOptionsFragment
+import ru.molinov.gram.ui.fragments.groups.adapters.AddContactsAdapter
 import ru.molinov.gram.utilites.AppValueEventListener
 import ru.molinov.gram.utilites.MAIN_ACTIVITY
 import ru.molinov.gram.utilites.replaceFragment
+import ru.molinov.gram.utilites.showToast
 
 class AddContactsFragment :
     BaseOptionsFragment<FragmentAddContactsBinding>(FragmentAddContactsBinding::inflate) {
@@ -22,10 +24,14 @@ class AddContactsFragment :
 
     override fun onResume() {
         super.onResume()
-        MAIN_ACTIVITY.title = getString(R.string.add_contacts_add_participants)
+        MAIN_ACTIVITY.title = getString(R.string.add_contacts_add_members)
         initFields()
         binding.addContactsButton.setOnClickListener {
-            replaceFragment(CreateGroupFragment.newInstance(listContacts))
+            if (listContacts.isEmpty()) {
+                showToast(getString(R.string.add_contacts_add_members))
+            } else {
+                replaceFragment(CreateGroupFragment.newInstance(listContacts))
+            }
         }
     }
 
