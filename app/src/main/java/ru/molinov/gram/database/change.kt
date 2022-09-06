@@ -1,6 +1,7 @@
 package ru.molinov.gram.database
 
 import android.net.Uri
+import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.utilites.showToast
 
 fun changeUserPhoto(uri: Uri?, onSuccess: (String) -> Unit) {
@@ -15,6 +16,35 @@ fun changeUserPhoto(uri: Uri?, onSuccess: (String) -> Unit) {
             }
         }
     }
+}
+
+fun createGroup(
+    name: String, uri: Uri?, list: List<CommonModel>, onSuccess: () -> Unit
+) {
+    val keyGroup = REFERENCE_DB.child(NODE_GROUPS).push().key.toString()
+    val pathGroup = REFERENCE_DB.child(NODE_GROUPS).child(keyGroup)
+    val pathStorage = REFERENCE_STORAGE.child(GROUPS_IMAGE).child(keyGroup)
+    val mapData = hashMapOf<String, Any>()
+    mapData[USER_ID] = keyGroup
+    mapData[USER_FULL_NAME] = name
+    val mapMembers = hashMapOf<String, Any>()
+    list.forEach { model -> mapMembers[model.id] = USER_MEMBER }
+    mapMembers[CURRENT_UID] = USER_CREATOR
+    mapData[NODE_MEMBERS] = mapMembers
+    pathGroup.updateChildren(mapData)
+        .addOnSuccessListener {
+            if (uri != Uri.EMPTY) {
+                putFile(uri, pathStorage) {
+                    getUrl(pathStorage) {
+                        pathGroup.child(USER_FILE_URL).setValue(it)
+                            .addOnSuccessListener { onSuccess() }
+                            .addOnFailureListener { exception -> showToast(exception.message.toString()) }
+                    }
+                }
+            } else onSuccess()
+        }
+        .addOnFailureListener { exception -> showToast(exception.message.toString()) }
+
 }
 
 fun changeUsername(newUsername: String, onSuccess: () -> Unit) {

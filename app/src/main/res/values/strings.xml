@@ -61,6 +61,8 @@
     <!-- Groups -->
     <string name="create_group">Create group</string>
     <string name="add_contacts_add_members">Add members</string>
+    <string name="create_group_enter_name">Enter name</string>
+    <string name="create_group_group_created">Group has been created</string>
     <plurals name="group_members">
         <item quantity="one">"%d member"</item>
         <item quantity="other">"%d members"</item>

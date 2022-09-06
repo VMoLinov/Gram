@@ -1,15 +1,22 @@
 package ru.molinov.gram.ui.fragments.groups
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageView
+import com.canhub.cropper.options
 import ru.molinov.gram.R
+import ru.molinov.gram.database.createGroup
 import ru.molinov.gram.databinding.FragmentCreateGroupBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.ui.fragments.base.BaseOptionsFragment
 import ru.molinov.gram.ui.fragments.groups.adapters.AddGroupAdapter
+import ru.molinov.gram.ui.fragments.mainlist.MainListFragment
 import ru.molinov.gram.utilites.MAIN_ACTIVITY
 import ru.molinov.gram.utilites.getParticipants
+import ru.molinov.gram.utilites.replaceFragment
 import ru.molinov.gram.utilites.showToast
 
 class CreateGroupFragment :
@@ -18,6 +25,13 @@ class CreateGroupFragment :
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AddGroupAdapter
     private lateinit var listContacts: List<CommonModel>
+    private var imageUri = Uri.EMPTY
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            imageUri = result.uriContent
+            binding.createGroupPhoto.setImageURI(imageUri)
+        } else showToast(result.error.toString())
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,7 +42,17 @@ class CreateGroupFragment :
         super.onResume()
         MAIN_ACTIVITY.title = getString(R.string.create_group)
         initFields()
-        binding.createGroupBtnDone.setOnClickListener { showToast("Click") }
+        binding.createGroupBtnDone.setOnClickListener {
+            val nameGroup = binding.createGroupInputName.text.toString()
+            if (nameGroup.isEmpty()) {
+                showToast(getString(R.string.create_group_enter_name))
+            } else {
+                createGroup(nameGroup, imageUri, listContacts) {
+                    showToast(getString(R.string.create_group_group_created))
+                    replaceFragment(MainListFragment())
+                }
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -40,11 +64,25 @@ class CreateGroupFragment :
         recyclerView = binding.recyclerView
         adapter = AddGroupAdapter()
         recyclerView.adapter = adapter
-        listContacts.forEach {
-            adapter.updateList(it)
+        listContacts.forEach { adapter.updateList(it) }
+        with(binding) {
+            createGroupInputName.requestFocus()
+            createGroupCounts.text = getParticipants(listContacts.size)
+            createGroupPhoto.setOnClickListener { startCrop() }
         }
-        binding.createGroupInputName.requestFocus()
-        binding.createGroupCounts.text = getParticipants(listContacts.size)
+    }
+
+    private fun startCrop() {
+        cropImage.launch(
+            options {
+                setGuidelines(CropImageView.Guidelines.OFF)
+                setRequestedSize(250, 250)
+                setAspectRatio(1, 1)
+                setCropShape(CropImageView.CropShape.OVAL)
+                setBorderCornerLength(0f)
+                setBorderCornerThickness(0f)
+            }
+        )
     }
 
     companion object {
