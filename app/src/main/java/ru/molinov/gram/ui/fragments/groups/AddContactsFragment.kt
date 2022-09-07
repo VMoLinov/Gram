@@ -1,6 +1,8 @@
 package ru.molinov.gram.ui.fragments.groups
 
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseReference
 import ru.molinov.gram.R
 import ru.molinov.gram.database.*
 import ru.molinov.gram.databinding.FragmentAddContactsBinding
@@ -27,11 +29,8 @@ class AddContactsFragment :
         MAIN_ACTIVITY.title = getString(R.string.add_contacts_add_members)
         initFields()
         binding.addContactsButton.setOnClickListener {
-            if (listContacts.isEmpty()) {
-                showToast(getString(R.string.add_contacts_add_members))
-            } else {
-                replaceFragment(CreateGroupFragment.newInstance(listContacts))
-            }
+            if (listContacts.isEmpty()) showToast(getString(R.string.add_contacts_add_members))
+            else replaceFragment(CreateGroupFragment.newInstance(listContacts))
         }
     }
 
@@ -45,24 +44,27 @@ class AddContactsFragment :
         adapter = AddContactsAdapter()
         refMainList.addListenerForSingleValueEvent(AppValueEventListener {
             listItems = it.children.map { map -> map.getCommonModel() }
-            listItems.forEach { model ->
-                refUsers.child(model.id)
-                    .addListenerForSingleValueEvent(AppValueEventListener { nModel ->
-                        val newModel = nModel.getCommonModel()
-                        refMessages.child(newModel.id).limitToLast(1)
-                            .addListenerForSingleValueEvent(AppValueEventListener { snapshot ->
-                                newModel.lastMessage = if (snapshot.hasChildren()) {
-                                    snapshot.children.last().getCommonModel().text
-                                } else {
-                                    getString(R.string.single_chat_cleared)
-                                }
-                                newModel.fullName.ifEmpty { newModel.phone }
-                                adapter.updateList(newModel)
-                            })
-                    })
-            }
+            listItems.forEach { model -> refUsers.child(model.id).getModel() }
         })
         recyclerView.adapter = adapter
+    }
+
+    private fun DatabaseReference.getModel() {
+        addListenerForSingleValueEvent(AppValueEventListener { model ->
+            val newModel = model.getCommonModel()
+            refMessages.child(newModel.id).limitToLast(1)
+                .addListenerForSingleValueEvent(AppValueEventListener { snapshot ->
+                    setLastMessage(newModel, snapshot)
+                })
+        })
+    }
+
+    private fun setLastMessage(newModel: CommonModel, snapshot: DataSnapshot) {
+        newModel.lastMessage = if (snapshot.hasChildren()) {
+            snapshot.children.last().getCommonModel().text
+        } else getString(R.string.single_chat_cleared)
+        newModel.fullName.ifEmpty { newModel.phone }
+        adapter.updateList(newModel)
     }
 
     companion object {
