@@ -2,6 +2,7 @@ package ru.molinov.gram.database
 
 import android.net.Uri
 import ru.molinov.gram.models.CommonModel
+import ru.molinov.gram.utilites.TYPE_GROUP
 import ru.molinov.gram.utilites.showToast
 
 fun changeUserPhoto(uri: Uri?, onSuccess: (String) -> Unit) {
@@ -27,6 +28,7 @@ fun createGroup(
     val mapData = hashMapOf<String, Any>()
     mapData[USER_ID] = keyGroup
     mapData[USER_FULL_NAME] = name
+    mapData[USER_PHOTO_URL] = "empty"
     val mapMembers = hashMapOf<String, Any>()
     list.forEach { model -> mapMembers[model.id] = USER_MEMBER }
     mapMembers[CURRENT_UID] = USER_CREATOR
@@ -36,15 +38,29 @@ fun createGroup(
             if (uri != Uri.EMPTY) {
                 putFile(uri, pathStorage) {
                     getUrl(pathStorage) {
-                        pathGroup.child(USER_FILE_URL).setValue(it)
-                            .addOnSuccessListener { onSuccess() }
+                        pathGroup.child(USER_PHOTO_URL).setValue(it)
+                            .addOnSuccessListener {
+                                addGroupToMainList(mapData, list) { onSuccess() }
+                            }
                             .addOnFailureListener { exception -> showToast(exception.message.toString()) }
                     }
                 }
-            } else onSuccess()
+            } else addGroupToMainList(mapData, list) { onSuccess() }
         }
         .addOnFailureListener { exception -> showToast(exception.message.toString()) }
+}
 
+fun addGroupToMainList(
+    mapData: HashMap<String, Any>, list: List<CommonModel>, onSuccess: () -> Unit
+) {
+    val path = REFERENCE_DB.child(NODE_MAIN_LIST)
+    val map = hashMapOf<String, Any>()
+    map[USER_ID] = mapData[USER_ID].toString()
+    map[USER_TYPE] = TYPE_GROUP
+    list.forEach { path.child(it.id).child(map[USER_ID].toString()).updateChildren(map) }
+    path.child(CURRENT_UID).child(map[USER_ID].toString()).updateChildren(map)
+        .addOnSuccessListener { onSuccess() }
+        .addOnFailureListener { showToast(it.message.toString()) }
 }
 
 fun changeUsername(newUsername: String, onSuccess: () -> Unit) {

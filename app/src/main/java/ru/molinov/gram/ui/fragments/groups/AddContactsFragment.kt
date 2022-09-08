@@ -19,7 +19,7 @@ class AddContactsFragment :
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AddContactsAdapter
-    private val refMainList = REFERENCE_DB.child(NODE_MAIN_LIST).child(CURRENT_UID)
+    private val refContactsList = REFERENCE_DB.child(NODE_PHONES_CONTACTS).child(CURRENT_UID)
     private val refUsers = REFERENCE_DB.child(NODE_USERS)
     private val refMessages = REFERENCE_DB.child(NODE_MESSAGES).child(CURRENT_UID)
     private var listItems = listOf<CommonModel>()
@@ -42,7 +42,7 @@ class AddContactsFragment :
     private fun initFields() {
         recyclerView = binding.recyclerView
         adapter = AddContactsAdapter()
-        refMainList.addListenerForSingleValueEvent(AppValueEventListener {
+        refContactsList.addListenerForSingleValueEvent(AppValueEventListener {
             listItems = it.children.map { map -> map.getCommonModel() }
             listItems.forEach { model -> refUsers.child(model.id).getModel() }
         })
@@ -52,7 +52,9 @@ class AddContactsFragment :
     private fun DatabaseReference.getModel() {
         addListenerForSingleValueEvent(AppValueEventListener { model ->
             val newModel = model.getCommonModel()
-            refMessages.child(newModel.id).limitToLast(1)
+            refMessages
+                .child(newModel.id)
+                .limitToLast(1)
                 .addListenerForSingleValueEvent(AppValueEventListener { snapshot ->
                     setLastMessage(newModel, snapshot)
                 })

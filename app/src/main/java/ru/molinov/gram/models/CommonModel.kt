@@ -15,7 +15,7 @@ data class CommonModel(
     var phone: String = "",
     var text: String = "",
     var messageType: Int = 0,
-    var lastMessageType: Int = 0,
+    var type: Int = 0,
     var from: String = "",
     var timestamp: Long = 0,
     var fileUrl: String = "",

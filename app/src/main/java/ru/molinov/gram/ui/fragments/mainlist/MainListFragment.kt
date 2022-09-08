@@ -7,6 +7,8 @@ import ru.molinov.gram.databinding.FragmentMainListBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.ui.fragments.base.BaseFragment
 import ru.molinov.gram.utilites.AppValueEventListener
+import ru.molinov.gram.utilites.TYPE_CHAT
+import ru.molinov.gram.utilites.TYPE_GROUP
 import ru.molinov.gram.utilites.MAIN_ACTIVITY
 
 class MainListFragment : BaseFragment<FragmentMainListBinding>(FragmentMainListBinding::inflate) {
@@ -31,22 +33,52 @@ class MainListFragment : BaseFragment<FragmentMainListBinding>(FragmentMainListB
         refMainList.addListenerForSingleValueEvent(AppValueEventListener {
             listItems = it.children.map { map -> map.getCommonModel() }
             listItems.forEach { model ->
-                refUsers.child(model.id)
-                    .addListenerForSingleValueEvent(AppValueEventListener { nModel ->
-                        val newModel = nModel.getCommonModel()
-                        refMessages.child(newModel.id).limitToLast(1)
-                            .addListenerForSingleValueEvent(AppValueEventListener { snapshot ->
-                                newModel.lastMessage = if (snapshot.hasChildren()) {
-                                    snapshot.children.last().getCommonModel().text
-                                } else {
-                                    getString(R.string.single_chat_cleared)
-                                }
-                                newModel.fullName.ifEmpty { newModel.phone }
-                                adapter.updateList(newModel)
-                            })
-                    })
+                when (model.type) {
+                    TYPE_CHAT -> showChat(model)
+                    TYPE_GROUP -> showGroup(model)
+                }
             }
         })
         recyclerView.adapter = adapter
+    }
+
+    private fun showGroup(model: CommonModel) {
+        REFERENCE_DB
+            .child(NODE_GROUPS)
+            .child(model.id)
+            .addListenerForSingleValueEvent(AppValueEventListener { nModel ->
+                val newModel = nModel.getCommonModel()
+                REFERENCE_DB
+                    .child(NODE_GROUPS)
+                    .child(model.id)
+                    .child(NODE_MESSAGES)
+                    .limitToLast(1)
+                    .addListenerForSingleValueEvent(AppValueEventListener { snapshot ->
+                        newModel.lastMessage = if (snapshot.hasChildren()) {
+                            snapshot.children.last().getCommonModel().text
+                        } else getString(R.string.single_chat_cleared)
+                        adapter.updateList(newModel)
+                    })
+            })
+    }
+
+    private fun showChat(model: CommonModel) {
+        refUsers
+            .child(model.id)
+            .addListenerForSingleValueEvent(AppValueEventListener { nModel ->
+                val newModel = nModel.getCommonModel()
+                refMessages
+                    .child(newModel.id)
+                    .limitToLast(1)
+                    .addListenerForSingleValueEvent(AppValueEventListener { snapshot ->
+                        newModel.lastMessage = if (snapshot.hasChildren()) {
+                            snapshot.children.last().getCommonModel().text
+                        } else {
+                            getString(R.string.single_chat_cleared)
+                        }
+                        newModel.fullName.ifEmpty { newModel.phone }
+                        adapter.updateList(newModel)
+                    })
+            })
     }
 }
