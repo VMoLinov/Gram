@@ -7,9 +7,9 @@ import ru.molinov.gram.databinding.FragmentMainListBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.ui.fragments.base.BaseFragment
 import ru.molinov.gram.utilites.AppValueEventListener
+import ru.molinov.gram.utilites.MAIN_ACTIVITY
 import ru.molinov.gram.utilites.TYPE_CHAT
 import ru.molinov.gram.utilites.TYPE_GROUP
-import ru.molinov.gram.utilites.MAIN_ACTIVITY
 
 class MainListFragment : BaseFragment<FragmentMainListBinding>(FragmentMainListBinding::inflate) {
 
@@ -57,6 +57,7 @@ class MainListFragment : BaseFragment<FragmentMainListBinding>(FragmentMainListB
                         newModel.lastMessage = if (snapshot.hasChildren()) {
                             snapshot.children.last().getCommonModel().text
                         } else getString(R.string.single_chat_cleared)
+                        newModel.type = TYPE_GROUP
                         adapter.updateList(newModel)
                     })
             })
@@ -77,6 +78,7 @@ class MainListFragment : BaseFragment<FragmentMainListBinding>(FragmentMainListB
                             getString(R.string.single_chat_cleared)
                         }
                         newModel.fullName.ifEmpty { newModel.phone }
+                        newModel.type = TYPE_CHAT
                         adapter.updateList(newModel)
                     })
             })

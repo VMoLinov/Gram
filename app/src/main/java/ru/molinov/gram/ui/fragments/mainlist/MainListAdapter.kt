@@ -8,7 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.molinov.gram.R
 import ru.molinov.gram.databinding.ItemMainListBinding
 import ru.molinov.gram.models.CommonModel
+import ru.molinov.gram.ui.fragments.groups.GroupChatFragment
 import ru.molinov.gram.ui.fragments.singlechat.SingleChatFragment
+import ru.molinov.gram.utilites.TYPE_CHAT
+import ru.molinov.gram.utilites.TYPE_GROUP
 import ru.molinov.gram.utilites.downloadAndSetImage
 import ru.molinov.gram.utilites.replaceFragment
 
@@ -40,7 +43,10 @@ class MainListAdapter :
             )
         )
         holder.binding.root.setOnClickListener {
-            replaceFragment(SingleChatFragment.newInstance(currentList[holder.absoluteAdapterPosition]))
+            when (currentList[holder.absoluteAdapterPosition].type) {
+                TYPE_CHAT -> replaceFragment(SingleChatFragment.newInstance(currentList[holder.absoluteAdapterPosition]))
+                TYPE_GROUP -> replaceFragment(GroupChatFragment.newInstance(currentList[holder.absoluteAdapterPosition]))
+            }
         }
         return holder
     }

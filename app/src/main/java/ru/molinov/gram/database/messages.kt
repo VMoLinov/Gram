@@ -24,6 +24,21 @@ fun sendMessageAsText(message: String, receivingUserId: String, onSuccess: () ->
         .addOnFailureListener { showToast(it.message.toString()) }
 }
 
+fun sendMessageToGroup(message: String, groupID: String, onSuccess: () -> Unit) {
+    val refMessages = "$NODE_GROUPS/$groupID/$NODE_MESSAGES"
+    val messageKey = REFERENCE_DB.child(refMessages).push().key
+    val mapMessage = hashMapOf<String, Any>()
+    mapMessage[USER_FROM] = CURRENT_UID
+    mapMessage[USER_TYPE] = TYPE_MESSAGE_TEXT
+    mapMessage[USER_TEXT] = message
+    mapMessage[USER_ID] = messageKey.toString()
+    mapMessage[USER_TIMESTAMP] = ServerValue.TIMESTAMP
+    REFERENCE_DB.child(refMessages).child(messageKey.toString())
+        .updateChildren(mapMessage)
+        .addOnSuccessListener { onSuccess() }
+        .addOnFailureListener { showToast(it.message.toString()) }
+}
+
 fun sendMessageAsFile(
     receivingUserId: String, fileUrl: Any, uri: Uri?, messageKey: String, typeMessage: Int
 ) {
