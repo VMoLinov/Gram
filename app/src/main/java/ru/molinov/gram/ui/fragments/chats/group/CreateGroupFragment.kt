@@ -1,4 +1,4 @@
-package ru.molinov.gram.ui.fragments.groups
+package ru.molinov.gram.ui.fragments.chats.group
 
 import android.net.Uri
 import android.os.Bundle
@@ -12,7 +12,7 @@ import ru.molinov.gram.database.createGroup
 import ru.molinov.gram.databinding.FragmentCreateGroupBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.ui.fragments.base.BaseOptionsFragment
-import ru.molinov.gram.ui.fragments.groups.adapters.AddGroupAdapter
+import ru.molinov.gram.ui.fragments.chats.group.adapters.AddGroupAdapter
 import ru.molinov.gram.ui.fragments.mainlist.MainListFragment
 import ru.molinov.gram.utilites.MAIN_ACTIVITY
 import ru.molinov.gram.utilites.getParticipants
@@ -33,6 +33,7 @@ class CreateGroupFragment :
         } else showToast(result.error.toString())
     }
 
+    @Suppress("DEPRECATION")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listContacts = arguments?.getParcelableArrayList<CommonModel>(ARGS)?.toList() ?: listOf()

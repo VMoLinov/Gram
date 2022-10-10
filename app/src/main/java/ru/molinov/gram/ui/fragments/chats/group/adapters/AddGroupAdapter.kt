@@ -1,4 +1,4 @@
-package ru.molinov.gram.ui.fragments.groups.adapters
+package ru.molinov.gram.ui.fragments.chats.group.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

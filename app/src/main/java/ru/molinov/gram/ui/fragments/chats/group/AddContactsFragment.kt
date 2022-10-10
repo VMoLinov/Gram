@@ -1,4 +1,4 @@
-package ru.molinov.gram.ui.fragments.groups
+package ru.molinov.gram.ui.fragments.chats.group
 
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
@@ -8,7 +8,7 @@ import ru.molinov.gram.database.*
 import ru.molinov.gram.databinding.FragmentAddContactsBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.ui.fragments.base.BaseOptionsFragment
-import ru.molinov.gram.ui.fragments.groups.adapters.AddContactsAdapter
+import ru.molinov.gram.ui.fragments.chats.group.adapters.AddContactsAdapter
 import ru.molinov.gram.utilites.AppValueEventListener
 import ru.molinov.gram.utilites.MAIN_ACTIVITY
 import ru.molinov.gram.utilites.replaceFragment

@@ -1,10 +1,10 @@
-package ru.molinov.gram.ui.fragments.groups.adapters
+package ru.molinov.gram.ui.fragments.chats.group.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import ru.molinov.gram.databinding.ItemAddContactsBinding
-import ru.molinov.gram.ui.fragments.groups.AddContactsFragment
+import ru.molinov.gram.ui.fragments.chats.group.AddContactsFragment
 
 class AddContactsAdapter : GroupsBaseAdapter() {
 

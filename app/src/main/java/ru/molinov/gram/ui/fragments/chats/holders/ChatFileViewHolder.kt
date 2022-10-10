@@ -1,4 +1,4 @@
-package ru.molinov.gram.ui.fragments.singlechat.holders
+package ru.molinov.gram.ui.fragments.chats.holders
 
 import android.os.Environment
 import android.view.View
@@ -12,8 +12,8 @@ import ru.molinov.gram.utilites.checkPermission
 import ru.molinov.gram.utilites.showToast
 import java.io.File
 
-class SingleChatFileViewHolder(val binding: ItemMessageFileBinding) :
-    SingleChatBaseViewHolder(binding) {
+class ChatFileViewHolder(val binding: ItemMessageFileBinding) :
+    ChatBaseViewHolder(binding) {
 
     override fun bind(model: CommonModel) = with(binding) {
         if (model.isFromUser()) bindUser(model)

@@ -1,12 +1,12 @@
-package ru.molinov.gram.ui.fragments.singlechat.holders
+package ru.molinov.gram.ui.fragments.chats.holders
 
 import androidx.core.view.isVisible
 import ru.molinov.gram.databinding.ItemMessageTextBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.utilites.asTime
 
-class SingleChatTextViewHolder(val binding: ItemMessageTextBinding) :
-    SingleChatBaseViewHolder(binding) {
+class ChatTextViewHolder(val binding: ItemMessageTextBinding) :
+    ChatBaseViewHolder(binding) {
 
     override fun bind(model: CommonModel) = with(binding) {
         if (model.isFromUser()) {

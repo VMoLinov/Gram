@@ -1,4 +1,4 @@
-package ru.molinov.gram.ui.fragments.singlechat.holders
+package ru.molinov.gram.ui.fragments.chats.holders
 
 import androidx.core.view.isVisible
 import ru.molinov.gram.databinding.ItemMessageVoiceBinding
@@ -6,8 +6,8 @@ import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.utilites.AppVoicePlayer
 import ru.molinov.gram.utilites.asTime
 
-class SingleChatVoiceViewHolder(val binding: ItemMessageVoiceBinding) :
-    SingleChatBaseViewHolder(binding) {
+class ChatVoiceViewHolder(val binding: ItemMessageVoiceBinding) :
+    ChatBaseViewHolder(binding) {
 
     private val voicePlayer = AppVoicePlayer()
 

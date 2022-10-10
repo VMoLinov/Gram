@@ -1,13 +1,13 @@
-package ru.molinov.gram.ui.fragments.singlechat
+package ru.molinov.gram.ui.fragments.chats
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import ru.molinov.gram.models.CommonModel
-import ru.molinov.gram.ui.fragments.singlechat.holders.SingleChatBaseViewHolder
+import ru.molinov.gram.ui.fragments.chats.holders.ChatBaseViewHolder
 
-class SingleChatAdapter :
-    ListAdapter<CommonModel, SingleChatBaseViewHolder>(SingleChatDiffCallback) {
+class BaseChatAdapter :
+    ListAdapter<CommonModel, ChatBaseViewHolder>(SingleChatDiffCallback) {
 
     private object SingleChatDiffCallback : DiffUtil.ItemCallback<CommonModel>() {
         override fun areItemsTheSame(oldItem: CommonModel, newItem: CommonModel): Boolean =
@@ -18,7 +18,7 @@ class SingleChatAdapter :
     }
 
     private val messagesList = mutableListOf<CommonModel>()
-    private val holdersList = mutableListOf<SingleChatBaseViewHolder>()
+    private val holdersList = mutableListOf<ChatBaseViewHolder>()
 
     fun addItem(item: CommonModel, onSuccess: () -> Unit) {
         if (!messagesList.contains(item)) {
@@ -32,21 +32,21 @@ class SingleChatAdapter :
 
     override fun getItemViewType(position: Int) = currentList[position].messageType
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleChatBaseViewHolder =
-        SingleChatBaseViewHolder.getHolder(parent, viewType)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatBaseViewHolder =
+        ChatBaseViewHolder.getHolder(parent, viewType)
 
-    override fun onBindViewHolder(holder: SingleChatBaseViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: ChatBaseViewHolder, position: Int) =
         holder.bind(currentList[position])
 
     override fun getItemCount(): Int = currentList.size
 
-    override fun onViewAttachedToWindow(holder: SingleChatBaseViewHolder) {
+    override fun onViewAttachedToWindow(holder: ChatBaseViewHolder) {
         holder.attach(currentList[holder.absoluteAdapterPosition])
         holdersList.add(holder)
         super.onViewAttachedToWindow(holder)
     }
 
-    override fun onViewDetachedFromWindow(holder: SingleChatBaseViewHolder) {
+    override fun onViewDetachedFromWindow(holder: ChatBaseViewHolder) {
         holder.detach()
         holdersList.remove(holder)
         super.onViewDetachedFromWindow(holder)

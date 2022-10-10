@@ -12,7 +12,7 @@ import ru.molinov.gram.databinding.FragmentContactsBinding
 import ru.molinov.gram.databinding.ItemContactBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.ui.fragments.base.BaseOptionsFragment
-import ru.molinov.gram.ui.fragments.singlechat.SingleChatFragment
+import ru.molinov.gram.ui.fragments.chats.single.SingleChatFragment
 import ru.molinov.gram.utilites.AppValueEventListener
 import ru.molinov.gram.utilites.MAIN_ACTIVITY
 import ru.molinov.gram.utilites.downloadAndSetImage

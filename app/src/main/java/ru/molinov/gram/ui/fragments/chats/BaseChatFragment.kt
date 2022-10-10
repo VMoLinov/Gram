@@ -1,4 +1,4 @@
-package ru.molinov.gram.ui.fragments.singlechat
+package ru.molinov.gram.ui.fragments.chats
 
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -24,45 +24,43 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.molinov.gram.R
 import ru.molinov.gram.database.*
-import ru.molinov.gram.databinding.FragmentSingleChatBinding
+import ru.molinov.gram.databinding.FragmentChatBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.models.UserModel
 import ru.molinov.gram.ui.fragments.base.BaseOptionsFragment
 import ru.molinov.gram.ui.fragments.mainlist.MainListFragment
 import ru.molinov.gram.utilites.*
 
-class SingleChatFragment :
-    BaseOptionsFragment<FragmentSingleChatBinding>(FragmentSingleChatBinding::inflate) {
+abstract class BaseChatFragment :
+    BaseOptionsFragment<FragmentChatBinding>(FragmentChatBinding::inflate) {
 
     private lateinit var toolbar: ViewGroup
     private lateinit var listenerToolbar: AppValueEventListener
     private lateinit var listenerRecycler: ChildEventListener
     private lateinit var receivingUser: UserModel
     private lateinit var refUser: DatabaseReference
-    private lateinit var refMessages: DatabaseReference
-    private lateinit var contact: CommonModel
     private lateinit var voiceRecorder: AppVoiceRecorder
-    private lateinit var adapter: SingleChatAdapter
+    private lateinit var adapter: BaseChatAdapter
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
-    private var isSmoothScroll = true
+    internal lateinit var refMessages: DatabaseReference
+    internal lateinit var commonModel: CommonModel
+    internal var isSmoothScroll = true
     private var isScrolling = false
     private var messagesCount = 10
     private val loadAttach = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
-            uploadFile(result.uriContent, contact.id, TYPE_MESSAGE_IMAGE)
+            uploadFile(result.uriContent, commonModel.id, TYPE_MESSAGE_IMAGE)
             isSmoothScroll = true
         } else showToast(result.error.toString())
     }
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) {
-        it?.let { uploadFile(it, contact.id, TYPE_MESSAGE_FILE) }
+        it?.let { uploadFile(it, commonModel.id, TYPE_MESSAGE_FILE) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        contact = arguments?.getParcelable(ARGS_KEY) ?: CommonModel()
         toolbar = MAIN_ACTIVITY.toolbar.findViewById(R.id.toolbarInfo)
-        refUser = REFERENCE_DB.root.child(NODE_USERS).child(contact.id)
-        refMessages = REFERENCE_DB.child(NODE_MESSAGES).child(CURRENT_UID).child(contact.id)
+        refUser = REFERENCE_DB.root.child(NODE_USERS).child(commonModel.id)
     }
 
     override fun onResume() {
@@ -97,15 +95,17 @@ class SingleChatFragment :
     private fun initToolbarInfo() {
         toolbar.apply {
             findViewById<TextView>(R.id.toolbarFullName).text =
-                receivingUser.fullName.ifEmpty { contact.fullName }
-            findViewById<CircleImageView>(R.id.toolbarImage)
-                .downloadAndSetImage(receivingUser.photoUrl, R.drawable.ic_default_user)
+                receivingUser.fullName.ifEmpty { commonModel.fullName }
+            findViewById<CircleImageView>(R.id.toolbarImage).downloadAndSetImage(
+                receivingUser.photoUrl,
+                R.drawable.ic_default_user
+            )
             findViewById<TextView>(R.id.toolbarUserStatus).text = receivingUser.status
         }
     }
 
     private fun initRecyclerView() = with(binding) {
-        adapter = SingleChatAdapter()
+        adapter = BaseChatAdapter()
         val layoutManager = LinearLayoutManager(requireContext())
         chatRecyclerView.adapter = adapter
         chatRecyclerView.layoutManager = layoutManager
@@ -142,6 +142,7 @@ class SingleChatFragment :
         refMessages.limitToLast(messagesCount).addChildEventListener(listenerRecycler)
     }
 
+    @Suppress("DEPRECATION")
     private fun initFields() {
         setHasOptionsMenu(true)
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet.root)
@@ -162,44 +163,31 @@ class SingleChatFragment :
     }
 
     private fun attachImage() {
-        loadAttach.launch(
-            options {
-                setGuidelines(CropImageView.Guidelines.OFF)
-                setRequestedSize(250, 250)
-                setAspectRatio(1, 1)
-                setBorderCornerLength(0f)
-                setBorderCornerThickness(0f)
-            }
-        )
+        loadAttach.launch(options {
+            setGuidelines(CropImageView.Guidelines.OFF)
+            setRequestedSize(250, 250)
+            setAspectRatio(1, 1)
+            setBorderCornerLength(0f)
+            setBorderCornerThickness(0f)
+        })
     }
 
-    private fun setSent() = with(binding) {
-        btnSent.setOnClickListener {
-            isSmoothScroll = true
-            val enterMessage = message.text.toString()
-            if (enterMessage.isEmpty()) showToast(getString(R.string.single_chat_enter_a_message))
-            else sendMessageAsText(enterMessage, contact.id) {
-                saveToMainList(contact.id, TYPE_CHAT)
-                message.setText(getString(R.string.app_empty_string))
-            }
-        }
-    }
+    abstract fun setSent()
 
     private fun setMessage() = with(binding) {
-        message.addTextChangedListener(
-            AppTextWatcher {
-                if (it.isEmpty()) {
-                    btnSent.isVisible = false
-                    btnAttach.isVisible = true
-                    btnVoice.isVisible = true
-                    changeMessageViewConstraints(btnAttach.id)
-                } else {
-                    btnSent.isVisible = true
-                    btnAttach.isVisible = false
-                    btnVoice.isVisible = false
-                    changeMessageViewConstraints(btnSent.id)
-                }
-            })
+        message.addTextChangedListener(AppTextWatcher {
+            if (it.isEmpty()) {
+                btnSent.isVisible = false
+                btnAttach.isVisible = true
+                btnVoice.isVisible = true
+                changeMessageViewConstraints(btnAttach.id)
+            } else {
+                btnSent.isVisible = true
+                btnAttach.isVisible = false
+                btnVoice.isVisible = false
+                changeMessageViewConstraints(btnSent.id)
+            }
+        })
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -212,7 +200,7 @@ class SingleChatFragment :
                         btnVoice.setColorFilter(
                             ContextCompat.getColor(requireContext(), R.color.colorPrimary)
                         )
-                        voiceRecorder.startRecording(contact.id)
+                        voiceRecorder.startRecording(commonModel.id)
                     } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                         recording.isVisible = false
                         btnVoice.colorFilter = null
@@ -235,17 +223,24 @@ class SingleChatFragment :
         }
     }
 
+    @Deprecated(
+        "Deprecated in Java", ReplaceWith(
+            "requireActivity().menuInflater.inflate(R.menu.single_chat_action_menu, menu)",
+            "ru.molinov.gram.R"
+        )
+    )
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         requireActivity().menuInflater.inflate(R.menu.single_chat_action_menu, menu)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.clear -> clearChat(contact.id) {
+            R.id.clear -> clearChat(commonModel.id) {
                 showToast(getString(R.string.single_chat_cleared))
                 replaceFragment(MainListFragment())
             }
-            R.id.delete -> deleteChat(contact.id) {
+            R.id.delete -> deleteChat(commonModel.id) {
                 showToast(getString(R.string.single_chat_deleted))
                 replaceFragment(MainListFragment())
             }
@@ -255,13 +250,5 @@ class SingleChatFragment :
 
     companion object {
         private const val ITEMS_PRE_LOAD = 3
-        private const val ARGS_KEY = "Single Chat ARGS"
-        fun newInstance(model: CommonModel = CommonModel()): SingleChatFragment {
-            val fragment = SingleChatFragment()
-            val args = Bundle()
-            args.putParcelable(ARGS_KEY, model)
-            fragment.arguments = args
-            return fragment
-        }
     }
 }

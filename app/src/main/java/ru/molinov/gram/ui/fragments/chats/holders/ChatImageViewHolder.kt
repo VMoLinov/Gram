@@ -1,4 +1,4 @@
-package ru.molinov.gram.ui.fragments.singlechat.holders
+package ru.molinov.gram.ui.fragments.chats.holders
 
 import androidx.core.view.isVisible
 import ru.molinov.gram.databinding.ItemMessageImageBinding
@@ -6,8 +6,8 @@ import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.utilites.asTime
 import ru.molinov.gram.utilites.downloadAndSetImage
 
-class SingleChatImageViewHolder(val binding: ItemMessageImageBinding) :
-    SingleChatBaseViewHolder(binding) {
+class ChatImageViewHolder(val binding: ItemMessageImageBinding) :
+    ChatBaseViewHolder(binding) {
 
     override fun bind(model: CommonModel) = with(binding) {
         if (model.isFromUser()) {

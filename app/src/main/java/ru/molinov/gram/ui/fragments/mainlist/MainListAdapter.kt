@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.molinov.gram.R
 import ru.molinov.gram.databinding.ItemMainListBinding
 import ru.molinov.gram.models.CommonModel
-import ru.molinov.gram.ui.fragments.groups.GroupChatFragment
-import ru.molinov.gram.ui.fragments.singlechat.SingleChatFragment
+import ru.molinov.gram.ui.fragments.chats.group.GroupChatFragment
+import ru.molinov.gram.ui.fragments.chats.single.SingleChatFragment
 import ru.molinov.gram.utilites.TYPE_CHAT
 import ru.molinov.gram.utilites.TYPE_GROUP
 import ru.molinov.gram.utilites.downloadAndSetImage

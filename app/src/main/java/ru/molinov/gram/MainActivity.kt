@@ -1,24 +1,21 @@
 package ru.molinov.gram
 
-import android.content.pm.PackageManager
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import ru.molinov.gram.database.AUTH
-import ru.molinov.gram.database.initFirebase
-import ru.molinov.gram.database.initUser
 import ru.molinov.gram.databinding.ActivityMainBinding
 import ru.molinov.gram.ui.fragments.mainlist.MainListFragment
 import ru.molinov.gram.ui.fragments.register.EnterPhoneNumberFragment
 import ru.molinov.gram.ui.objects.AppDrawer
-import ru.molinov.gram.utilites.*
+import ru.molinov.gram.utilites.AppStates
+import ru.molinov.gram.utilites.MAIN_ACTIVITY
+import ru.molinov.gram.utilites.addFragment
 
 class MainActivity : AppCompatActivity() {
 
+    private val viewModel: MainActivityViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
     internal lateinit var toolbar: Toolbar
     internal lateinit var appDrawer: AppDrawer
@@ -28,16 +25,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         MAIN_ACTIVITY = this
-        initFirebase()
         toolbar = binding.mainToolbar
-        initUser {
-            CoroutineScope(Dispatchers.IO).launch { initContacts() }
-            initProperties()
-            initFunc()
-        }
+        viewModel.initApp { initFunc() }
     }
 
     private fun initFunc() {
+        appDrawer = AppDrawer()
         setSupportActionBar(toolbar)
         if (AUTH.currentUser != null) {
             appDrawer.create()
@@ -45,26 +38,20 @@ class MainActivity : AppCompatActivity() {
         } else addFragment(EnterPhoneNumberFragment())
     }
 
-    private fun initProperties() {
-        appDrawer = AppDrawer()
-    }
-
     override fun onStart() {
         super.onStart()
-        if (AUTH.currentUser != null) AppStates.updateState(AppStates.ONLINE)
+        if (AUTH.currentUser != null) viewModel.updateState(AppStates.ONLINE)
     }
 
     override fun onStop() {
         super.onStop()
-        if (AUTH.currentUser != null) AppStates.updateState(AppStates.OFFLINE)
+        if (AUTH.currentUser != null) viewModel.updateState(AppStates.OFFLINE)
     }
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (ContextCompat.checkSelfPermission(MAIN_ACTIVITY, READ_CONTACTS)
-            == PackageManager.PERMISSION_GRANTED
-        ) initContacts()
+        viewModel.checkPermission()
     }
 }

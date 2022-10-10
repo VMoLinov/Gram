@@ -1,4 +1,4 @@
-package ru.molinov.gram.ui.fragments.groups.adapters
+package ru.molinov.gram.ui.fragments.chats.group.adapters
 
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.molinov.gram.R
 import ru.molinov.gram.databinding.ItemAddContactsBinding
 import ru.molinov.gram.models.CommonModel
-import ru.molinov.gram.ui.fragments.groups.AddContactsFragment
+import ru.molinov.gram.ui.fragments.chats.group.AddContactsFragment
 import ru.molinov.gram.utilites.downloadAndSetImage
 
 abstract class GroupsBaseAdapter :
