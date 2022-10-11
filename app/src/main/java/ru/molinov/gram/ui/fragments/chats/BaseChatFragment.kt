@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.canhub.cropper.CropImageContract
@@ -34,6 +35,7 @@ import ru.molinov.gram.utilites.*
 abstract class BaseChatFragment :
     BaseOptionsFragment<FragmentChatBinding>(FragmentChatBinding::inflate) {
 
+    private lateinit var viewModel: BaseChatViewModel
     private lateinit var toolbar: ViewGroup
     private lateinit var listenerToolbar: AppValueEventListener
     private lateinit var listenerRecycler: ChildEventListener
@@ -59,6 +61,10 @@ abstract class BaseChatFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this)[BaseChatViewModel::class.java]
+        viewModel.liveData.observe(viewLifecycleOwner) {
+
+        }
         toolbar = MAIN_ACTIVITY.toolbar.findViewById(R.id.toolbarInfo)
         refUser = REFERENCE_DB.root.child(NODE_USERS).child(commonModel.id)
     }

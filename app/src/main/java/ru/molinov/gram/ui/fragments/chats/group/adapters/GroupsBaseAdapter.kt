@@ -32,7 +32,10 @@ abstract class GroupsBaseAdapter :
 
     override fun getItemCount(): Int = currentList.size
 
-    abstract override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddContactsViewHolder
+    abstract override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): AddContactsViewHolder
 
     override fun onBindViewHolder(holder: AddContactsViewHolder, position: Int) {
         holder.bind(currentList[position])
