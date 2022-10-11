@@ -2,6 +2,7 @@ package ru.molinov.gram.ui.fragments.chats.group
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
 import ru.molinov.gram.R
 import ru.molinov.gram.database.NODE_GROUPS
 import ru.molinov.gram.database.NODE_MESSAGES
@@ -9,6 +10,8 @@ import ru.molinov.gram.database.REFERENCE_DB
 import ru.molinov.gram.database.sendMessageToGroup
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.ui.fragments.chats.BaseChatFragment
+import ru.molinov.gram.ui.fragments.chats.ChatsViewModelFactory
+import ru.molinov.gram.utilites.MAIN_ACTIVITY
 import ru.molinov.gram.utilites.showToast
 
 class GroupChatFragment : BaseChatFragment() {
@@ -17,6 +20,9 @@ class GroupChatFragment : BaseChatFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         commonModel = arguments?.getParcelable(ARGS_KEY) ?: CommonModel()
         refMessages = REFERENCE_DB.child(NODE_GROUPS).child(commonModel.id).child(NODE_MESSAGES)
+        viewModel = ViewModelProvider(
+            this, ChatsViewModelFactory(MAIN_ACTIVITY.application, commonModel.id, refMessages)
+        )[GroupChatViewModel::class.java]
         super.onViewCreated(view, savedInstanceState)
     }
 

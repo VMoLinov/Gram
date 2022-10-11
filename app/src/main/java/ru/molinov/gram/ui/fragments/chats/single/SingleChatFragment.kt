@@ -2,10 +2,13 @@ package ru.molinov.gram.ui.fragments.chats.single
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
 import ru.molinov.gram.R
 import ru.molinov.gram.database.*
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.ui.fragments.chats.BaseChatFragment
+import ru.molinov.gram.ui.fragments.chats.ChatsViewModelFactory
+import ru.molinov.gram.utilites.MAIN_ACTIVITY
 import ru.molinov.gram.utilites.TYPE_CHAT
 import ru.molinov.gram.utilites.showToast
 
@@ -15,6 +18,9 @@ class SingleChatFragment : BaseChatFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         commonModel = arguments?.getParcelable(ARGS_KEY) ?: CommonModel()
         refMessages = REFERENCE_DB.child(NODE_MESSAGES).child(CURRENT_UID).child(commonModel.id)
+        viewModel = ViewModelProvider(
+            this, ChatsViewModelFactory(MAIN_ACTIVITY.application, commonModel.id, refMessages)
+        )[SingleChatViewModel::class.java]
         super.onViewCreated(view, savedInstanceState)
     }
 

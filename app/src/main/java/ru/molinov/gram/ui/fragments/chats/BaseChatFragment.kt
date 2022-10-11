@@ -1,7 +1,6 @@
 package ru.molinov.gram.ui.fragments.chats
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.AbsListView
@@ -17,14 +16,14 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DatabaseReference
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.molinov.gram.R
-import ru.molinov.gram.database.*
+import ru.molinov.gram.database.clearChat
+import ru.molinov.gram.database.deleteChat
 import ru.molinov.gram.databinding.FragmentChatBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.models.UserModel
@@ -35,38 +34,29 @@ import ru.molinov.gram.utilites.*
 abstract class BaseChatFragment :
     BaseOptionsFragment<FragmentChatBinding>(FragmentChatBinding::inflate) {
 
-    private lateinit var viewModel: BaseChatViewModel
     private lateinit var toolbar: ViewGroup
-    private lateinit var listenerToolbar: AppValueEventListener
-    private lateinit var listenerRecycler: ChildEventListener
-    private lateinit var receivingUser: UserModel
-    private lateinit var refUser: DatabaseReference
-    private lateinit var voiceRecorder: AppVoiceRecorder
-    private lateinit var adapter: BaseChatAdapter
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
     internal lateinit var refMessages: DatabaseReference
+    internal lateinit var viewModel: BaseChatViewModel
     internal lateinit var commonModel: CommonModel
     internal var isSmoothScroll = true
     private var isScrolling = false
-    private var messagesCount = 10
     private val loadAttach = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
-            uploadFile(result.uriContent, commonModel.id, TYPE_MESSAGE_IMAGE)
+            viewModel.sendFile(result.uriContent, TYPE_MESSAGE_IMAGE)
             isSmoothScroll = true
         } else showToast(result.error.toString())
     }
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) {
-        it?.let { uploadFile(it, commonModel.id, TYPE_MESSAGE_FILE) }
+        it?.let { viewModel.sendFile(it, TYPE_MESSAGE_FILE) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[BaseChatViewModel::class.java]
-        viewModel.liveData.observe(viewLifecycleOwner) {
-
-        }
+        viewModel = ViewModelProvider(
+            this, ChatsViewModelFactory(MAIN_ACTIVITY.application, commonModel.id, refMessages)
+        )[BaseChatViewModel::class.java]
         toolbar = MAIN_ACTIVITY.toolbar.findViewById(R.id.toolbarInfo)
-        refUser = REFERENCE_DB.root.child(NODE_USERS).child(commonModel.id)
     }
 
     override fun onResume() {
@@ -78,27 +68,21 @@ abstract class BaseChatFragment :
 
     override fun onPause() {
         super.onPause()
+        viewModel.onPause()
         toolbar.isVisible = false
-        refUser.removeEventListener(listenerToolbar)
-        refMessages.removeEventListener(listenerRecycler)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        voiceRecorder.releaseRecorder()
-        adapter.onDestroy()
+        viewModel.onDestroy()
     }
 
     private fun initToolbar() {
         toolbar.isVisible = true
-        listenerToolbar = AppValueEventListener {
-            receivingUser = it.getUserModel()
-            initToolbarInfo()
-        }
-        refUser.addValueEventListener(listenerToolbar)
+        viewModel.initToolbar { initToolbarInfo(it) }
     }
 
-    private fun initToolbarInfo() {
+    private fun initToolbarInfo(receivingUser: UserModel) {
         toolbar.apply {
             findViewById<TextView>(R.id.toolbarFullName).text =
                 receivingUser.fullName.ifEmpty { commonModel.fullName }
@@ -111,17 +95,15 @@ abstract class BaseChatFragment :
     }
 
     private fun initRecyclerView() = with(binding) {
-        adapter = BaseChatAdapter()
+        chatRecyclerView.adapter = viewModel.adapter
         val layoutManager = LinearLayoutManager(requireContext())
-        chatRecyclerView.adapter = adapter
         chatRecyclerView.layoutManager = layoutManager
         chatRecyclerView.setHasFixedSize(true)
         chatRecyclerView.isNestedScrollingEnabled = false
-        listenerRecycler = AppChildEventListener {
-            adapter.addItem(it.getCommonModel()) { swipeRefresh.isRefreshing = false }
-            if (isSmoothScroll) chatRecyclerView.smoothScrollToPosition(adapter.itemCount)
+        viewModel.initRecyclerView {
+            swipeRefresh.isRefreshing = false
+            if (isSmoothScroll) chatRecyclerView.smoothScrollToPosition(it)
         }
-        refMessages.limitToLast(messagesCount).addChildEventListener(listenerRecycler)
         chatRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -143,9 +125,7 @@ abstract class BaseChatFragment :
     private fun updateData() {
         isSmoothScroll = false
         isScrolling = false
-        messagesCount += 10
-        refMessages.removeEventListener(listenerRecycler)
-        refMessages.limitToLast(messagesCount).addChildEventListener(listenerRecycler)
+        viewModel.updateData()
     }
 
     @Suppress("DEPRECATION")
@@ -153,7 +133,6 @@ abstract class BaseChatFragment :
         setHasOptionsMenu(true)
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet.root)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        voiceRecorder = AppVoiceRecorder()
         binding.btnAttach.setOnClickListener { attach() }
         setSent()
         setMessage()
@@ -206,14 +185,11 @@ abstract class BaseChatFragment :
                         btnVoice.setColorFilter(
                             ContextCompat.getColor(requireContext(), R.color.colorPrimary)
                         )
-                        voiceRecorder.startRecording(commonModel.id)
+                        viewModel.startRecording()
                     } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                         recording.isVisible = false
                         btnVoice.colorFilter = null
-                        voiceRecorder.stopRecording { file, contactId ->
-                            uploadFile(Uri.fromFile(file), contactId, TYPE_MESSAGE_VOICE)
-                            isSmoothScroll = true
-                        }
+                        viewModel.stopRecording { isSmoothScroll = true }
                     }
                 }
                 true
