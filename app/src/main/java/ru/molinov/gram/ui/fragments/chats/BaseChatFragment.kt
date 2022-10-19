@@ -2,12 +2,15 @@ package ru.molinov.gram.ui.fragments.chats
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.*
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuHost
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,13 +25,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.molinov.gram.R
-import ru.molinov.gram.database.clearChat
-import ru.molinov.gram.database.deleteChat
 import ru.molinov.gram.databinding.FragmentChatBinding
 import ru.molinov.gram.models.CommonModel
 import ru.molinov.gram.models.UserModel
 import ru.molinov.gram.ui.fragments.base.BaseOptionsFragment
-import ru.molinov.gram.ui.fragments.mainlist.MainListFragment
 import ru.molinov.gram.utilites.*
 
 abstract class BaseChatFragment :
@@ -128,9 +128,9 @@ abstract class BaseChatFragment :
         viewModel.updateData()
     }
 
-    @Suppress("DEPRECATION")
     private fun initFields() {
-        setHasOptionsMenu(true)
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(viewModel.actionMenuProvider)
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet.root)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         binding.btnAttach.setOnClickListener { attach() }
@@ -203,31 +203,6 @@ abstract class BaseChatFragment :
             connect(binding.message.id, ConstraintSet.END, targetId, ConstraintSet.START)
             applyTo(binding.constraint)
         }
-    }
-
-    @Deprecated(
-        "Deprecated in Java", ReplaceWith(
-            "requireActivity().menuInflater.inflate(R.menu.single_chat_action_menu, menu)",
-            "ru.molinov.gram.R"
-        )
-    )
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        requireActivity().menuInflater.inflate(R.menu.single_chat_action_menu, menu)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.clear -> clearChat(commonModel.id) {
-                showToast(getString(R.string.single_chat_cleared))
-                replaceFragment(MainListFragment())
-            }
-            R.id.delete -> deleteChat(commonModel.id) {
-                showToast(getString(R.string.single_chat_deleted))
-                replaceFragment(MainListFragment())
-            }
-        }
-        return true
     }
 
     companion object {

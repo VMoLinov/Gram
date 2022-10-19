@@ -2,15 +2,18 @@ package ru.molinov.gram.ui.fragments.chats
 
 import android.app.Application
 import android.net.Uri
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import androidx.core.view.MenuProvider
 import androidx.lifecycle.AndroidViewModel
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DatabaseReference
+import ru.molinov.gram.R
 import ru.molinov.gram.database.*
 import ru.molinov.gram.models.UserModel
-import ru.molinov.gram.utilites.AppChildEventListener
-import ru.molinov.gram.utilites.AppValueEventListener
-import ru.molinov.gram.utilites.AppVoiceRecorder
-import ru.molinov.gram.utilites.TYPE_MESSAGE_VOICE
+import ru.molinov.gram.ui.fragments.mainlist.MainListFragment
+import ru.molinov.gram.utilites.*
 
 open class BaseChatViewModel(
     application: Application,
@@ -27,10 +30,7 @@ open class BaseChatViewModel(
     private lateinit var listenerRecycler: ChildEventListener
 
     fun initToolbar(onSuccess: (UserModel) -> Unit) {
-        listenerToolbar = AppValueEventListener {
-            val receivingUser = it.getUserModel()
-            onSuccess(receivingUser)
-        }
+        listenerToolbar = AppValueEventListener { onSuccess(it.getUserModel()) }
         refUser.addValueEventListener(listenerToolbar)
     }
 
@@ -39,16 +39,16 @@ open class BaseChatViewModel(
         refMessages.removeEventListener(listenerRecycler)
     }
 
+    fun onDestroy() {
+        voiceRecorder.releaseRecorder()
+        adapter.onDestroy()
+    }
+
     fun initRecyclerView(onSuccess: (Int) -> Unit) {
         listenerRecycler = AppChildEventListener {
             adapter.addItem(it.getCommonModel()) { onSuccess(adapter.itemCount) }
         }
         refMessages.limitToLast(messagesCount).addChildEventListener(listenerRecycler)
-    }
-
-    fun onDestroy() {
-        voiceRecorder.releaseRecorder()
-        adapter.onDestroy()
     }
 
     fun updateData() {
@@ -67,4 +67,25 @@ open class BaseChatViewModel(
 
     fun sendFile(uri: Uri?, type: Int, idForLoad: String = id) =
         uploadFile(uri, idForLoad, type)
+
+    val actionMenuProvider = object : MenuProvider {
+
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menuInflater.inflate(R.menu.single_chat_action_menu, menu)
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            when (menuItem.itemId) {
+                R.id.clear -> clearChat(id) {
+                    showToast(getApplication<Application>().getString(R.string.single_chat_cleared))
+                    replaceFragment(MainListFragment())
+                }
+                R.id.delete -> deleteChat(id) {
+                    showToast(getApplication<Application>().getString(R.string.single_chat_deleted))
+                    replaceFragment(MainListFragment())
+                }
+            }
+            return true
+        }
+    }
 }

@@ -11,7 +11,6 @@ class ChatsViewModelFactory(
     private val refMessages: DatabaseReference
 ) : ViewModelProvider.AndroidViewModelFactory(application) {
 
-    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return modelClass.getConstructor(
             Application::class.java,
